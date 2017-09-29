@@ -28,10 +28,11 @@ Comandi pricipali di Git
 Comandi Emacs:
 
 
-C-x b switch to buffer
+C-x b   switch to buffer
 C-x C-b show buffers
-C-x k kill buffer
-C-x f find
+C-x k   kill buffer
+C-x f   find
+C-x C-s save changes
 
 C-x 1 show 1 tab (the one where the cursor is)
 C-x 2 show 2 tabs (horizontal)
@@ -40,17 +41,22 @@ C-x 3 show 2 tabs (vertical)
 C-a goes to the beginning of line
 C-e goes to the end of line
 C-w cut selected items
-C-k cut line
+C-k cut line/everything at the right of the cursor
 C-y paste
 C-% replace -> y, n, !(all remaining forward)
 C-t swap
 C-s search forward
 C-r search backward
 
+------------------------------------------------------------
 
-Aprire Emacs in backgroung da terminale
-   emacs &
-   se mi dimentico &, fare C-z poi bg 
+Comandi utili da terminale
+
+ls -lrth   mostra dettagli (dimensione) file
+&          apre in background e.g. emacs &
+           !!! se mi dimentico &, C-z poi bg
+            
+
 
 
 */
