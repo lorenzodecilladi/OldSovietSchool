@@ -40,6 +40,8 @@ C-x 3 show 2 tabs (vertical)
 
 C-a goes to the beginning of line
 C-e goes to the end of line
+C-f go forward
+C-b go backward
 C-w cut selected items
 C-k cut line/everything at the right of the cursor
 C-y paste
@@ -47,6 +49,8 @@ C-% replace -> y, n, !(all remaining forward)
 C-t swap
 C-s search forward
 C-r search backward
+
+M-g M-g go to line
 
 ------------------------------------------------------------
 
