@@ -19,7 +19,7 @@ void func(const char* fimpName, const char *histName){
     return;
   }
 
-  Double_t xmin=0., xmax=0,;
+  Double_t xmin=0., xmax=0;
   Double_t x;
   in>>x; //N.B.: questo programma dà un errore se il file è vuoto, si suppone che ci sia almeno un numero. Non è a prova di scemo!
   xmin=xmax=x;
@@ -51,13 +51,18 @@ void func(const char* fimpName, const char *histName){
   TH1D *hist;
   hist = new TH1D("hist", "histogram", 100, xmin-1, xmax+1);
 
+  for(UInt_t i=0; i<v.size(); i++){
+    count++;
+    hist->Fill(v[i]);
+  }
+  /*
   for()while((in>>x)){
     count++;
     hist.Fill(x);
-  }
+  }*/
   cout<<"Dati letti: "<< count<< endl;
   in.close();
-  hist.DrawCopy();
+  hist->DrawCopy();
   file.Write(); //scarica tutti gli oggetti di quella directory
   file.Close();
 }
