@@ -33,6 +33,7 @@ C-x C-b show buffers
 C-x k   kill buffer
 C-x f   find
 C-x C-s save changes
+C-z     minimize
 
 C-x 1 show 1 tab (the one where the cursor is)
 C-x 2 show 2 tabs (horizontal)
@@ -42,15 +43,23 @@ C-a goes to the beginning of line
 C-e goes to the end of line
 C-f go forward
 C-b go backward
+C-p go up
+C-m go down
+C-d delete forward
 C-w cut selected items
 C-k cut line/everything at the right of the cursor
 C-y paste
 C-% replace -> y, n, !(all remaining forward)
 C-t swap
+M-u capital letter
+M-l lowercase letter
 C-s search forward
 C-r search backward
+C-j wrap
+M-i interspace
 
 M-g M-g go to line
+C-c C-c coomment everything up to that line
 
 ------------------------------------------------------------
 
