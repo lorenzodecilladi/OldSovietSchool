@@ -1,0 +1,24 @@
+#if !defined(__CINT__) || defined(__MAKECINT__)
+#include<Riostream.h>
+#include<TFile.h>
+#include<TH1D.h>
+#include<TCanvas.h>
+#include<TAxis.h>
+#include<TRandom.h>
+#endif
+
+using namespace std;
+
+
+float gener(float xmin=0., float xmax=1.)
+{
+  float ampl = xmax - xmin;
+
+  // float x = gRandom -> Rndm();
+
+  TRandom* r = new TRandom(1000);
+  float x = r -> Rndm();
+
+  return x * ampl + xmin;
+  
+}
