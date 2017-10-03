@@ -94,10 +94,19 @@ void limite_centrale_multipli(const int ndata = 200000, const int nbins = 100){
 
 
 
-//TH1F* build_histo(const char* name, const char* title, int nbins = 100, float xmin = 0., float xmax = 300.){
-//  TH1F* hist = new TH1F(name, title, nbins, xmin, xmax);
-//  return hist;
-//}
+TH1F* histo_sum(const char* name, const char* title, float xmax, int nbins = 100, float xmin = 0., int ndata =200000){
+  TH1F* hist = new TH1F(name, title, nbins, xmin, xmax);
+  
+  for(int i=0; i<ndata; i++){
+    float y = 0.;
+    for(int count = 1; count <= (int)xmax; count ++){
+      y+=gener();
+    }
+    hist->Fill(y);
+  }  
+
+  return hist;
+}
 
 
 
