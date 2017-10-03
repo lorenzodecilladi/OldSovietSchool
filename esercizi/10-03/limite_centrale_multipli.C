@@ -41,22 +41,22 @@ float gener(int seed = 65539){
 
 
 
-void limite_centrale_multipli(const int ndata = 200000){
+void limite_centrale_multipli(const int ndata = 200000, const int nbins = 100){
   
   TCanvas* c = new TCanvas("c", "c");
-  TH1F* hist = new TH1F("hist", "Somma di 1 variabile", 100, 0., 1.);
+  TH1F* hist = new TH1F("hist", "Somma di 1 variabile", nbins, 0., 1.);
 
   TCanvas* c2 = new TCanvas("c2", "c2");
-  TH1F* hist2 = new TH1F("hist2", "Somma di 2 variabili", 100, 0., 2.);
+  TH1F* hist2 = new TH1F("hist2", "Somma di 2 variabili", nbins, 0., 2.);
   
   TCanvas* c10 = new TCanvas("c10", "c10");
-  TH1F* hist10 = new TH1F("hist10", "Somma di 10 variabili", 100, 0., 10.);
+  TH1F* hist10 = new TH1F("hist10", "Somma di 10 variabili", nbins, 0., 10.);
 
   TCanvas* c50 = new TCanvas("c50", "c50");
-  TH1F* hist50 = new TH1F("hist50", "Somma di 50 variabili", 100, 0., 50.);
+  TH1F* hist50 = new TH1F("hist50", "Somma di 50 variabili", nbins, 0., 50.);
 
   TCanvas* c300 = new TCanvas("c300", "c300");
-  TH1F* hist300 = new TH1F("hist300", "Somma di 300 variabili", 100, 0., 300.);
+  TH1F* hist300 = new TH1F("hist300", "Somma di 300 variabili", nbins, 0., 300.);
   
   
   
@@ -87,6 +87,21 @@ void limite_centrale_multipli(const int ndata = 200000){
   hist300->Draw();
   
 }
+
+
+
+
+
+
+
+//TH1F* build_histo(const char* name, const char* title, int nbins = 100, float xmin = 0., float xmax = 300.){
+//  TH1F* hist = new TH1F(name, title, nbins, xmin, xmax);
+//  return hist;
+//}
+
+
+
+
 
 
 //TStopWatch per misurare il tempo di CPU
