@@ -15,20 +15,19 @@
 void Decadimento(int ntot, const float deltat, const float ttot, const float alfa){
 
   const int dimensione = (int)ttot/deltat;
+  const int tempotot = dimensione*deltat;
   const float Ntot = ntot;
-  float tempo = 0.;
   
-  TH1F *istogramma = new TH1F("istogramma", "Simulazione di un decadimento", dimensione, 0., ttot);
+  TH1F *istogramma = new TH1F("istogramma", "Simulazione di un decadimento", dimensione, 0., tempotot);
   
   for(int i = 0; i < dimensione; i++){
     int Ndec = 0;
     
     for(int j = 0; j < ntot; j++){
-      if(gRandom->Rndm() <= alfa*tempo)
+      if(gRandom->Rndm() <= alfa*deltat)
 	Ndec++;
     }
     
-    tempo = tempo + deltat;
     ntot = ntot - Ndec;
     istogramma->TH1F::AddBinContent(i+1, (double)ntot);
   }
@@ -43,7 +42,7 @@ void Decadimento(int ntot, const float deltat, const float ttot, const float alf
   fhisto->SetParameter(1, Ntot);
   fhisto->SetLineColor(2);
 
-  istogramma->Fit(fhisto, "M");
+  istogramma->Fit(fhisto, "M+");
   cout << "Chi^2:" << fhisto->GetChisquare() << ", number of DoF: " << fhisto->GetNDF() << " (Probability: " << fhisto->GetProb() << ")." << endl;
   cout << "--------------------------------------------------------------------------------------------------------" << endl;
 }
