@@ -58,6 +58,7 @@ void Decay(int n0,double alpha, double Delt, double ttot,unsigned int seed){
   h1->Draw("histo"); //opzione histo mi toglie errori
   fteo->Draw("same");
   file->ls(); //stampa cosa c'è nel file
+
   
   
 
