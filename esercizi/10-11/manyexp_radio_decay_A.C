@@ -12,10 +12,18 @@
 //dichiar funz
 
 void Decay(int& NdecTot, int n0=1000, double alpha = 2.5*pow(10.,-5), double Delt=1., double ttot = 100., unsigned int seed = 95689, bool doHist = true);
-void RepeatExp(int Nexp = 1000, int n0=1000, double alpha = 2.5*pow(10.,-5), double Delt=1., double ttot = 100., unsigned int seed = 95689, bool doHist = false);
+
+void RepeatExp(int Nexp = 1000, int n0=1000, double alpha = 2.5*pow(10.,-5), double Delt=1., double ttot = 100., bool doHist = false);
+
 double exponential(double *x, double *par); //da usare con TF1 //non posso mettere int: la segnatura è double, double!!
 
+double poisson(double *x, double *par);
 
+double binomial(double *x, double *par);
+
+
+
+//-----------------------------------------------------
 //implementaz
 
 void Decay(int& NdecTot, int n0,double alpha, double Delt, double ttot,unsigned int seed, bool doHist){
@@ -96,20 +104,42 @@ void Decay(int& NdecTot, int n0,double alpha, double Delt, double ttot,unsigned 
 }
 
 
-void RepeatExp(int Nexp, int n0, double alpha, double Delt, double ttot, unsigned int seed, bool doHist){
+void RepeatExp(int Nexp, int n0, double alpha, double Delt, double ttot, bool doHist){
 
   int NdecTot = 0;
+
   TH1F *hrep = new TH1F("hrep", "Num decays in fixed time T", n0+1, -0.5, n0+0.5);
   
   for(int i=0; i<Nexp; i++){
     cout << "\nEvento #: " << i+1 << endl;
+
+    unsigned int seed = static_cast<unsigned int>(gRandom->Rndm() * 100000);
+    
     Decay(NdecTot, n0, alpha, Delt, ttot, seed, doHist);
     hrep->Fill(NdecTot);
   }
 
+  TF1 *fPoisson = new TF1("fPoisson", poisson, 0., 30., 2);
+  double lambda = hrep->GetBinCenter(hrep->GetMaximumBin());
+  Double_t lambda_par=alpha*ttot*n0;
+  
+  fPoisson->SetParameter(0, lambda_par);
+  fPoisson->SetParameter(1, hrep->GetMaximum());  //dobbiamo considerare l'integrale dell'istogramma
+
+  cout << hrep->GetMaximum() << endl;
+
+  
   hrep->GetXaxis()->SetRange(0.,50.);
   hrep->Draw("histo");
+
+  fPoisson->Draw("same");
   
+  //string confirm;
+  //cin >> confirm;
+
+
+  //oppure normalizziamo l'istogramma dividendo per l'integrale dell'istogramma
+
 }
 
 
@@ -117,6 +147,51 @@ double exponential(double *x, double *par){
   double X = x[0];
   return par[0]*TMath::Exp(-par[1]*X);
 }
+
+
+
+  
+
+
+double poisson(double *x, double *par){
+  double n = x[0];
+  double lambda= par[0];
+  double pMax=par[1];
+
+  //return pow(lambda,n)/TMath::Gamma(n)*TMath::Exp();
+  return pMax*TMath::Exp(n*(TMath::Log(lambda/n)+1)-lambda);  
+  //return TMath::Poisson(n,lambda);
+}
+
+
+//double binomial(double *x, double *par){
+
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 
