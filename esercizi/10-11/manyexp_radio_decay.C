@@ -11,7 +11,7 @@
 
 //dichiar funz
 
-void Decay(int& NdecTot=0, int n0=1000, double alpha = 2.5*pow(10,-5), double Delt=1., double ttot = 100., unsigned int seed = 95689);
+void Decay(int& NdecTot, int n0=1000, double alpha = 2.5*pow(10,-5), double Delt=1., double ttot = 100., unsigned int seed = 95689);
 void RepeatExp(int Nexp = 1000, int n0=1000, double alpha = 2.5*pow(10,-5), double Delt=1., double ttot = 100., unsigned int seed = 95689);
 double exponential(double *x, double *par); //da usare con TF1 //non posso mettere int: la segnatura è double, double!!
 
@@ -52,7 +52,8 @@ void Decay(int& NdecTot, int n0,double alpha, double Delt, double ttot,unsigned 
   
   for(double time=Delt; time<timetot+Delt/2.; time+=Delt){
     int ndec = 0;
-    for(int nuclei =0 ; nuclei<n0; nuclei++)if(gRandom->Rndm() < prob) {
+    for(int nuclei =0 ; nuclei<n0; nuclei++)
+      if(gRandom->Rndm() < prob) {
 	ndec++;
 	ndecTot++;
       }
@@ -118,3 +119,14 @@ double exponential(double *x, double *par){
   return par[0]*TMath::Exp(-par[1]*X);
 }
 
+
+/*
+PROBLEMI
+
+1. ogni volta che apre file, poi non lo chiude => memory leak, ad un certo punto non apre + file (troppi aperti)
+2. ogni volta creare istogrammi interni a delay occupa troppa memoria (!!): per chiudere root ci mette due minuti a furia di invocare distruttori
+   
+Possibile soluzione: inizializzare un argomento booleano nella funzione che se, vero, fa istogrammi e file, e in RepeatDelay lo inizializiamo a FALSE, mentre in Delay a TRUE (così se si esegue solo Delay li fa);
+
+3. lui dà sempre lo stesso # di decadimenti (3), anche con 1000 eventi: forse gRandom invoca sempre lo stesso numero ??
+*/
