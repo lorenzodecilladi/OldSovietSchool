@@ -5,7 +5,7 @@
 #include<TF1.h>
 #include<TCanvas.h>
 #include<TAxis.h>
-#include<TRandom.h>
+#include<TRandom.h> //3??? 
 #endif
 
 using namespace std;

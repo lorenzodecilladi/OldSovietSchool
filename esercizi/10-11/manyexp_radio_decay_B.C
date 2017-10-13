@@ -12,14 +12,11 @@
 //dichiar funz
 
 void Decay(int& NdecTot, int n0=1000, double alpha = 2.5*pow(10.,-5), double Delt=1., double ttot = 100., unsigned int seed = 95689, bool doHist = true);
-
 void RepeatExp(int Nexp = 1000, int n0=1000, double alpha = 2.5*pow(10.,-5), double Delt=1., double ttot = 100., bool doHist = false);
-
 double exponential(double *x, double *par); //da usare con TF1 //non posso mettere int: la segnatura è double, double!!
-
 double poisson(double *x, double *par);
+double binomial(double *x, double *par); //MASERA: double binomial(double xx, double norm, double prob, double ...);
 
-double binomial(double *x, double *par);
 
 
 
@@ -43,7 +40,7 @@ void Decay(int& NdecTot, int n0,double alpha, double Delt, double ttot,unsigned 
   
   TH1D *h1 = 0;
   TF1 *fteo = 0;
-  bool isNull = h1 == 0;
+  bool isNull = (h1 == 0);
   //  cout << isNull << endl;
   
   if(doHist){
@@ -99,6 +96,7 @@ void Decay(int& NdecTot, int n0,double alpha, double Delt, double ttot,unsigned 
     fteo->Write();
     
     file->ls(); //stampa cosa c'è nel file
+    file->Close();
   }
   
 }
@@ -107,6 +105,11 @@ void Decay(int& NdecTot, int n0,double alpha, double Delt, double ttot,unsigned 
 void RepeatExp(int Nexp, int n0, double alpha, double Delt, double ttot, bool doHist){
 
   int NdecTot = 0;
+
+  //MASERA:
+  //sprintf(title,""Numero decadimenti in %4.1f s", time)
+  //nbins = static_cast<int>(n0*alpha*time*4);
+  //TH1F("ndecays,title,nbins,-0.5,nbins-0.5");
 
   TH1F *hrep = new TH1F("hrep", "Num decays in fixed time T", n0+1, -0.5, n0+0.5);
   
