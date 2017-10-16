@@ -20,7 +20,7 @@ TRandom3()
 }
 
 //STANDARD CONSTRUCTOR
-DistGen::DistGen(double alpha, double xmin=0., double xmax=2*TMath::Pi(), double seed=65349):
+DistGen::DistGen(double alpha, double xmin, double xmax, unsigned int seed):
   TRandom3()
 {
   fParam = alpha;
@@ -55,6 +55,12 @@ double DistGen::func(double xx){
   return 1/(TMath::Sin(theta)*TMath::Sin(theta) + alpha * TMath::Cos(theta)*TMath::Cos(theta));
 }
 
+//INVERSE of CUMULATIVE FUNCTION for f(x)
+double DistGen::invCumFunc(double xx){
+  double alpha = fParam;
+
+  return TMath::ATan( TMath::Sqrt(alpha)*TMath::Tan(TMath::Pi()*xx - 0.5) );
+}
 
 //REJECTION TECHNIQUE
 double DistGen::rejection(){
@@ -79,5 +85,16 @@ double DistGen::rejection(){
 double DistGen::inversion(){
 
   double u = gRandom->Rndm(fSeed);
-  return 0.;
+
+  //risurltato in [-pi/2, pi/2]
+  double x = invCumFunc(u);
+  
+  //traspongo in [0, 2pi]
+  double w = gRandom -> Rndm(fSeed);
+  if     (w<0.5)        x = x + TMath::Pi(); //II e III quadrante
+  else if(w>0.5 && x<0) x = x + 2*TMath::Pi(); // IV quadrante
+  else if(w>0.5 && x>0) x = x; //I quadrante (riga superflua)
+  
+  return x;
 }
+
