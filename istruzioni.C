@@ -34,6 +34,8 @@ C-x k   kill buffer
 C-x f   find
 C-x C-s save changes
 C-z     minimize
+C-x u   undo (also consecutive repetitions)
+C-_     undo (also consecutive repetitions)
 
 C-x 1 show 1 tab (the one where the cursor is)
 C-x 2 show 2 tabs (horizontal)

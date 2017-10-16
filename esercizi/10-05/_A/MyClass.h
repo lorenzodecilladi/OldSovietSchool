@@ -5,7 +5,7 @@
 
 
 class MyClass : public TObject{ 
-
+  
  public: //se è private, solo le memb funct di MyClass possono vederle (uso interno)
          //protected: possono accedere solo le classi figlie
 
