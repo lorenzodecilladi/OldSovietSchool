@@ -3,14 +3,8 @@
 #include <TCanvas.h>
 #include <TMath.h>
 #include <TH1F.h>
-#include <TF1.h>
-#include <TFile.h>
 #include <TRandom.h>
 #include <TRandom3.h>
-#include <TVirtualFitter.h>
-
-#include <boost/foreach.hpp>
-#define foreach BOOST_FOREACH
 #endif
 
 using namespace std;
@@ -34,6 +28,8 @@ void Poissoniana(int ntot, const float deltat, const float ttot, const float alf
   double Nrest;
   
   TH1F *histo = new TH1F("histo", "Numero di decadimenti", nbin, - 0.5, nbin - 0.5);
+  THF1 *fpoissoniana = new THF1("fpoissoniana", "Curva poissoniana", nbin, -0.5, nbin - 0.5);
+  THF1 *fbinomiale = new THF1("fbinomiale", "Curva binomiale", nbin, -0.5, nbin - 0.5);
 
   ///*
   for(int i = 0; i < nesp; i++){
@@ -44,34 +40,17 @@ void Poissoniana(int ntot, const float deltat, const float ttot, const float alf
     histo->Fill(Nrest);
   }
   //*/
-  /*
-  for(int k = 0; k < nesp; k++){
-    if(k%100 == 0){
-      cout << "Sto elaborando il decadimento numero " << k << endl;
-    }
-    int Nrest = 0;
-    
-    for(int i = 0; i < dimensione; i++){
-      int Ndec = 0;
-      
-      if(i != 0){
-       	for(int j = 0; j < ntot; j++){
-	  if(gRandom->Rndm() <= alfa*deltat)
-	    Ndec++;
-	    }
-      }
-      
-      ntot = ntot - Ndec;
-    }
-    
-    Nrest = (int)Ntot - ntot;
-    histo->Fill((double)Nrest);
+
+  for(double x=0.; x < nbin - 0.5; x+=1.){
+    fpoissoniana->Fill(x, Ntot*Poisson(x, beta, tempo));
+    fbinomiale->Fill(x, Ntot*Binomiale(x, nesp, beta, deltat));
   }
-  */
   
-  cout << "Ho finito, plotto il grafico." << endl;
+  cout << "Ho finito, plotto i grafici." << endl;
   TCanvas *chisto = new TCanvas("chisto", "Numero di decadimenti", 10, 10, 1280, 1024);
   histo->Draw();
+  fpoissoniana->Draw("same");
+  fbinomiale->Draw("same");
   
 }
 
@@ -98,14 +77,14 @@ double Decadimento(int ntot, const float deltat, const float ttot, const float a
 // /*
 double Binomiale(const int nesperimenti, const int nintervalli, float beta, float tempo){
   probabilita = beta*tempo;
-  return 1.;
+  return Exp(LnGamma(nintervalli + 1) - LnGamma(nesperimenti + 1) - LnGamma(nintervalli - nesperimenti + 1) + nesperimenti*Log(probabilita) + nesperimenti*Log(nintervalli - probabilita));
 }
 // */
 
 // /*
-double Poisson(const int nesperimenti, float beta, float tempo){
+double Poisson(const int nrestanti, float beta, float tempo){
   probabilita = beta*tempo;
-  return Exp(nesperimenti * Log(probabilita) - probabilita - LnGamma(nesperimenti + 1));
+  return Exp(nrestanti * Log(probabilita) - probabilita - LnGamma(nrestanti + 1));
 }
 // */
 
