@@ -12,10 +12,11 @@
 #define foreach BOOST_FOREACH
 #endif
 
-void Decadimento(int ntot, const float deltat, const float ttot, const float alfa){
+void Decadimento(int ntot = 50000, const float deltat = 1., const float ttot = 300., const float alfa = 0.05){
 
   const int dimensione = (int)ttot/deltat;
   const int tempotot = dimensione*deltat;
+  //const int tempotot = ttot;
   const float Ntot = ntot;
   
   TH1F *istogramma = new TH1F("istogramma", "Simulazione di un decadimento", dimensione, 0., tempotot);
@@ -23,9 +24,11 @@ void Decadimento(int ntot, const float deltat, const float ttot, const float alf
   for(int i = 0; i < dimensione; i++){
     int Ndec = 0;
     
-    for(int j = 0; j < ntot; j++){
-      if(gRandom->Rndm() <= alfa*deltat)
-	Ndec++;
+    if(i != 0){
+      for(int j = 1; j < ntot; j++){
+	if(gRandom->Rndm() <= alfa*deltat)
+	  Ndec++;
+      }
     }
     
     ntot = ntot - Ndec;
@@ -34,7 +37,7 @@ void Decadimento(int ntot, const float deltat, const float ttot, const float alf
 
   TCanvas *chisto = new TCanvas("chisto", "Simulazione di un decadimento", 10, 10, 1280, 1024);
   chisto->cd();
-  istogramma->Draw("HISTO");
+  istogramma->Draw();
 
   TF1 *fhisto = new TF1("fhisto", "[1]*TMath::Exp(-[0]*x)");
   TVirtualFitter::SetMaxIterations(100000);
