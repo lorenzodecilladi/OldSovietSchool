@@ -15,10 +15,10 @@ Class MyRandom : public TRandom3{
 
   MyRandom& operator=(const MyRandom& source); //! operatore =
 
-  Int_t SetEstrazioni(Int_t nestrazioni);
+  SetEstrazioni(Int_t nestrazioni);
   Int_t GetEstrazioni() const;
-  Double_t SetA(Double_t parametroa);
-  Double_t GetA();
+  SetA(Double_t parametroa);
+  Double_t GetA() const;
  
 
 
@@ -26,6 +26,9 @@ Class MyRandom : public TRandom3{
 
  private:
 
+  Int_t fNestrazioni;
+  Double_t fParametroa;
+  
   ClassDef(MyRandom,1)
 };
 
