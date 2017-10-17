@@ -75,6 +75,7 @@ Double_t MyRandom::GetA(){
 
 Double_t Funzione1(double teta)
 {
+
   double senquadro = TMath::Sin(teta) * TMath::Sin(teta);
   double cosquadro = TMath::Cos(teta) * TMath::Cos(teta);
 
@@ -127,4 +128,3 @@ Double_t F1Inversione()
 
   return teta;
 }
-
