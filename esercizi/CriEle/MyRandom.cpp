@@ -6,20 +6,47 @@ ClassImp(MyRandom)
 
 MyRandom::MyRandom():
   TRandom(),
-  fNestrazioni(0),
-  fParametroa(0.)
+  fMaggiorante(0.),
+  fParametroa(0.),
+  fPi(0.),
+  fRadiceParametro(0.)
 {}
-  
-MyRandom::MyRandom(Int_t nestrazioni, Double_t parametroa):
+
+MyRandom::MyRandom(Double_t parametroa):
   TRandom(),
-  fNestrazioni(nestrazioni),
-  fParametroa(parametroa)
-{}
+  fMaggiorante(0.),
+  fParametroa(parametroa),
+  fPi(0.),
+  fRadiceParametro(0.)
+{
+  SetName("MyRandom");
+  SetTitle("Random number generator: Mersenne Twister");
+
+  Inizializzazione();
+}
+
+MyRandom::Inizializzazione():
+{
+  fPi = TMath::Pi();
+  if(fParametroa <= 0. || fParametroa > 1.){
+    Warning("Inizializzazione","Parametro a non valido = %f8.3 \n",fParametroa);
+    Warning("Init","Bisognerebbe inizializzarlo appropriatamente\n");
+    fParametroa = 0.;
+    fMaggiorante = 0.;
+    fRadiceParametro = 0.;
+  }
+  else {
+    fMaggiorante = 1/fParametroa;
+    fRadiceParametro = TMath::Sqrt(fParametroa);
+  }
+}
   
 MyRandom::MyRandom(const MyRandom &source):
   TRandom(source),
-  fNestrazioni(source.fNestrazioni),
-  fParametroa(source.fParametroa)
+  fMaggiorante(source.fMaggiorante),
+  fParametroa(source.fParametroa),
+  fPi(source.fPi),
+  fRadiceParametro(source.fRadiceParametro)
 {}
 
 MyRandom::~MyRandom()
@@ -28,19 +55,13 @@ MyRandom::~MyRandom()
 MyRandom& MyRandom::operator=(const MyRandom& source){
   if(this != &source){
     TRandom::operator=(source);
-    fNestrazioni = source.fNestrazioni;
+    fMaggiorante = source.fMaggiorante;
     fParametroa = source.fParametroa;
+    fPi = source.fPi;
+    fRadiceParametro = source.fRadiceParametro;
   }
 
   return *this;
-}
-
-MyRandom::SetEstrazioni(Int_t nestrazioni){
-  fNestrazioni = nestrazioni;
-}
-
-Int_t MyRandom::GetEstrazioni(){
-  return fNestrazioni;
 }
 
 MyRandom::SetA(Double_t parametroa){
@@ -50,3 +71,23 @@ MyRandom::SetA(Double_t parametroa){
 Double_t MyRandom::GetA(){
   return fParametroa;
 }
+
+Double_t Funzione1(double teta)
+{
+  
+}
+
+Double_t Funzione2(double teta)
+{}
+
+Double_t F1Reiezione1()
+{}
+
+Double_t F1Reiezione2()
+{}
+
+Double_t F1Inversione1()
+{}
+
+Double_t F1Inversione2()
+{}
