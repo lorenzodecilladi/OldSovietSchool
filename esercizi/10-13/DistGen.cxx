@@ -1,5 +1,4 @@
 #include <TH1F.h>
-#include <TF1.h>
 #include <TMath.h>
 //#include <TRandom3.h>
 
@@ -27,6 +26,8 @@ DistGen::DistGen(double alpha, double xmin, double xmax, unsigned int seed):
   fXmin = xmin;
   fXmax = xmax;
   fSeed = seed;
+
+  this->SetName("DistGen"); //memb func di TRandom3
 }
 
 //DESTRUCTOR
@@ -70,7 +71,7 @@ double DistGen::rejection(){
   double yBig = fParam<1 ? 1/fParam : 1;
   
   do{
-    u1 = gRandom->Rndm(fSeed);
+    u1 = gRandom->Rndm(fSeed);//anche this->Rndm(fSeed) oppure solo Rndm(fSeed)
     u2 = gRandom->Rndm(fSeed);
     //cout << u1 << " != " << u2 << endl;
     xT = fXmin+(fXmax-fXmin)*u1;
@@ -96,5 +97,12 @@ double DistGen::inversion(){
   else if(w>0.5 && x>0) x = x; //I quadrante (riga superflua)
   
   return x;
+}
+
+//IMPORTANCE SAMPLING
+double DistGen::importanceSampling(TF1* funcPtr){
+
+  //funcPtr.SetParameter(0, fParam);  
+  return funcPtr->GetRandom();
 }
 
