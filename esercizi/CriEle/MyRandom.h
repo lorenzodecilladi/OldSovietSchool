@@ -23,8 +23,7 @@ Class MyRandom : public TRandom3{
 
   Double_t F1Reiezione1();
   Double_t F1Reiezione2();
-  Double_t F1Inversione1();
-  Double_t F1Inversione2();
+  Double_t F1Inversione();
 
 
  private:
