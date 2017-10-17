@@ -3,6 +3,7 @@
 
 #include <TRandom3.h>
 #include <TMath.h>
+#include <TF1.h>
 
 class DistGen : public TRandom3{
   
@@ -18,6 +19,7 @@ class DistGen : public TRandom3{
   
   double inversion();
   double rejection();
+  double importanceSampling(TF1 *funcPtr);
   
 
  private:
@@ -26,6 +28,7 @@ class DistGen : public TRandom3{
   double fXmin;
   double fXmax;
   unsigned int fSeed;
+  //TF1 func = TF1("func1", "1/(TMath::Sin(x)*TMath::Sin(x) + [0] * TMath::Cos(x)*TMath::Cos(x))", 0., 2*TMath::Pi());
 
   
   ClassDef(DistGen, 1)
