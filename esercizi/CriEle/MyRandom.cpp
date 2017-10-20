@@ -128,3 +128,18 @@ Double_t F1Inversione()
 
   return teta;
 }
+
+Double_t F2Sampling(double xmin, double xmax, double x1, double x2, double ymax1, double ymax2)
+{
+  //xmin = -10, xmax = 10, x1 = -2.6, x2 = 2.6, ymax1 = 0.05, ymax2 = 1
+  double u = Rndm();
+  
+  double norm1 = ymax1 * (x1 - xmin);
+  double norm2 = ymax2 * (x2 - x1);
+  double norm3 = ymax1 * (xmax - x2);
+  double normtot = norm1 + norm2 + norm3;
+
+  if(u < norm1/normtot){ //questo dovrebbe andare perché è il primo intervallo a sinistra, quindi u sicuramente parte da 0 e arriva fino al primo pezzo della normalizzazione totale
+    x = u/(ymax1 * normtot) + xmin;
+  }
+}

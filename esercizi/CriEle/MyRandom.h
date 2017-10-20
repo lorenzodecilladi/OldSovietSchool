@@ -24,6 +24,7 @@ Class MyRandom : public TRandom3{
   Double_t F1Reiezione1();
   Double_t F1Reiezione2();
   Double_t F1Inversione();
+  Double_t F2Sampling(double xmin, double xmax, double x1, double x2, double ymax1, double ymax2);
 
 
  private:
