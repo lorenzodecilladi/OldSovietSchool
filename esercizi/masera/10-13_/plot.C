@@ -1,0 +1,32 @@
+void plot(Bool_t ls=kFALSE){
+  TFile *f = new TFile("testrand.root");
+    TH1F* funz = (TH1F*)f->Get("funz");
+    TH1F* inv = (TH1F*)f->Get("inv");
+    TH1F* inv2 = (TH1F*)f->Get("inv2");
+    TH1F* rej = (TH1F*)f->Get("rej");
+    TH1F* rej2 = (TH1F*)f->Get("rej2");
+    TH1F* standroot = (TH1F*)f->Get("standroot");
+  TCanvas *cv = new TCanvas();
+  gStyle->SetOptStat(0);
+  cv->Divide(2,3);
+  TVirtualPad *pd=cv->cd(1);
+  pd->SetLogy(ls);
+  funz->Draw("hist");
+  pd=cv->cd(2);
+  pd->SetLogy(ls);
+  inv->Draw("hist");
+  pd=cv->cd(3);
+  pd->SetLogy(ls);
+  inv2->Draw("hist");
+  pd=cv->cd(4);
+  pd->SetLogy(ls);
+  rej->Draw("hist");
+  pd=cv->cd(5);
+  pd->SetLogy(ls);
+  standroot->Draw("hist");
+  pd=cv->cd(6);
+  pd->SetLogy(ls);
+  //  funz->Draw();
+  //  inv->Draw("same");
+  rej2->Draw("hist");
+}
