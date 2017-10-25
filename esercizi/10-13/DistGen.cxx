@@ -48,7 +48,7 @@ DistGen& DistGen::operator=(const DistGen& source){
 
 
 //FUNCTION f(x)
-double DistGen::func(double xx){
+double DistGen::funcAlpha(double xx){
   double theta = xx;
   double alpha = fParam; //posso accedere direttamente ai data member privati
                          //di DistGen perché ho specificato che la funzione
@@ -57,11 +57,25 @@ double DistGen::func(double xx){
 }
 
 //INVERSE of CUMULATIVE FUNCTION for f(x)
-double DistGen::invCumFunc(double xx){
+double DistGen::invCumFuncAlpha(double xx){
   double alpha = fParam;
 
   return TMath::ATan( TMath::Sqrt(alpha)*TMath::Tan(TMath::Pi()*xx - 0.5) );
 }
+
+//FUNCTION g(x)
+double DistGen::funcSin(double xx){
+  double theta = xx;
+ 
+  return (TMath::Sin(theta)*TMath::Sin(theta)) / (theta*theta);
+}
+
+//SUPREMUM of g(x)
+double DistGen::sinBig(double xx){
+  if(abs(xx)<=2.6) return 1.;
+  else if(abs(xx)>2.6) return 0.05;
+}
+
 
 //REJECTION TECHNIQUE
 double DistGen::rejection(){
@@ -76,10 +90,11 @@ double DistGen::rejection(){
     //cout << u1 << " != " << u2 << endl;
     xT = fXmin+(fXmax-fXmin)*u1;
     yT = yBig*u2;
-  }while(func(xT)<yT);
+  }while(funcAlpha(xT)<yT);
   
   return xT;
 }
+//questo metodo funziona con qualunque funzione (e.g. basta passarla come parametro)
 
 
 //INVERSION TECHNIQUE
@@ -88,7 +103,7 @@ double DistGen::inversion(){
   double u = gRandom->Rndm(fSeed);
 
   //risurltato in [-pi/2, pi/2]
-  double x = invCumFunc(u);
+  double x = invCumFuncAlpha(u);
   
   //traspongo in [0, 2pi]
   double w = gRandom -> Rndm(fSeed);
@@ -98,11 +113,41 @@ double DistGen::inversion(){
   
   return x;
 }
+/*
+//INVERSION TECHNIQUE
+double DistGen::inversionsin(){
 
-//IMPORTANCE SAMPLING
-double DistGen::importanceSampling(TF1* funcPtr){
+  double u = gRandom->Rndm(fSeed);
+
+  double x;
+  if(x<-2.6)
+    x
+  
+  return x;
+}
+
+*/
+
+//ROOT NUMERICAL INVERSION
+double DistGen::rootInversion(TF1* funcPtr){
 
   //funcPtr.SetParameter(0, fParam);  
   return funcPtr->GetRandom();
 }
 
+//IMPORTANCE SAMPLING
+double DistGen::importanceSampling(double xMin, double xMax){
+  
+  double u1, u2, xT, yT;
+  
+  do{
+    u1 = gRandom->Rndm(fSeed);//anche this->Rndm(fSeed) oppure solo Rndm(fSeed)
+    u2 = gRandom->Rndm(fSeed);
+    //cout << u1 << " != " << u2 << endl;
+    xT = xMin+(xMax-xMin)*u1;
+    yT = sinBig(xT)*u2;
+  }while(funcSin(xT)<yT);
+  
+  return xT;
+
+}

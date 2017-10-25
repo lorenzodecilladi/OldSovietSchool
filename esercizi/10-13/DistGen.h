@@ -14,12 +14,15 @@ class DistGen : public TRandom3{
   virtual ~DistGen();
   DistGen& operator=(const DistGen& source); //& prima di operator: non crea una
   
-  double func(double xx);
-  double invCumFunc(double xx);
+  double funcAlpha(double xx);
+  double invCumFuncAlpha(double xx);
+  double funcSin(double xx);
+  double sinBig(double xx);
   
   double inversion();
   double rejection();
-  double importanceSampling(TF1 *funcPtr);
+  double rootInversion(TF1 *funcPtr);
+  double importanceSampling(double xMin, double xMax);
   
 
  private:
