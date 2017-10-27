@@ -1,0 +1,91 @@
+#if !defined(__CINT__) || defined(__MAKECINT__)
+#include <Riostream.h>
+#include <TCanvas.h>
+#include <TMath.h>
+#include <TH1F.h>
+#include <TF1.h>
+#include <TFile.h>
+#include <TRandom.h>
+#include <TVirtualFitter.h>
+
+#include <boost/foreach.hpp>
+#define foreach BOOST_FOREACH
+#endif
+
+using namespace std;
+using namespace TMath;
+
+// Dichiarazioni
+//double Decadimento(int ntot, const float deltat, const float ttot, const float alfa);
+void Poissoniana(int ntot = 1000, const float deltat = 1., const float ttot = 100., const float alfa = 2.5 * pow(10, -5), const int nesp = 1000);
+
+void Poissoniana(int ntot, const float deltat, const float ttot, const float alfa, const int nesp){
+
+  const int dimensione = (int)ttot/deltat;
+  const int tempotot = dimensione*deltat;
+  const float Ntot = ntot;
+  const float beta = ntot*alfa;
+  int Nrest[nesp];
+  
+  TH1F *histo = new TH1F("istogramma", "Numero di decadimenti", dimensione, 0., 50.);
+
+  /*
+  for(int i = 0; i < nesp; i++){
+    if(i+100 == 0){
+      cout << "Sto elaborando il decadimento numero " << i+1 << endl;
+    }
+    Nrest = Decadimento(ntot, deltat, ttot, alfa);
+    istogramma->TH1F::AddBinContent(i+1, (double)Nrest);
+  }
+  */
+  for(int k = 0; k < nesp; k++){
+    if(k+1%100 == 0){
+      cout << "Sto elaborando il decadimento numero " << k+1 << endl;
+    }
+    
+    for(int i = 0; i < dimensione; i++){
+      int Ndec = 0;
+
+      if(i != 0){
+	for(int j = 0; j < ntot; j++){
+	  if(gRandom->Rndm() <= alfa*deltat)
+	    Ndec++;
+	}
+      }
+      
+      ntot = ntot - Ndec;
+    }
+    
+    Nrest[k] = (int)Ntot - ntot;
+  }
+
+  for(int t = 0; t < nesp; t++){
+    histo->TH1F::AddBinContent(t+1, Nrest[t]);
+  }
+
+  cout << "Ho finito, plotto il grafico." << endl;
+
+  TCanvas *chisto = new TCanvas("chisto", "Numero di decadimenti", 10, 10, 1280, 1024);
+  chisto->cd();
+  histo->Draw("histoc");
+}
+
+/*
+double Decadimento(int ntot, const float deltat, const float ttot, const float alfa){
+  const int dimensione = (int)ttot/deltat;
+  const int numeroiniziale = ntot;
+  
+  for(int i = 0; i < dimensione; i++){
+    int Ndec = 0;
+    
+    for(int j = 0; j < ntot; j++){
+      if(gRandom->Rndm() <= alfa*deltat)
+	Ndec++;
+    }
+    
+    ntot = ntot - Ndec;
+  }
+
+  return numeroiniziale - ntot;
+}
+*/
