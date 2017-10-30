@@ -1,0 +1,29 @@
+#ifndef COLPI_H
+#define COLPI_H
+
+#include "TObject.h"
+
+class Colpi : public TObject{
+ public:
+
+  // Costruttori
+  Colpi();
+  Colpi(double x, double y, double z);
+
+  // Distruttori
+  virtual ~Colpi();
+
+  // Member function
+  double GetX() const;
+  double GetY() const;
+  double GetZ() const;
+
+ private:
+
+  // Data Member
+  double dmX;
+  double dmY;
+  double dmZ;
+}
+
+#endif
