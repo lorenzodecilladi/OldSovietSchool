@@ -13,6 +13,7 @@
 double poisson(double *x, double *par);
 double chi2(double *x, double *mu, int N);
 double rootInversion(TF1* funcPtr);
+Double_t ChiSquareDistr(Double_t *x,Double_t *par);
   
 
 
@@ -54,6 +55,11 @@ void chi_2_MC(const int nloop = 1000){
     histChi2->Fill(chi2(x,mu,nbins));
   }
   histChi2->Draw();
+
+  TF1 *pearson = new TF1("pearson", ChiSquareDistr, 0., 60., 2);
+  pearson -> SetParameter(0, nbins);
+  pearson -> SetParameter(1, histChi2->Integral(0, nbins));
+  pearson -> Draw("same");
   
 }
 
@@ -83,4 +89,21 @@ double rootInversion(TF1* funcPtr){
 
   //funcPtr.SetParameter(0, fParam);  
   return funcPtr->GetRandom();
+}
+
+
+Double_t ChiSquareDistr(Double_t *x,Double_t *par)
+{
+// Chisquare density distribution for nrFree degrees of freedom
+
+Double_t nrFree = par[0];
+Double_t Int = par[1];
+Double_t chi2 = x[0];
+
+if (chi2 > 0) {
+Double_t lambda = nrFree/2.;
+Double_t norm = TMath::Gamma(lambda)*TMath::Power(2.,lambda);
+return Int*TMath::Power(chi2,lambda-1)*TMath::Exp(-0.5*chi2)/norm;
+} else
+return 0.0;
 }
