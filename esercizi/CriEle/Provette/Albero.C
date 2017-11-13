@@ -9,7 +9,14 @@
 #include "Colpi.h"
 #include "Varie.h"
 
-void Albero(int numeroeventi){
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Implementazione della generazione degli eventi        ~
+  ~ Autori: Eleonora Racca eleonora.racca288@edu.unito.it ~
+  ~         Cristina Sauda cristina.sauda@edu.unito.it    ~
+  ~ Ultima modifica: 13/11/2017                           ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+void Albero(int numeroeventi){  
   // File di output per i dati generati dal Monte Carlo e TTree
   TFile fileoutput("AlberoDati.root", "RECREATE");
   TTree *alberello = new TTree("quercia", "Tree di Racca e Sauda");
