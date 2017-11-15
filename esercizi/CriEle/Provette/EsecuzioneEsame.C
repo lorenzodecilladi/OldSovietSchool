@@ -1,12 +1,12 @@
 #include "Riostream.h"
 #include "TStopwatch.h"
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Macro per l'esecuzione della simulazione d'esame      ~
-  ~ Autori: Eleonora Racca eleonora.racca288@edu.unito.it ~
-  ~         Cristina Sauda cristina.sauda@edu.unito.it    ~
-  ~ Ultima modifica: 13/11/2017                           ~
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Macro per l'esecuzione della simulazione d'esame        ~
+  ~ Autori: Racca Eleonora - eleonora.racca288@edu.unito.it ~
+  ~         Sauda Cristina - cristina.sauda@edu.unito.it    ~
+  ~ Ultima modifica: 15/11/2017                             ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void EsecuzioneEsame(TString myopt = "fast"){
   // Dichiarazione dei parametri della simulazione
@@ -19,12 +19,12 @@ void EsecuzioneEsame(TString myopt = "fast"){
   TStopwatch temporicostruzione;
   
   // Interimento dei parametri della simulazione
-  cout << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" << endl;
+  cout << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" << endl;
   cout << "---------- Inserire i parametri per la generazione ---------" << endl;
   cout << "+ numero di eventi: ";
   cin >> numeroesperimenti;
   cout << "\n\n----------- Inserire i parametri per il trasporto ----------" << endl;
-  cout << "\n\n---------- Inserire i parametri per la generazione ---------" << endl;
+  cout << "\n\n--------- Inserire i parametri per la ricostruzione --------" << endl;
   
 
   // --------- Simulazione e analisi ---------

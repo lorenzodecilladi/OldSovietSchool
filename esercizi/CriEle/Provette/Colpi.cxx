@@ -3,12 +3,12 @@
 
 ClassImp(Colpi)
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Implementazione della classe Colpi                    ~
-  ~ Autori: Eleonora Racca eleonora.racca288@edu.unito.it ~
-  ~         Cristina Sauda cristina.sauda@edu.unito.it    ~
-  ~ Ultima modifica: 27/10/2017                           ~
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Implementazione della classe Colpi                      ~
+  ~ Autori: Racca Eleonora - eleonora.racca288@edu.unito.it ~
+  ~         Sauda Cristina - cristina.sauda@edu.unito.it    ~
+  ~ Ultima modifica: 15/11/2017                             ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 // Costruttori
 Colpi::Colpi(): TObject(),
