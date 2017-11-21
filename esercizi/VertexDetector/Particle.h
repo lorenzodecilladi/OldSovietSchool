@@ -5,28 +5,40 @@
 
 class Particle{
 
-  //serve che erediti da TObject
+  //serve che erediti da TObject ??
   //serve accettanza su eta? se si includi Constans.h
  public:
+  
   Particle();
-  //Particle(Double_t s, Double_t p, Int_t e, Bool_t sex); ci serve??
+  Particle(Double_t _phi, Double_t _eta);
   //Particle(const Particle& source); ci serve??
 
   virtual ~Particle();
 
-
+  //calcolo pseudorapidity
+  Double_t eta(Double_t _theta);//non riesco a settare come default argument il data member fTheta
+   
+  Double_t theta(Double_t _eta);//non riesco a settare come default argument il data member fEta
+                                //rad
+  void setEta(Double_t _eta);
+							       
   //Parametri dell'eq parametrica della retta-traiettoria
-  Double_t c1(Double_t phi = fPhi, Double_t theta = fTheta) return TMath::Sin(theta)*TMath::Cos(phi);
-  Double_t c2(Double_t phi = fPhi, Double_t theta = fTheta) return TMath::Sin(theta)*TMath::Sin(phi);
-  Double_t c3(Double_t phi = fPhi, Double_t theta = fTheta) return TMath::Cos(theta);
+  Double_t c1() {return TMath::Sin(fTheta)*TMath::Cos(fPhi);}
+ 
+  Double_t c2() {return TMath::Sin(fTheta)*TMath::Sin(fPhi);}
+    
+  Double_t c3() {return TMath::Cos(fTheta);}
+    
 
-
+  
  private:
 
   Double_t fPhi; //azimut [0,2Pi]
   Double_t fTheta; // pseudorapidity angle [0, Pi]
   Double_t fEta; // pseudorapydity eta = ln(tg(theta/2)))
+
+  ClassDef(Particle, 1)
   
-}
+};
 
 #endif

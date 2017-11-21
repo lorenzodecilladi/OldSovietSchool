@@ -1,6 +1,10 @@
 #ifndef Utils_h
 #define Utils_h
 
+#include "Constants.h"
+#include "TRandom3.h"
+using namespace constants;
+
 namespace utils{
 
   Double_t rndmUniform(Double_t min, Double_t max){
@@ -13,6 +17,13 @@ namespace utils{
     return x;
   }
   
+  Double_t radToDeg(Double_t rad){
+    return rad*180./pi;
+  }
+  Double_t degToRad(Double_t deg){
+    return deg*pi/180.;
+  }
+
   
 }
 
