@@ -1,0 +1,9 @@
+#ifndef VertexResolution_h
+#define VertexResolution_h
+
+namespace vres{
+
+}
+
+
+#endif
