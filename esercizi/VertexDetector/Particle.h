@@ -23,6 +23,7 @@ class Particle{
   void setEta(Double_t _eta);
 							       
   //Parametri dell'eq parametrica della retta-traiettoria
+  //forse da spostare
   Double_t c1() {return TMath::Sin(fTheta)*TMath::Cos(fPhi);}
  
   Double_t c2() {return TMath::Sin(fTheta)*TMath::Sin(fPhi);}
@@ -36,7 +37,7 @@ class Particle{
   Double_t fPhi; //azimut [0,2Pi]
   Double_t fTheta; // pseudorapidity angle [0, Pi]
   Double_t fEta; // pseudorapydity eta = ln(tg(theta/2)))
-
+  //forse dovremmo mettere coordinate!!
   ClassDef(Particle, 1)
   
 };
