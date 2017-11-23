@@ -3,7 +3,7 @@
 
 #include "TObject.h"
 
-class Point : public TObject {
+class Point{// : public TObject{
 
  public:
 
@@ -33,9 +33,9 @@ class Point : public TObject {
   Double_t fX;
   Double_t fY;
   Double_t fZ;
+  
 
-
-  ClassDef(Point,1);
-};
+  //  ClassDef(Point,1)
+    };
 
 #endif

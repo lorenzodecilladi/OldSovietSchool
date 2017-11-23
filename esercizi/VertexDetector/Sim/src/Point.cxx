@@ -1,24 +1,25 @@
 #include "../include/Point.h"
+//#include "TObject.h"
 //#include "Point.h"
 
-ClassImp(Point)
+//ClassImp(Point)
 
 //default constructor
-Point::Point():TObject(){
+Point::Point(){//:TObject(){
   fX = 0.;
   fY = 0.;
   fZ = 0.;
 }
 
 //standard constructor
-Point::Point(Double_t x, Double_t y, Double_t z):TObject(){
+Point::Point(Double_t x, Double_t y, Double_t z){//:TObject(){
   fX = x;
   fY = y;
   fZ = z;
 }
 
 //copy constructor
-Point::Point(const Point& source):TObject(source){
+Point::Point(const Point& source){//:TObject(source){
   fX = source.fX;
   fY = source.fY;
   fZ = source.fZ;
