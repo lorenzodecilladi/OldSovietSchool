@@ -1,4 +1,5 @@
-#include "OldSovietSchool/esercizi/VertexDetector/Sim/include/Point.h"
+#include "../include/Point.h"
+//#include "Point.h"
 
 ClassImp(Point)
 
