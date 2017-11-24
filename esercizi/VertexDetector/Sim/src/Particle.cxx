@@ -1,6 +1,9 @@
-#include "../include/Particle.h"
-#include "../../Utils/Rootils.h"
-#include "../../Utils/Math.h"
+//#include "../include/Particle.h"
+#include "Particle.h"
+//#include "../../Utils/Rootils.h"
+//#include "../../Utils/Math.h"
+#include "Rootils.h"
+#include "Math.h"
 
 ClassImp(Particle)
 
@@ -12,11 +15,10 @@ Particle::Particle(){
   fDirection.eta = rootils::rndmUniform(-2., 2.);
   fDirection.theta = etaToTheta(fDirection.eta);
 
-
   fLabel = 0;
 }
 
-Particle::Particle(Point point, Int_t label){
+Particle::Particle(Point point, UInt_t label){
   fPoint = point;
 
   fDirection.phi = rootils::rndmUniform(0., 2*math::pi);
@@ -35,7 +37,7 @@ void Particle::setDirection(Direction dir){
   fDirection.theta = dir.theta;
 }
 
-void setCoords(Point point){
+void Particle::setCoords(Point point){
   fPoint.setCoords(point.X(), point.Y(), point.Z());
 }
 

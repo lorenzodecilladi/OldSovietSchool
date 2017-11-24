@@ -1,5 +1,6 @@
 //#if !defined(__CINT__) || defined(__MAKECINT__)
-#include "../include/Point.h"
+//#include "../include/Point.h"
+#include "Point.h"
 //#endif
 
 ClassImp(Point)

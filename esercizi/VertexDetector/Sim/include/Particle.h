@@ -12,7 +12,7 @@ class Particle : public Point {
  public:
   
   Particle();
-  Particle(Point point, Int_t label);
+  Particle(Point point, UInt_t label);
   //Particle(const Particle& source); ci serve??
 
   virtual ~Particle();
@@ -43,7 +43,7 @@ class Particle : public Point {
   //Double_t fEta; // pseudorapydity eta = ln(tg(theta/2)))
   
   //particle label in a single event
-  static Int_t fLabel;
+  UInt_t fLabel;
   
   ClassDef(Particle, 1)
   
