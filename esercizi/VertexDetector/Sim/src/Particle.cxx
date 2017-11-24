@@ -1,6 +1,6 @@
-#include "Particle.h"
-#include "Rootils.h"
-#include "Math.h"
+#include "../include/Particle.h"
+#include "../../Utils/Rootils.h"
+#include "../../Utils/Math.h"
 
 ClassImp(Particle)
 
