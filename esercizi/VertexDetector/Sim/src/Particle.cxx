@@ -1,7 +1,4 @@
-//#include "../include/Particle.h"
 #include "Particle.h"
-//#include "../../Utils/Rootils.h"
-//#include "../../Utils/Math.h"
 #include "Rootils.h"
 #include "Math.h"
 
@@ -18,7 +15,7 @@ Particle::Particle(){
   fLabel = 0;
 }
 
-Particle::Particle(Point point, UInt_t label){
+Particle::Particle(Point point, UInt_t label){ //Particle(vertice.getPoint(),...)
   fPoint = point;
 
   fDirection.phi = rootils::rndmUniform(0., 2*math::pi);
@@ -37,7 +34,7 @@ void Particle::setDirection(Direction dir){
   fDirection.theta = dir.theta;
 }
 
-void Particle::setCoords(Point point){
+void Particle::setPoint(Point point){
   fPoint.setCoords(point.X(), point.Y(), point.Z());
 }
 

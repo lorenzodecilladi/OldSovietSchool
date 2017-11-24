@@ -23,9 +23,11 @@ class Particle : public Point {
   Double_t etaToTheta(Double_t eta);//non riesco a settare come default argument il data member fEta
                                 //rad
   void setDirection(Direction dir);
+  void setPoint(Point point);
 
-  void setCoords(Point point);
-							       
+  Point getPoint(){return fPoint;}
+
+  
 
     
 
