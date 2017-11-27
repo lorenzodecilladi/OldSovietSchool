@@ -23,21 +23,18 @@ Double_t Transport::time(Double_t R){
 
 
 
-Double_t x(Double_t t);
-Double_t y(Double_t t);
-Double_t z(Double_t t);
-  
-  
- private:
-
-  Particle fPart;
-  Vertix fVert;
-  //detector ???
-
-  
-  ClassDef(Transport, 1)
-  
-};
-
-#endif
-
+Double_t x(Double_t t){
+  Double_t x0 = fPart.x0();
+  Double_t c1 = fPart.c1();
+  return x0+c1*t;
+}
+Double_t y(Double_t t){
+  Double_t y0 = fPart.y0();
+  Double_t c2 = fPart.c2();
+  return y0+c2*t;
+}
+Double_t z(Double_t t){
+  Double_t z0 = fPart.z0();
+  Double_t c3 = fPart.c3();
+  return y0+c2*t;
+}

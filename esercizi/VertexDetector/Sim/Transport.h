@@ -2,7 +2,7 @@
 #define Transport_h
 
 #include "Particle.h"
-#include "Vertix.h"
+#include "Vertex.h"
 
 class Transport{
 
@@ -36,7 +36,7 @@ class Transport{
  private:
 
   Particle fPart;
-  Vertix fVert;
+  Vertex fVert;
   //detector ???
 
   
