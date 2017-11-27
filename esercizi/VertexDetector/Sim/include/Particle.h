@@ -26,6 +26,7 @@ class Particle : public Point {
   void setPoint(Point point);
 
   Point getPoint(){return fPoint;}
+  Direction getDirection(){return fDirection;}
 
   
 
