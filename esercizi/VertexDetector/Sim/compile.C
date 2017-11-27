@@ -15,8 +15,10 @@ void compile(TString myopt="fast"){
   gSystem->AddIncludePath("-I../Utils");
   gSystem->AddIncludePath("-I../Geometry");
   gSystem -> CompileMacro("src/Point.cxx", opt.Data());
+  gSystem -> CompileMacro("src/Direction.cxx", opt.Data());
   gSystem -> CompileMacro("src/Particle.cxx", opt.Data());
   gSystem -> CompileMacro("src/Vertex.cxx", opt.Data());
   gSystem -> CompileMacro("src/Transport.cxx", opt.Data());
+  gSystem -> CompileMacro("src/MultipleScattering.cxx", opt.Data());
 
 }

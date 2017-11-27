@@ -5,7 +5,7 @@
 #include "Point.h"
 #include "Direction.h"
 
-class Particle : public Point {
+class Particle : public Point, public Direction {
   //serve accettanza su eta? se si includi Detector.h
   
  public:

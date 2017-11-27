@@ -80,10 +80,10 @@ Double_t Direction::evalTheta(){
   return TMath::ACos(fC3);
 }
 Double_t Direction::evalPhi(){ //se fC1 o fC2 == 0??
-  if(fC1>0 && fC2>0) return ATan(fC2/fC1);
-  else if(fC1<0 && fC2<0) return ATan(fC2/fC1)+math::pi;
-  else if(fC1>0 && fC2<0) return ATan(fC2/fC1)+2*math::pi;
-  else if(fC1<0 && fC2>0) return ATan(fC2/fC1)+math::pi;
+  if(fC1>0 && fC2>0) return TMath::ATan(fC2/fC1);
+  else if(fC1<0 && fC2<0) return TMath::ATan(fC2/fC1)+math::pi;
+  else if(fC1>0 && fC2<0) return TMath::ATan(fC2/fC1)+2*math::pi;
+  else if(fC1<0 && fC2>0) return TMath::ATan(fC2/fC1)+math::pi;
 }
 
 
