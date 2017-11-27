@@ -6,7 +6,6 @@
 #include "Direction.h"
 
 class Particle : public Point {
-
   //serve accettanza su eta? se si includi Detector.h
   
  public:
@@ -17,36 +16,18 @@ class Particle : public Point {
 
   virtual ~Particle();
 
-  //calcolo pseudorapidity
-  Double_t thetaToEta(Double_t theta);//non riesco a settare come default argument il data member fTheta
-   
-  Double_t etaToTheta(Double_t eta);//non riesco a settare come default argument il data member fEta
-                                //rad
-  void setDirection(Direction dir);
-  void setPoint(Point point);
-
   Point getPoint(){return fPoint;}
   Direction getDirection(){return fDirection;}
-
   
-
-    
+  void setPoint(Point point);
+  void setDirection(Direction dir);
 
   
  private:
 
-
-
-  //forse dovremmo mettere coordinate!!
   Point fPoint;
-
   Direction fDirection;
-  //Double_t fPhi; //azimut [0,2Pi]
-  //Double_t fTheta; // pseudorapidity angle [0, Pi]
-  //Double_t fEta; // pseudorapydity eta = ln(tg(theta/2)))
-  
-  //particle label in a single event
-  UInt_t fLabel;
+  UInt_t fLabel; //particle label in a single event
   
   ClassDef(Particle, 1)
   
