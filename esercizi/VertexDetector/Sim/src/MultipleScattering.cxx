@@ -41,7 +41,7 @@ Direction rotation(Direction dir0, Direction dir1){ //prende la direzione inizia
   
   Double_t cP[3] = {dir1.c1(), dir1.c2(), dir1.c3()}; //P particle S.R.
 
-  Double_t c1L, c2L, c3L = 0.; //c1, c2, c3 dopo lo scattering nel SR del laboratorio
+  Double_t c1L = 0, c2L = 0, c3L = 0.; //c1, c2, c3 dopo lo scattering nel SR del laboratorio
   
   for(int i=0; i<3; i++){
     c1L += mat[0][i]*cP[i];
