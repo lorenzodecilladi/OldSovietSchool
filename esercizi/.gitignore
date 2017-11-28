@@ -1,0 +1,11 @@
+#ignore all files ending _cxx.d
+*_cxx.d
+
+#ignore all files ending _cxx.so
+*_cxx.so
+
+#ignore all files ending ~
+*~
+
+#ignore all files ending .root
+*.root
