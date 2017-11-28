@@ -7,13 +7,14 @@
 #include "Rootils.h"
 #include "TFile.h"
 #include "TTree.h"
+#include "TBranch.h"
 #include "TClonesArray.h"
 
 using namespace detector;
 
 void sim();
-void deleter();
-void generTree();
+//void deleter();
+//void generTree();
 
 
 
@@ -24,6 +25,7 @@ void sim(){
   TTree *simTree = new TTree("simTree", "Sim output tree");
   
   TClonesArray *hitsBP = new TClonesArray("Point", 100);
+  //  TClonesArray& hits = *hitsBP;
   TClonesArray *hits1L = new TClonesArray("Point", 100);
   TClonesArray *hits2L = new TClonesArray("Point", 100);
   Vertex *vert = new Vertex();
@@ -37,8 +39,12 @@ void sim(){
   //Vertex *vert = new Vertex();
 
   for(UInt_t event=0; event<5; event++){
+
+    cout << "------------------------------------------------" << endl;
+
     vert = new Vertex();
     UInt_t mult = vert->getMult();
+    cout << "\n\n Event: " << event << "\tmult : " << mult << endl;
     
     for(UInt_t i=0; i<mult; i++){
       
@@ -51,12 +57,19 @@ void sim(){
       //tansport to Beam Pipe
       //Point prova = transport(*part, detector::rBP);
       //Point *hitBP = new Point(prova);
-      //*hitsBP[i] = new Point(transport(*part, rBP));
-      new(hitsBP[i])Point(transport(*part, rBP));
-      //part->setPoint(*hitsBP[i]);
+
+      new((*hitsBP)[i]) Point(transport(*part, rBP)); //also good ->   (*hitsBP)[i] = new Point(transport(*part, rBP));
+      part->setPoint((* (Point*)hitsBP->At(i) )); //(* .....)    passo da Point* a Point
+      /*
+      //come accedere all'i-esimo elemento di un TClonesArray
+
+      Point* ptrhit = (Point*)hitsBP->At(i);   //accedo al puntatore Point* dell'elemento i del TClonsArray
+      Point* ptrhit = (Point*)(*hitsBP).At(i); //altro modo
+      Point hit = *( ptrhit ); //per accedere all'oggetto Point vero e proprio devo ancora dereferenziare vedere come funziona      
+      */
+
       //cout << "Particle at Beam Pipe..." << endl;
-      
-      
+            
       //multiple scattering in BP
       Direction *scBP = new Direction(multipleScattering(*part));
       part->setDirection(*scBP);
@@ -64,8 +77,9 @@ void sim(){
       
       
       //tansport BP -> 1Layer
-      hits1L[i] = new Point(transport(*part, r1L));
-      part->setPoint(*hits1L[i]);
+      (*hits1L)[i] = new Point(transport(*part, r1L));
+      part->setPoint((* (Point*)hits1L->At(i) ));
+      //part->setPoint(*hits1L[i]);
       //cout << "Prticle at Layer 1..." << endl;
       
       
@@ -75,8 +89,10 @@ void sim(){
 
       
       //tansport 1L -> 2L
-      hits2L[i] = new Point(transport(*part, r2L));
-      part->setPoint(*hits2L[i]);    
+      (*hits2L)[i] = new Point(transport(*part, r2L));
+      part->setPoint((* (Point*)hits2L->At(i) ));
+      
+      cout << "\n---final position in 2nd layer---";
       part->print();
       
       //delete part;
@@ -87,10 +103,16 @@ void sim(){
       //delete hit2L;
     }
     
-
+    simTree->Fill();
+    hitsBP->Clear();
+    hits1L->Clear();
+    hits2L->Clear();
   }
   
-  //delete vert;  
+  vert->Clear();
+  sim_file.Write();
+  sim_file.Close();
+  
 }
 
 
