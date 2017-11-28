@@ -18,6 +18,7 @@ class Particle : public Point, public Direction {
 
   Point getPoint(){return fPoint;}
   Direction getDirection(){return fDirection;}
+  UInt_t getLabel(){return fLabel;}
   
   void setPoint(Point point);
   void setDirection(Direction dir);
