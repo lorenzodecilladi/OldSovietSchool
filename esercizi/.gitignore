@@ -1,8 +1,8 @@
-#ignore all files ending _cxx.d
-*_cxx.d
+#ignore all files ending .d
+*.d
 
-#ignore all files ending _cxx.so
-*_cxx.so
+#ignore all files ending .so
+*.so
 
 #ignore all files ending ~
 *~
