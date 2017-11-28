@@ -8,7 +8,7 @@ Point transport(Particle part, Double_t R){
   Double_t t = time(part, R);
   //  cout << "Time t = " << t << endl;
   if(t==0){
-    cout << "WARNING: Transport time == 0" << endl;
+    cout << "Particle # "<< part.getLabel() << ": WARNING: Transport time == 0" << endl;
     return Point(part.getPoint());
   }
   Double_t _c1 = part.getDirection().c1();

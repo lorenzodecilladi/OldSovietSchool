@@ -29,7 +29,8 @@ void Particle::setDirection(Direction dir){
 }
 
 void Particle::print(){
-    cout << "\n\tParticle p" << endl;
+
+  cout << "\nlabel: " << fLabel << endl;
   cout << "\nx: " << fPoint.X() << endl;
   cout << "y: " << fPoint.Y() << endl;
   cout << "z: " << fPoint.Z() << endl;
