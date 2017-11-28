@@ -10,7 +10,7 @@
 
 void testParticle();
 void testVertex();
-//void testTransport();
+void testTime(Particle part, Double_t R);
 //void testMultipleScattering();
 //void testSim();
 
@@ -39,4 +39,16 @@ void testVertex(){
 
   cout << "\nMult: " << v->getMult() << endl;
 
+}
+
+void testTime(Particle part, Double_t R){
+  Double_t x0 = part.getPoint().X();
+  Double_t y0 = part.getPoint().Y();
+  Double_t _c1 = part.getDirection().c1();
+  Double_t _c2 = part.getDirection().c2();
+  Double_t delta = (x0*_c1+y0*_c2)*(x0*_c1+y0*_c2) - (_c1*_c1+_c2*_c2)*(x0*x0+y0*y0-R*R);
+  Double_t t1 = (-(x0*_c1+y0*_c2) - TMath::Sqrt(delta))/(_c1*_c1+_c2*_c2);
+  Double_t t2 = (-(x0*_c1+y0*_c2) + TMath::Sqrt(delta))/(_c1*_c1+_c2*_c2);
+  cout << "t1: " << t1 << endl;
+  cout << "t2: " << t2 << endl;
 }
