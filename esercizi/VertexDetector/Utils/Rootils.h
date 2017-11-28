@@ -6,7 +6,7 @@
 namespace rootils{
 
   Double_t rndmUniform(Double_t min, Double_t max){
-    Double_t x = gRandom -> Rndm();
+    Double_t x = gRandom -> Rndm(0);
     return x*(max-min) + min;
   }
 

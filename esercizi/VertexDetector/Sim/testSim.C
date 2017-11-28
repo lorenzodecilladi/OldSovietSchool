@@ -7,16 +7,18 @@
 #include "Rootils.h"
 
 
-
 void testParticle();
 void testVertex();
-//void testTransport();
+void testTransport();
 //void testMultipleScattering();
 //void testSim();
 
 void testParticle(){
 
-  Particle *p = new Particle();
+  //  Particle *p = new Particle();
+  
+  Vertex *v = new Vertex();
+  Particle *p = new Particle(v->getPoint(), 1);
   cout << "\n\tParticle p" << endl;
   cout << "\nx: " << p->getPoint().X() << endl;
   cout << "y: " << p->getPoint().Y() << endl;
@@ -30,6 +32,7 @@ void testParticle(){
   cout << "c3: " << p->getDirection().c3() << endl;
 }
 
+
 void testVertex(){
   Vertex *v = new Vertex();
   cout << "\n\tVertex v" << endl;
@@ -39,4 +42,13 @@ void testVertex(){
 
   cout << "\nMult: " << v->getMult() << endl;
 
+}
+
+
+
+void testTransport(){
+
+  Particle *p = new Particle();
+  Point *hit = new Point(transport(*p, 1));
+  
 }

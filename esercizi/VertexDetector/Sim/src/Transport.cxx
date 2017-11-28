@@ -6,6 +6,7 @@
 Point transport(Particle part, Double_t R){
   
   Double_t t = time(part, R);
+  //  cout << "Time t = " << t << endl;
   if(t==0){
     cout << "WARNING: Transport time == 0" << endl;
     return Point(part.getPoint());
@@ -36,7 +37,8 @@ Double_t time(Particle part, Double_t R){
   Double_t t1 = (-(x0*_c1+y0*_c2) - TMath::Sqrt(delta))/(_c1*_c1+_c2*_c2);
   Double_t t2 = (-(x0*_c1+y0*_c2) + TMath::Sqrt(delta))/(_c1*_c1+_c2*_c2);
   if(t1>0) return t1;
-  else if(t2>0) return t2;
+  else if (t2>0) return t2;
+  //else return t2;
   else return 0.;
 }
 

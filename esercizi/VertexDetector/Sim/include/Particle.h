@@ -22,6 +22,7 @@ class Particle : public Point, public Direction {
   void setPoint(Point point);
   void setDirection(Direction dir);
 
+  void print();
   
  private:
 

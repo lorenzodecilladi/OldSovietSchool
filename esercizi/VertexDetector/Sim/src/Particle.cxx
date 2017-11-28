@@ -1,6 +1,7 @@
 #include "Particle.h"
 #include "Rootils.h"
 #include "Math.h"
+#include "Riostream.h"
 
 ClassImp(Particle)
 
@@ -27,3 +28,17 @@ void Particle::setDirection(Direction dir){
   fDirection = dir;
 }
 
+void Particle::print(){
+    cout << "\n\tParticle p" << endl;
+  cout << "\nx: " << fPoint.X() << endl;
+  cout << "y: " << fPoint.Y() << endl;
+  cout << "z: " << fPoint.Z() << endl;
+  
+  cout << "\ntheta: " << fDirection.theta() << endl;
+  cout << "phi: " << fDirection.phi() << endl;
+  cout << "eta: " << fDirection.eta() << endl;
+  cout << "c1: " << fDirection.c1() << endl;
+  cout << "c2: " << fDirection.c2() << endl;
+  cout << "c3: " << fDirection.c3() << endl;
+
+}

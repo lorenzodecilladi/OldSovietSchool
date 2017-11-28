@@ -1,6 +1,7 @@
 #include "Direction.h"
 #include "Math.h"
 #include "Rootils.h"
+#include "Riostream.h"
 
 ClassImp(Direction)
 
@@ -84,6 +85,10 @@ Double_t Direction::evalPhi(){ //se fC1 o fC2 == 0??
   else if(fC1<0 && fC2<0) return TMath::ATan(fC2/fC1)+math::pi;
   else if(fC1>0 && fC2<0) return TMath::ATan(fC2/fC1)+2*math::pi;
   else if(fC1<0 && fC2>0) return TMath::ATan(fC2/fC1)+math::pi;
+  else {
+    cout << "WARNING: C1 or C2 == 0 !!! phi set to -1 ___ Direction::evalPhi TO BE DEBUGGED" << endl;
+    return -1.;
+  }
 }
 
 
