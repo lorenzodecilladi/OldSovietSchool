@@ -19,9 +19,17 @@ Comandi pricipali di Git
     e.g. arianna@arianna-AOD260:~/github/OldSovietSchool$ git add slides/tans2017_01.pdf 
   git commit: committare, -m "commento"
     e.g. git commit -m "added slides"
+  git commit --amend : aggiunge i file aggiunti (staged) all'ultimo commit (se non ho ancora fatto push); 
+    utile se ho dimenticato di aggiungere qualcosa all'ultimo commit o se ho committato cose sbagliate
   git pull: per aggiornare il mio git su pc
   git push: per caricare le mie modifiche su github
-  
+  git log: mostra la history 
+    opzioni varie e.g. -2 ultimi 2 commit, --until/since,  ...
+  git clean: cancella file e fa anche git add/rm
+    -x: anche i file .gitignore
+    -n: solo virtuale (gli chiedo cosa cancellerebbe)
+    -i: chiedi cosa cancellare e come
+    -f: forza la cancellazione (usare con parsimonia)
 
 -------------------------------------------------------------
 
