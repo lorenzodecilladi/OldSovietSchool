@@ -1,5 +1,5 @@
-//#if !defined(__CINT__) || defined(__MAKECINT__)
 //#include "../include/Point.h"
+#include "Riostream.h"
 #include "Point.h"
 //#endif
 
@@ -36,7 +36,7 @@ Point::Point(const Point& source):TObject(source){
 }
 
 //destructor
-Point::~Point(){}
+Point::~Point(){}//cout << "Destroying Point..."<< endl;}
 
 //assignment operator
 Point& Point::operator= (const Point& source){
