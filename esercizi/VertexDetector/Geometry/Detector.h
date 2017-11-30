@@ -22,6 +22,8 @@ namespace detector {
   static const Double_t smZhit = 0.012; //cm  smearing Z direction  (120 #mum)
   static const Double_t smRhit = 0.003; //cm  smearing r#phi direction (30 #mum)
 
+  static const Double_t cutPhi = 0.01; // rad = 10 mrad
+
   static const Double_t thetaSpace = TMath::Sqrt(2.)*0.001; //[rad] RMS generazione gaussiana theta multiple scattering
   
 }
