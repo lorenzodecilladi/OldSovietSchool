@@ -17,13 +17,22 @@ Tracklet::Tracklet(){
 
 
 
-//copy constructor
+//standard constructor
 Tracklet::Tracklet(Point hit1L, Point hit2L){
 
   fHit1L = hit1L;
   fHit2L = hit2L;
 
 }
+
+//copy constructor
+Tracklet::Tracklet(const Tracklet& source):Point(source){
+
+  fHit1L = source.fHit1L;
+  fHit2L = source.fHit2L;
+
+}
+
 
 //destructor
 Tracklet::~Tracklet(){}//cout << "Destroying Tracklet..."<< endl;}
