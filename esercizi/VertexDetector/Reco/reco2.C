@@ -34,7 +34,7 @@ void reco2(){
   Vertex       *vert   = new Vertex();
     
   //open and read tree
-  TFile sim_file("../Sim/sim_file.root");
+  TFile sim_file("../Sim/sim2results.root");
   TTree   *tree  = (TTree*)sim_file.Get("simTree");
   TBranch *bVert = tree -> GetBranch("Vertex");
   TBranch *bBP   = tree -> GetBranch("HitsBP");
@@ -49,9 +49,9 @@ void reco2(){
   //cout << "\nnEvents in the tree = " << nEvents << endl;
 
   //histograms to be filled with analysis results
-  TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 1000       , -13.5, 13.5);
-  TH1D *histRecoVertices = new TH1D("histRecoVertices", "z Reco Vertices"     , nEvents/10., -13.5, 13.5);
-  TH1D *histSimVertices  = new TH1D("histSimVertices" , "z Sim Vertices"      , nEvents/10., -13.5, 13.5);
+  TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 10000      , -13.5, 13.5);
+  TH1D *histRecoVertices = new TH1D("histRecoVertices", "z Reco Vertices"     , nEvents/50., -13.5, 13.5);
+  TH1D *histSimVertices  = new TH1D("histSimVertices" , "z Sim Vertices"      , nEvents/50., -13.5, 13.5);
   TH1D *histSimMult      = new TH1D("histSimMults"    , "z Sim Multiplicities", 50         ,  0   , 50  );
   
   for(Int_t event=0; event<nEvents; event++){//loop over events
@@ -62,7 +62,7 @@ void reco2(){
   }//end event loop
   
   //write results on a file
-  TFile *reco_file = new TFile("reco_file2.root", "RECREATE"); 
+  TFile *reco_file = new TFile("reco2results.root", "RECREATE"); 
   histCandidates   -> Write(); //only the last one, as an example
   histRecoVertices -> Write();
   histSimVertices  -> Write();
@@ -80,7 +80,7 @@ void reco2(){
 
 void eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult){
   
-  cout << "Event: " << event << "; Multiplicity: " << vert->getMult() << endl;
+  //cout << "Event: " << event << "; Multiplicity: " << vert->getMult() << endl; //the run is faster if not used: for 10000 events, 6.56 vs 4.43 seconds
   //cout << "Event: " << event << "; zVert: " << vert->getPoint().Z() << endl;
   
   Int_t nHits = hits1L -> GetEntries();
@@ -93,7 +93,7 @@ void eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vert
   sprintf(title, "Reco vertices distribution - event %d", event);
   //TH1D* histCandidates = new TH1D(name, title, 1000, -13.5, 13.5);
   //histCandidates = new TH1D(name, title, 100, -13.5, 13.5);
-  //histCandidates->SetNameTitle(name,title);
+  //  histCandidates->SetNameTitle(name,title); //the run is faster if not used: for 10000 events, 7.67 vs 6.56 seconds
     
   for (Int_t i=0; i<nHits; i++){ //loop over 1st layer's hits
 
@@ -129,7 +129,7 @@ void eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vert
 TTree* readTree(TClonesArray *hitsBP, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert){
 
   //Open input sim file and tree
-  TFile *sim_file = new TFile("../Sim/sim_file.root");
+  TFile *sim_file = new TFile("../Sim/sim2results.root");
   TTree *tree = (TTree*)sim_file->Get("simTree");
   TBranch *bVert = tree->GetBranch("Vertex");
   TBranch *bBP = tree->GetBranch("HitsBP");
