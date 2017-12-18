@@ -27,8 +27,7 @@
 using namespace detector;
 
 void sim(UInt_t nEvents = 1000);
-//void deleter();
-//void generTree();
+//void deleter(); DELETE???
 
 
 
