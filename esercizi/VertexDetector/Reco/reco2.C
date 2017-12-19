@@ -67,7 +67,7 @@ void reco2(){
 
   //histograms to be filled with analysis results
   //TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 1020        , -25.5, 25.5); //NO match hits; bin size 500 um
-  TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 510         , -25.5, 25.5); //WITH match hits; bin size 1 mm
+  TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 510         , -25.45, 25.55); //WITH match hits; bin size 1 mm
   TH1D *histRecoVertices = new TH1D("histRecoVertices", "z Reco Vertices"     , nEvents/200., -25.5, 25.5);
   TH1D *histSimVertices  = new TH1D("histSimVertices" , "z Sim Vertices"      , nEvents/200., -25.5, 25.5);
   TH1D *histSimMult      = new TH1D("histSimMults"    , "z Sim Multiplicities", 50          ,  0   , 50  );
@@ -97,7 +97,7 @@ void reco2(){
 
 void eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult){
 
-  if(event%1000 == 0) {cout << "Processing EVENT " << event << endl;}
+  if(event%10000 == 0) {cout << "Processing EVENT " << event << endl;}
   
   Int_t nHits = hits1L -> GetEntries();
   
