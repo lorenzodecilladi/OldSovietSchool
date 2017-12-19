@@ -2,18 +2,22 @@
 #include "MultipleScattering.h"
 #include "Detector.h"
 #include "Rootils.h"
+#include "Math.h"
 
 Direction multipleScattering(Particle part){
 
+  //SR lab
   //direction before scattering
   Direction dir0 = part.getDirection(); //get c1, c2, c3 before scattering
 
+  //SR con apici
   //estrazione gaussiana theta e flat??? di phi
-  Double_t phi1 = dir0.phi();//rootils::rndmUniform(0., 2*math::pi);
+  Double_t phi1 = dir0.phi();
+  //Double_t phi1 = rootils::rndmUniform(0., 2*math::pi);
   Double_t theta1 = rootils::rndmGaus(0., detector::thetaSpace);
 
   //otteniamo direzione dopo scattering nel SR con apici (sempre dei c)
-  //riportiamo del SR del laboratorio (sempre i coefficienti c)
+  //riportiamo nel SR del laboratorio (sempre i coefficienti c)
 
   //  Double_t rotMatrix[3][3] = matrix(dir0);
   Direction dir1 = Direction(theta1, phi1);

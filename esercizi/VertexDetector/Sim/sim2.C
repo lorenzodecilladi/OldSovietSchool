@@ -32,8 +32,8 @@ using namespace detector;
 //------------------------------------------
 //---------- FUNCTION DECLARATION ----------
 void sim2(UInt_t nEvents = 10000, bool aripc = kFALSE);
-void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L );
-//void deleter(); DELETE???
+//void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L );
+void hitMaker(UInt_t i, Vertex& vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L );
 
 
 
@@ -71,20 +71,25 @@ void sim2(UInt_t nEvents, bool aripc){
     }
 
     
-    vert = new Vertex("gaus", 20, 5);
-    UInt_t mult = vert->getMult();
+    //vert = new Vertex("gaus", 20, 5);
+    //UInt_t mult = vert->getMult();
+    
+    Vertex vert("gaus", 20, 5); //
+    UInt_t mult = vert.getMult();
     
     for(UInt_t i=0; i<mult; i++){ //loop over particles
-      hitMaker(i, vert, hitsBP, hits1L, hits2L);
+      //hitMaker(i, vert, hitsBP, hits1L, hits2L);
+      hitMaker(i, vert, hitsBP, hits1L, hits2L); // PASSA VERTICE COME REFERENZA!!
     } // end particles loop
     
     simTree->Fill();
     hitsBP->Clear();
     hits1L->Clear();
     hits2L->Clear();
+    //delete vert;
   }//end events loop
   
-  vert->Clear();
+  //vert->Clear();
   sim_file.Write();
   sim_file.Close();
 
@@ -95,12 +100,14 @@ void sim2(UInt_t nEvents, bool aripc){
 
 
 //---------------- HITMAKER ------------------
-void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L ){
+//void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L ){
+void hitMaker(UInt_t i, Vertex &vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L ){
     
-  Particle part(vert->getPoint(), i);
+  //  Particle part(vert->getPoint(), i);
+  Particle part(vert.getPoint(), i);
   
   //tansport to Beam Pipe
-  (*hitsBP)[i] = new Point(transport(part, rBP));   //also good -> new((*hitsBP)[i]) Point(transport(*part, rBP));
+  new((*hitsBP)[i]) Point(transport(part, rBP));  // memory leak-> (*hitsBP)[i] = new Point(transport(part, rBP));
   part.setPoint((* (Point*)hitsBP->At(i) ));
 
   //multiple scattering in BP
@@ -108,7 +115,7 @@ void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L
   part.setDirection(scBP);
   
   //tansport BP -> 1Layer
-  (*hits1L)[i] = new Point(transport(part, r1L));
+  new((*hits1L)[i]) Point(transport(part, r1L));//  (*hits1L)[i] = new Point(transport(part, r1L));
   part.setPoint((* (Point*)hits1L->At(i) ));
   
   //multiple scattering in 1L
@@ -116,7 +123,7 @@ void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L
   part.setDirection(sc1L);
   
   //tansport 1L -> 2L
-  (*hits2L)[i] = new Point(transport(part, r2L));
+  new((*hits2L)[i]) Point(transport(part, r2L));//  (*hits2L)[i] = new Point(transport(part, r2L));
   part.setPoint((* (Point*)hits2L->At(i) ));
 }
 

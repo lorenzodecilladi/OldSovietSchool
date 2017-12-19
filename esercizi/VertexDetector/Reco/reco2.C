@@ -7,6 +7,8 @@
   ~ Last modified: 18/12/2017                                ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+//errore binomiALe sull'efficienza perché il numeratore (numero di eventi riostruiti) è un sottogruppo del denominatore (numero di eventi generati)
+
 #if !defined(__CINT__) || defined(__MAKECINT__)
 
 #include <Riostream.h>
@@ -64,11 +66,11 @@ void reco2(){
   Int_t nEvents = tree -> GetEntries();
 
   //histograms to be filled with analysis results
-  //TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 1020       , -25.5, 25.5); //NO match hits; bin size 500 um
-  TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 2550       , -25.5, 25.5); //WITH match hits; bin size 200 um
+  //TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 1020        , -25.5, 25.5); //NO match hits; bin size 500 um
+  TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 510         , -25.5, 25.5); //WITH match hits; bin size 1 mm
   TH1D *histRecoVertices = new TH1D("histRecoVertices", "z Reco Vertices"     , nEvents/200., -25.5, 25.5);
   TH1D *histSimVertices  = new TH1D("histSimVertices" , "z Sim Vertices"      , nEvents/200., -25.5, 25.5);
-  TH1D *histSimMult      = new TH1D("histSimMults"    , "z Sim Multiplicities", 50         ,  0   , 50  );
+  TH1D *histSimMult      = new TH1D("histSimMults"    , "z Sim Multiplicities", 50          ,  0   , 50  );
 
   for(Int_t event=0; event<nEvents; event++){ //loop over events
     tree -> GetEntry(event);
