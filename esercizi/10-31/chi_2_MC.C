@@ -14,9 +14,7 @@
 //=================================================
 //============= FUNCTION DECLARATION ==============
 
-//double poisson(double *x, double *par);
 double chi2(double *x, double *mu, int N); //evaluates chi2
-double rootInversion(TF1* funcPtr);
 Double_t chi2PDF(Double_t *x,Double_t *par); //PDF Chi2
 
 
@@ -89,8 +87,6 @@ void chi_2_MC(const int nrep = 100, bool highBg = kFALSE){              //nrep =
   for(int j=0; j<nrep; j++){                //loop over experiment repetitions
     for(int i=0; i<nDoF; i++){              //loop over data histogram's bins
       dataMC[i] = gRandom->Poisson(mu[i]);  //MC extraction
-                                            //fPoisson->SetParameter(0, mu[i]);    //questo è problematico, è lentissimo!
-                                            //dataMC[i] = rootInversion(fPoisson);
     }
     histChi2->Fill(chi2(dataMC,mu,nDoF));
                                             //if(j%100000==0)cout<<"Processing event " << j << endl;
@@ -143,27 +139,6 @@ double chi2(double *x, double *mu, int N){
   return chiSquare;
 }
 
-
-/*
-double poisson(double *x, double *par){
-  double n = x[0];
-  double lambda= par[0];
-  //double pMax=par[1];
-
-  //return pow(lambda,n)/TMath::Gamma(n)*TMath::Exp();
-  return TMath::Exp(n*(TMath::Log(lambda/n)+1)-lambda);  
-  //return TMath::Poisson(n,lambda);
-}
-*/
-
-/*
-//ROOT NUMERICAL INVERSION
-double rootInversion(TF1* funcPtr){
-
-  //funcPtr.SetParameter(0, fParam);  
-  return funcPtr->GetRandom();
-}
-*/
 
 Double_t chi2PDF(Double_t *x,Double_t *par)
 {
