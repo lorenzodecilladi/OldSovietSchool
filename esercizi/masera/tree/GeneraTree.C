@@ -32,7 +32,7 @@ void GeneraTree()
   tree->Branch("VertMult",&point.X,"X/D:Y:Z:mult/I");
   tree->Branch("Hits",&ptrhits);
       
-  for(Int_t i=0; i<100;i++){ // loop sugli eventi
+  for(Int_t i=0; i<100000;i++){ // loop sugli eventi
 
     // Genero una molteplicita e un vertice
     Int_t numpart=0;
@@ -51,12 +51,12 @@ void GeneraTree()
     }
 
       // Debug
-      printf("Evento %d - moltepl: %d\n",i,numpart);
-      printf("x= %f ; y= %f; z= %f \n",point.X,point.Y,point.Z);
-      printf("Entries nel TClonesArray: %d\n",ptrhits->GetEntries());
+    if(i%1000 == 0) printf("Evento %d - moltepl: %d\n",i,numpart);
+      //printf("x= %f ; y= %f; z= %f \n",point.X,point.Y,point.Z);
+      //printf("Entries nel TClonesArray: %d\n",ptrhits->GetEntries());
       for (Int_t j=0; j<hits.GetEntries(); j++){
 	Punto *tst=(Punto*)ptrhits->At(j);
-	cout<<"Punto "<<j<<") x, y, z = "<<tst->GetX()<<"; "<<tst->GetY()<<"; "<<tst->GetZ()<<endl;
+	//	cout<<"Punto "<<j<<") x, y, z = "<<tst->GetX()<<"; "<<tst->GetY()<<"; "<<tst->GetZ()<<endl;
       }
       // fine del debug
 
