@@ -33,7 +33,7 @@ using namespace detector;
 //---------- FUNCTION DECLARATION ----------
 void sim2(UInt_t nEvents = 10000, bool aripc = kFALSE);
 //void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L );
-void hitMaker(UInt_t i, Vertex& vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L );
+void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L );
 
 
 
@@ -50,7 +50,7 @@ void sim2(UInt_t nEvents, bool aripc){
   TFile sim_file("sim2results.root", "RECREATE");
   
   TTree *simTree = new TTree("simTree", "Sim output tree");
-
+  //simTree->SetMaxEntryLoop(nEvents);
   TClonesArray *hitsBP = new TClonesArray("Point", 100);
   TClonesArray *hits1L = new TClonesArray("Point", 100);
   TClonesArray *hits2L = new TClonesArray("Point", 100);
@@ -65,7 +65,7 @@ void sim2(UInt_t nEvents, bool aripc){
   for(UInt_t event=0; event<nEvents; event++){ //loop over events
 
     if(event%1000 == 0){cout << "Processing EVENT " << event << endl;}
-    if(aripc && event>=35000){
+    if(aripc && event>=137000){
       cout << "\nEvent " << event << " of "<< nEvents <<": too much for ari's pc. No more events processed!!\n" << endl;
       break;
     }
@@ -74,12 +74,28 @@ void sim2(UInt_t nEvents, bool aripc){
     //vert = new Vertex("gaus", 20, 5);
     //UInt_t mult = vert->getMult();
     
-    Vertex vert("gaus", 20, 5); //
-    UInt_t mult = vert.getMult();
+    *vert = Vertex("gaus", 20, 5); //
+    UInt_t mult = vert->getMult();
     
     for(UInt_t i=0; i<mult; i++){ //loop over particles
       //hitMaker(i, vert, hitsBP, hits1L, hits2L);
-      hitMaker(i, vert, hitsBP, hits1L, hits2L); // PASSA VERTICE COME REFERENZA!!
+      //hitMaker(i, vert, hitsBP, hits1L, hits2L); // PASSA VERTICE COME REFERENZA!!
+
+      
+          
+      //  Particle part(vert->getPoint(), i);
+      Particle part(vert->getPoint(), i);
+      
+      //tansport to Beam Pipe
+      new((*hitsBP)[i]) Point(transport(part, rBP));  // memory leak-> (*hitsBP)[i] = new Point(transport(part, rBP));
+      part.setPoint((* (Point*)hitsBP->At(i) ));
+      
+      //multiple scattering in BP
+      Direction scBP(multipleScattering(part));
+      part.setDirection(scBP);
+      
+      
+      
     } // end particles loop
     
     simTree->Fill();
@@ -101,10 +117,10 @@ void sim2(UInt_t nEvents, bool aripc){
 
 //---------------- HITMAKER ------------------
 //void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L ){
-void hitMaker(UInt_t i, Vertex &vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L ){
+void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L ){
     
   //  Particle part(vert->getPoint(), i);
-  Particle part(vert.getPoint(), i);
+  Particle part(vert->getPoint(), i);
   
   //tansport to Beam Pipe
   new((*hitsBP)[i]) Point(transport(part, rBP));  // memory leak-> (*hitsBP)[i] = new Point(transport(part, rBP));

@@ -12,8 +12,8 @@ Direction multipleScattering(Particle part){
 
   //SR con apici
   //estrazione gaussiana theta e flat??? di phi
-  Double_t phi1 = dir0.phi();
-  //Double_t phi1 = rootils::rndmUniform(0., 2*math::pi);
+  //  Double_t phi1 = dir0.phi();
+  Double_t phi1   = rootils::rndmUniform(0., 2*math::pi);
   Double_t theta1 = rootils::rndmGaus(0., detector::thetaSpace);
 
   //otteniamo direzione dopo scattering nel SR con apici (sempre dei c)
