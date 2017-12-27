@@ -68,7 +68,6 @@ void reco2(){
   Int_t nEvents = tree -> GetEntries();
 
   //histograms to be filled with analysis results
-  //TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 1020        , -25.5, 25.5); //NO match hits; bin size 500 um
   TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 510         , -25.45, 25.55); //WITH match hits; bin size 1 mm
 
   TH1D *histRecoVertices = new TH1D("histRecoVertices", "z Reco Vertices"     , nEvents/200., -25.5, 25.5);
@@ -102,7 +101,8 @@ void eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vert
 
   if(event%1000 == 0) {cout << "Processing EVENT " << event << endl;}
   
-  Int_t nHits = hits1L -> GetEntries();
+  Int_t nHits1L = hits1L -> GetEntries();
+  Int_t nHits2L = hits2L -> GetEntries();
 
   //cout << nHits << endl;
   
@@ -117,15 +117,16 @@ void eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vert
   Double_t sumCand = 0;
   Int_t meanSize = 0;
   
-  for (Int_t i=0; i<nHits; i++){ //loop over 1st layer's hits
+  for (Int_t i=0; i<nHits1L; i++){ //loop over 1st layer's hits
 
     Point hit1L = *((Point*)hits1L->At(i)); //TObject* ---> Point* ---> Point
-    
-    for(Int_t j=0; j<nHits; j++){ //loop over 2nd layer's hits
+    if(TMath::Abs(hit1L.Z())>detector::length/2.) continue;
+    for(Int_t j=0; j<nHits2L; j++){ //loop over 2nd layer's hits
       //e se n1L != n2L ==> mettere un cut!!
       Point hit2L = *((Point*)hits2L->At(j));
+      if(TMath::Abs(hit2L.Z())>detector::length/2.) continue;
       if(kTRUE){
-	//if(matchHits(hit1L, hit2L)){
+      //if(matchHits(hit1L, hit2L)){
 	Tracklet trt = Tracklet(hit1L, hit2L);
 	Double_t zCandidate = trt.extractVertex().Z();
 	histCandidates -> Fill(zCandidate);
@@ -145,32 +146,27 @@ void eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vert
   Double_t thr = yCandMax/2.;
   if(yCandMax<thr) return; // --> no maximum
 
-  if(event == 1499){
+  /*  if(event == 1499){
     cout << "nbins " << nbins << endl;
     cout << "binMax " << binMax << endl;
     cout << "xCandMax " << xCandMax << endl;
     cout << "yCandMax " << yCandMax << endl;
     cout << "thr " << thr << endl;
     cout << histCandidates->GetBinContent(histCandidates->GetXaxis()->FindBin(0.8)) << endl;
-  }
+    }*/
   
-  // histCandidates->GetXaxis()->SetRange(1,binMax-3);
-  Int_t binMaxL = findMaximum(histCandidates, 1, binMax-3);
+  Int_t binMaxL = findMaximum(histCandidates, 1, binMax-4);
   Double_t yCandMaxL = histCandidates->GetBinContent(binMaxL);
   Double_t xCandMaxL = histCandidates->GetBinCenter(binMaxL);
-  if(yCandMaxL>=thr) return;
+  if(yCandMaxL>=thr){
+    //histCandidates->GetXaxis()->SetRange(1,nbins);
+    if(event<400) histCandidates->DrawCopy();
+    return;}
   
-  //  histCandidates->GetXaxis()->SetRange(binMax+3, nbins);
-  Int_t binMaxR = findMaximum(histCandidates, binMax+3, nbins -1);
+  Int_t binMaxR = findMaximum(histCandidates, binMax+4, nbins -1);
   Double_t yCandMaxR = histCandidates->GetBinContent(binMaxR);
   Double_t xCandMaxR = histCandidates->GetBinCenter(binMaxR);
-  if(yCandMaxR>=thr){
-    //if(event<3000){
-    histCandidates->GetXaxis()->SetRange(1,nbins);
-    histCandidates->DrawCopy();//}
-    return;}
-
-  //histCandidates->GetXaxis()->SetRange(1,nbins);
+  if(yCandMaxR>=thr) return;
   
 
   for(UInt_t i=0; i<vCand.size(); i++){
@@ -185,8 +181,6 @@ void eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vert
   histRecoVertices -> Fill(zVertex);
   
 }
-
-
 
 
 
