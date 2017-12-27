@@ -1,8 +1,10 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Macro per l'esecuzione della simulazione d'esame        ~
-  ~ Autori:  ~
-  ~          ~
-  ~ Ultima modifica: 15/11/2017                             ~
+  ~ Macro for the simulation of a VERTEX DETECTOR           ~
+  ~ Authors:  Arianna Corrado                               ~
+  ~           Lorenzo de Cilladi                            ~
+  ~ Course:   TANS - 2017/2018                              ~
+  ~                                                         ~
+  ~ Last modified: 27/12/2017                               ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 
@@ -12,8 +14,6 @@
 #include "Riostream.h"
 #include "Particle.h"
 #include "Vertex.h"
-#include "Transport.h"
-#include "MultipleScattering.h"
 #include "Detector.h"
 #include "Rootils.h"
 #include "TFile.h"
@@ -26,89 +26,69 @@
 
 using namespace detector;
 
-void sim(UInt_t nEvents = 1000);
-//void deleter(); DELETE???
+
+//------------------------------------------
+//---------- FUNCTION DECLARATION ----------
+void sim(UInt_t nEvents = 10000, Bool_t msON = kTRUE, Bool_t aripc = kFALSE); //if msON == kTRUE --> multiple scattering is switched on
+void hitMaker(UInt_t i, Vertex vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L, Bool_t msON);
 
 
 
-void sim(UInt_t nEvents){
+//--------------------------------------------
+//---------- FUNCTION IMPLMENTATION ----------
+
+
+//------------------ SIM --------------------
+void sim(UInt_t nEvents, Bool_t msON, Bool_t aripc){
 
   TStopwatch watch;
   watch.Start(kTRUE);
   
-  TFile sim_file("sim_file.root", "RECREATE");
+  TFile sim_file("sim_results.root", "RECREATE");
   
   TTree *simTree = new TTree("simTree", "Sim output tree");
+
+  TClonesArray *ptrhitsBP = new TClonesArray("Point", 100);
+  TClonesArray *ptrhits1L = new TClonesArray("Point", 100);
+  TClonesArray *ptrhits2L = new TClonesArray("Point", 100);
+  TClonesArray& hitsBP = *ptrhitsBP;
+  TClonesArray& hits1L = *ptrhits1L;
+  TClonesArray& hits2L = *ptrhits2L;
   
-  TClonesArray *hitsBP = new TClonesArray("Point", 100);
-  TClonesArray *hits1L = new TClonesArray("Point", 100);
-  TClonesArray *hits2L = new TClonesArray("Point", 100);
-  Vertex *vert = new Vertex();
+  Vertex vert;
+
   
+  
+
   simTree->Branch("Vertex", &vert);
-  simTree->Branch("HitsBP", &hitsBP);
-  simTree->Branch("Hits1L", &hits1L);
-  simTree->Branch("Hits2L", &hits2L);
+  simTree->Branch("HitsBP", &ptrhitsBP);
+  simTree->Branch("Hits1L", &ptrhits1L);
+  simTree->Branch("Hits2L", &ptrhits2L);
   
 
-  for(UInt_t event=0; event<nEvents; event++){
-    
-    vert = new Vertex("gaus", 20, 5);
-    UInt_t mult = vert->getMult();
-
-    //    cout << "\n---------------------------------------------" << endl;
-    //    cout << " EVENT: " << event << "\tMULT: " << mult << endl;
+  for(UInt_t event=0; event<nEvents; event++){ //loop over events
 
     if(event%1000 == 0){cout << "Processing EVENT " << event << endl;}
-    
-    for(UInt_t i=0; i<mult; i++){
-      
-      //cout << "Generating particle" << i <<..." << endl;
-      Particle *part = new Particle(vert->getPoint(), i);
-      
-      //tansport to Beam Pipe
-      (*hitsBP)[i] = new Point(transport(*part, rBP));   //also good -> new((*hitsBP)[i]) Point(transport(*part, rBP));
-      part->setPoint((* (Point*)hitsBP->At(i) ));        //(* .....)    passo da Point* a Point
-
-      
-      //cout << "Particle at Beam Pipe..." << endl;
-      //cout << "Particle scattering in Beam Pipe..." << endl;
-      Direction *scBP = new Direction(multipleScattering(*part));
-      part->setDirection(*scBP);
-
-      
-      //tansport BP -> 1Layer
-      //cout << "Particle at Layer 1..." << endl;
-      (*hits1L)[i] = new Point(transport(*part, r1L));
-      part->setPoint((* (Point*)hits1L->At(i) ));
-
-      
-      //multiple scattering in 1L
-      Direction *sc1L = new Direction(multipleScattering(*part));
-      part->setDirection(*sc1L);
-
-      //tansport 1L -> 2L
-      (*hits2L)[i] = new Point(transport(*part, r2L));
-      part->setPoint((* (Point*)hits2L->At(i) ));
-      
-      //cout << "\n---final position in 2nd layer---";
-      //part->print();
-      
-      //delete part;
-      //delete hitBP;
-      //delete scBP;
-      //delete hit1L;
-      //delete sc1L;
-      //delete hit2L;
+    if(aripc && event>=35000){
+      cout << "\nEvent " << event << " of "<< nEvents <<": too much for ari's pc. No more events processed!!\n" << endl;
+      break;
     }
+
     
+    vert = Vertex("gaus", 20, 5);
+    UInt_t mult = vert.getMult();
+        
+    for(UInt_t i=0; i<mult; i++){ //loop over particles
+      hitMaker(i, vert, ptrhitsBP, ptrhits1L, ptrhits2L, msON);
+    } // end particles loop
+
     simTree->Fill();
-    hitsBP->Clear();
-    hits1L->Clear();
-    hits2L->Clear();
-  }
+    ptrhitsBP->Clear();
+    ptrhits1L->Clear();
+    ptrhits2L->Clear();
+    //delete vert;
+  }//end events loop
   
-  vert->Clear();
   sim_file.Write();
   sim_file.Close();
 
@@ -118,38 +98,49 @@ void sim(UInt_t nEvents){
 
 
 
-//void deleter(){
-//  delete *vert;
-//  delete 
-//}
+//---------------- HITMAKER ------------------
+void hitMaker(UInt_t i, Vertex vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON){
+  
+  Particle *part = new Particle(vert.getPoint(), i);
+  
+  part->transport(rBP);           //tansport to Beam Pipe
+  new((*ptrhitsBP)[i]) Point(part->getPoint());
+  
+  if(msON) part->multipleScattering();     //MS in Beam Pipe
+  
+  part->transport(r1L);           //tansport BP -> Layer1
+  //new((*ptrhits1L)[i]) Point(part->getPoint());
+  Int_t i1L = ptrhits1L->GetEntries();
+  if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits1L)[i1L]) Point(part->getPoint());
+  
+  if(msON) part->multipleScattering();     //MS in Layer1
+  
+  part->transport(r2L);           //transport Layer1 -> Layer2
+  //new((*ptrhits2L)[i]) Point(part->getPoint());
+  Int_t i2L = ptrhits2L->GetEntries();
+  if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(part->getPoint());
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*
-void generTree(){
-  TTree *simTree = new TTree("simTree", "Sim output tree");
-
-  TClonesArray *hitsBP = new TClonesArray("Point", 100);
-  TClonesArray *hits1L = new TClonesArray("Point", 100);
-  TClonesArray *hits2L = new TClonesArray("Point", 100);
-
-  Vertex *vertex = new Vertex();
+  //come accedere all'i-esimo elemento di un TClonesArray
   
-  simTree->Branch("Vertex", &vertex);
-  simTree->Branch("HitsBP", &hitsBP);
-  simTree->Branch("Hits1L", &hits1L);
-  simTree->Branch("Hits2L", &hits2L);
-}
+  Point* ptrhit = (Point*)ptrhitsBP->At(i);   //accedo al puntatore Point* dell'elemento i del TClonsArray
+  Point* ptrhit = (Point*)(*ptrhitsBP).At(i); //altro modo
+  Point hit = *( ptrhit ); //per accedere all'oggetto Point vero e proprio devo ancora dereferenziare vedere come funziona      
 */
-
-
-
-
-
-
-      /*
-      //come accedere all'i-esimo elemento di un TClonesArray
-      
-      Point* ptrhit = (Point*)hitsBP->At(i);   //accedo al puntatore Point* dell'elemento i del TClonsArray
-      Point* ptrhit = (Point*)(*hitsBP).At(i); //altro modo
-      Point hit = *( ptrhit ); //per accedere all'oggetto Point vero e proprio devo ancora dereferenziare vedere come funziona      
-      */

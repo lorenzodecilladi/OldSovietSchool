@@ -18,10 +18,8 @@ void compile(TString myopt="fast"){
   gSystem->CompileMacro("src/Direction.cxx", opt.Data());
   gSystem->CompileMacro("src/Particle.cxx", opt.Data());
   gSystem->CompileMacro("src/Vertex.cxx", opt.Data());
-  //gSystem->CompileMacro("src/Transport.cxx", opt.Data());
-  //gSystem->CompileMacro("src/MultipleScattering.cxx", opt.Data());
   //gSystem->Exec("compile()");
-  gSystem->CompileMacro("sim2.C", opt.Data());
+  gSystem->CompileMacro("sim.C", opt.Data());
   //gSystem->Exec("sim()");
 }
 
