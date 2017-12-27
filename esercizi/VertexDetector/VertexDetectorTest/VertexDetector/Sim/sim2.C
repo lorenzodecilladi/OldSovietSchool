@@ -52,23 +52,22 @@ void sim2(UInt_t nEvents, bool aripc){
   TTree *simTree = new TTree("simTree", "Sim output tree");
   //TTree simTree("simTree", "Sim output tree");
 
-  TClonesArray *hitsBP = new TClonesArray("Point", 100);
-  TClonesArray *hits1L = new TClonesArray("Point", 100);
-  TClonesArray *hits2L = new TClonesArray("Point", 100);
-  Vertex *vert = new Vertex();
-
-  //TClonesArray hitsBP("Point", 100);
-  //TClonesArray hits1L("Point", 100);
-  //TClonesArray hits2L("Point", 100);
-  //Vertex vert(); 
+  TClonesArray *ptrhitsBP = new TClonesArray("Point", 100);
+  TClonesArray *ptrhits1L = new TClonesArray("Point", 100);
+  TClonesArray *ptrhits2L = new TClonesArray("Point", 100);
+  TClonesArray& hitsBP = *ptrhitsBP;
+  TClonesArray& hits1L = *ptrhits1L;
+  TClonesArray& hits2L = *ptrhits2L;
+  
+  Vertex vert;
 
   
   
 
   simTree->Branch("Vertex", &vert);
-  simTree->Branch("HitsBP", &hitsBP);
-  simTree->Branch("Hits1L", &hits1L);
-  simTree->Branch("Hits2L", &hits2L);
+  simTree->Branch("HitsBP", &ptrhitsBP);
+  simTree->Branch("Hits1L", &ptrhits1L);
+  simTree->Branch("Hits2L", &ptrhits2L);
   
 
   for(UInt_t event=0; event<nEvents; event++){ //loop over events
@@ -81,29 +80,38 @@ void sim2(UInt_t nEvents, bool aripc){
 
     
     //vert = new Vertex("gaus", 20, 5);
-    *vert = Vertex("gaus", 20, 5);
-    UInt_t mult = vert->getMult();
+    vert = Vertex("gaus", 20, 5);
+    UInt_t mult = vert.getMult();
     
     //Vertex vert("gaus", 20, 5); //
     //UInt_t mult = vert.getMult();
     
     for(UInt_t i=0; i<mult; i++){ //loop over particles
-      //hitMaker(i, vert, hitsBP, hits1L, hits2L);
+      //hitMaker(i, vert, ptrhitsBP, ptrhits1L, ptrhits2L);
 
-      Particle part(vert->getPoint(), i);
+      Particle *part = new Particle(vert.getPoint(), i);
+      //Particle part;
 
-      part.transport(rBP);           //tansport to Beam Pipe
-      new((*hitsBP)[i]) Point(part.getPoint());
+      part->transport(rBP);           //tansport to Beam Pipe
+      new(hitsBP[i]) Point(part->getPoint());
       
-      part.multipleScattering();     //MS in Beam Pipe
+      part->multipleScattering();     //MS in Beam Pipe
+
+      part->transport(r1L);           //tansport BP -> Layer1
+      new((*ptrhits1L)[i]) Point(part->getPoint());
       
-      //hitMaker(i, vert, hitsBP, hits1L, hits2L); // PASSA VERTICE COME REFERENZA!!
+      part->multipleScattering();     //MS in Layer1
+      
+      part->transport(r2L);           //transport Layer1 -> Layer2
+      new((*ptrhits2L)[i]) Point(part->getPoint());
+      
+      //hitMaker(i, vert, ptrhitsBP, ptrhits1L, ptrhits2L); // PASSA VERTICE COME REFERENZA!!
     } // end particles loop
     
     simTree->Fill();
-    hitsBP->Clear();
-    hits1L->Clear();
-    hits2L->Clear();
+    ptrhitsBP->Clear();
+    ptrhits1L->Clear();
+    ptrhits2L->Clear();
     //delete vert;
   }//end events loop
   
@@ -118,24 +126,24 @@ void sim2(UInt_t nEvents, bool aripc){
 
 
 //---------------- HITMAKER ------------------
-void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L ){
-//void hitMaker(UInt_t i, Vertex &vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L ){
+void hitMaker(UInt_t i, Vertex* vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L ){
+//void hitMaker(UInt_t i, Vertex &vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L ){
     
   //Particle part(vert.getPoint(), i); //oppure
   Particle part(vert->getPoint(), i);
   
-  //part.transport(rBP);           //tansport to Beam Pipe
-  //new((*hitsBP)[i]) Point(part.getPoint());
+  part.transport(rBP);           //tansport to Beam Pipe
+  new((*ptrhitsBP)[i]) Point(part.getPoint());
   
   part.multipleScattering();     //MS in Beam Pipe
   
-  //part.transport(r1L);           //tansport BP -> Layer1
-  //new((*hits1L)[i]) Point(part.getPoint());
+  part.transport(r1L);           //tansport BP -> Layer1
+  new((*ptrhits1L)[i]) Point(part.getPoint());
   
-  //part.multipleScattering();     //MS in Layer1
+  part.multipleScattering();     //MS in Layer1
   
-  //part.transport(r2L);           //transport Layer1 -> Layer2
-  //new((*hits2L)[i]) Point(part.getPoint());
+  part.transport(r2L);           //transport Layer1 -> Layer2
+  new((*ptrhits2L)[i]) Point(part.getPoint());
 }
 
 
@@ -157,7 +165,7 @@ void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L
 /*
   //come accedere all'i-esimo elemento di un TClonesArray
   
-  Point* ptrhit = (Point*)hitsBP->At(i);   //accedo al puntatore Point* dell'elemento i del TClonsArray
-  Point* ptrhit = (Point*)(*hitsBP).At(i); //altro modo
+  Point* ptrhit = (Point*)ptrhitsBP->At(i);   //accedo al puntatore Point* dell'elemento i del TClonsArray
+  Point* ptrhit = (Point*)(*ptrhitsBP).At(i); //altro modo
   Point hit = *( ptrhit ); //per accedere all'oggetto Point vero e proprio devo ancora dereferenziare vedere come funziona      
 */

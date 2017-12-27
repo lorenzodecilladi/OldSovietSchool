@@ -19,7 +19,7 @@ using namespace detector;
 
 
 
-void simNoFile(UInt_t nEvents, bool aripc){
+void simNoFile(UInt_t nEvents, bool aripc=kFALSE){
 
   TStopwatch watch;
   watch.Start(kTRUE);
@@ -33,7 +33,7 @@ void simNoFile(UInt_t nEvents, bool aripc){
       break;
     }
 
-    vert = new Vertex("gaus", 20, 5);
+    Vertex *vert = new Vertex("gaus", 20, 5);
     UInt_t mult = vert->getMult();
     
     for(UInt_t i=0; i<mult; i++){ //loop over particles
