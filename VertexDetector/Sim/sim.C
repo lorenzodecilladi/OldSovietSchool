@@ -44,7 +44,7 @@ void sim(UInt_t nEvents, Bool_t msON, Bool_t aripc){
   TStopwatch watch;
   watch.Start(kTRUE);
   
-  TFile sim_file("sim_results.root", "RECREATE");
+  TFile sim_file("simFile.root", "RECREATE");
   
   TTree *simTree = new TTree("simTree", "Sim output tree");
 
@@ -75,7 +75,8 @@ void sim(UInt_t nEvents, Bool_t msON, Bool_t aripc){
     }
 
     
-    vert = Vertex("gaus", 20, 5);
+    //vert = Vertex("gaus", 20, 5);
+    vert = Vertex("uniform", 0, 50);
     UInt_t mult = vert.getMult();
         
     for(UInt_t i=0; i<mult; i++){ //loop over particles
@@ -119,6 +120,8 @@ void hitMaker(UInt_t i, Vertex vert, TClonesArray* ptrhitsBP, TClonesArray* ptrh
   //new((*ptrhits2L)[i]) Point(part->getPoint());
   Int_t i2L = ptrhits2L->GetEntries();
   if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(part->getPoint());
+
+  delete part;
 }
 
 
