@@ -33,7 +33,7 @@
 //---------- FUNCTION DECLARATION ------------
 
 void   reco2();
-void   eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult);
+Bool_t   eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult, Double_t &residualZ, Double_t &zVertReco);
 Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin);
 
 
@@ -67,37 +67,54 @@ void reco2(){
 
   Int_t nEvents = tree -> GetEntries();
 
-  //histograms to be filled with analysis results
-  TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 510         , -25.45, 25.55); //WITH match hits; bin size 1 mm
 
+  //open reco file
+  TFile *reco_file = new TFile("reco2results.root", "RECREATE");
+  
+  //histograms to be filled with reco analysis results
+  TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 510         , -25.45, 25.55); //WITH match hits; bin size 1 mm
   TH1D *histRecoVertices = new TH1D("histRecoVertices", "z Reco Vertices"     , nEvents/200., -25.5, 25.5);
   TH1D *histSimVertices  = new TH1D("histSimVertices" , "z Sim Vertices"      , nEvents/200., -25.5, 25.5);
   TH1D *histSimMult      = new TH1D("histSimMults"    , "z Sim Multiplicities", 50          ,  0   , 50  );
 
+  //open reco tree
+  TTree *recoTree = new TTree("recoTree", "Reco output tree");
+  Double_t residualZ;
+  Double_t zVertReco;
+  recoTree->Branch("residualZ", &residualZ, "residualZ/D" );
+  recoTree->Branch("zVertReco", &zVertReco, "zVertReco/D");
+  
   for(Int_t event=0; event<nEvents; event++){ //loop over events
     tree -> GetEntry(event);
-    eventAnalysis(event, hits1L, hits2L, vert, histRecoVertices, histSimVertices, histCandidates, histSimMult);
+    if(eventAnalysis(event, hits1L, hits2L, vert, histRecoVertices, histSimVertices, histCandidates, histSimMult, residualZ, zVertReco))
+      recoTree -> Fill();
+    
   } //end events loop
+  
+  recoTree->GetEvent(0);
+  cout << residualZ << endl;
 
-  //write results on a file
-  TFile *reco_file = new TFile("reco2results.root", "RECREATE"); 
+  //write results on reco file
+  //TFile *reco_file = new TFile("reco2results.root", "RECREATE"); 
   histCandidates   -> Write(); //only the last one, as an example
   histRecoVertices -> Write();
   histSimVertices  -> Write();
   histSimMult      -> Write();
+  recoTree         -> Write();
+
   reco_file -> ls();
   reco_file -> Close();
   sim_file.Close();
 
   watch.Stop();
   watch.Print();
-
 }
+
 
 
 //--------EVENT ANALYSIS------------
 
-void eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult){
+Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult, Double_t &residualZ, Double_t &zVertReco){
 
   if(event%1000 == 0) {cout << "Processing EVENT " << event << endl;}
   
@@ -135,8 +152,12 @@ void eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vert
     }//end hit 2L loop
   }//end hit 1L loop
 
-  histSimVertices  -> Fill(vert->getPoint().Z());
+  
+  Double_t zVertSim = vert->getPoint().Z();
+  histSimVertices  -> Fill(zVertSim);
   histSimMult      -> Fill(vert->getMult());
+
+
   
   Int_t nbins = histCandidates->GetNbinsX();
 
@@ -144,7 +165,7 @@ void eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vert
   Double_t yCandMax = histCandidates->GetBinContent(binMax);
   Double_t xCandMax = histCandidates->GetBinCenter(binMax);
   Double_t thr = yCandMax/2.;
-  if(yCandMax<thr) return; // --> no maximum
+  if(yCandMax<thr) return kFALSE; // --> no maximum
 
   /*  if(event == 1499){
     cout << "nbins " << nbins << endl;
@@ -161,12 +182,12 @@ void eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vert
   if(yCandMaxL>=thr){
     //histCandidates->GetXaxis()->SetRange(1,nbins);
     if(event<400) histCandidates->DrawCopy();
-    return;}
+    return kFALSE;}
   
   Int_t binMaxR = findMaximum(histCandidates, binMax+4, nbins -1);
   Double_t yCandMaxR = histCandidates->GetBinContent(binMaxR);
   Double_t xCandMaxR = histCandidates->GetBinCenter(binMaxR);
-  if(yCandMaxR>=thr) return;
+  if(yCandMaxR>=thr) return kFALSE;
   
 
   for(UInt_t i=0; i<vCand.size(); i++){
@@ -177,9 +198,12 @@ void eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vert
   }
 
   Double_t zVertex = sumCand/meanSize;
-
   histRecoVertices -> Fill(zVertex);
+
+  zVertReco = zVertex;
+  residualZ = zVertReco - zVertSim;
   
+  return kTRUE;
 }
 
 
