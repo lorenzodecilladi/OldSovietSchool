@@ -30,7 +30,7 @@ using namespace detector;
 //------------------------------------------
 //---------- FUNCTION DECLARATION ----------
 void sim(UInt_t nEvents = 10000, Bool_t msON = kTRUE, Bool_t aripc = kFALSE); //if msON == kTRUE --> multiple scattering is switched on
-void hitMaker(UInt_t i, Vertex vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L, Bool_t msON);
+void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L, Bool_t msON);
 
 
 
@@ -44,7 +44,7 @@ void sim(UInt_t nEvents, Bool_t msON, Bool_t aripc){
   TStopwatch watch;
   watch.Start(kTRUE);
   
-  TFile sim_file("sim_results.root", "RECREATE");
+  TFile *sim_file = new TFile("simResults.root", "RECREATE");
   
   TTree *simTree = new TTree("simTree", "Sim output tree");
 
@@ -55,16 +55,14 @@ void sim(UInt_t nEvents, Bool_t msON, Bool_t aripc){
   TClonesArray& hits1L = *ptrhits1L;
   TClonesArray& hits2L = *ptrhits2L;
   
-  Vertex vert;
-
+  Vertex *ptrvert = new Vertex();
+  Vertex& vert = *ptrvert;
   
-  
-
-  simTree->Branch("Vertex", &vert);
+  simTree->Branch("Vertex", &ptrvert);
   simTree->Branch("HitsBP", &ptrhitsBP);
   simTree->Branch("Hits1L", &ptrhits1L);
   simTree->Branch("Hits2L", &ptrhits2L);
-  
+ 
 
   for(UInt_t event=0; event<nEvents; event++){ //loop over events
 
@@ -74,23 +72,24 @@ void sim(UInt_t nEvents, Bool_t msON, Bool_t aripc){
       break;
     }
 
+    //ptrvert = new Vertex("gaus", 20, 5);
+    ptrvert = new Vertex("uniform", 0, 20);
     
-    vert = Vertex("gaus", 20, 5);
-    UInt_t mult = vert.getMult();
+    UInt_t mult = ptrvert->getMult();
         
     for(UInt_t i=0; i<mult; i++){ //loop over particles
-      hitMaker(i, vert, ptrhitsBP, ptrhits1L, ptrhits2L, msON);
+      hitMaker(i, ptrvert, ptrhitsBP, ptrhits1L, ptrhits2L, msON);
     } // end particles loop
 
     simTree->Fill();
     ptrhitsBP->Clear();
     ptrhits1L->Clear();
     ptrhits2L->Clear();
-    //delete vert;
+    delete ptrvert;
   }//end events loop
   
-  sim_file.Write();
-  sim_file.Close();
+  sim_file->Write();
+  sim_file->Close();
 
   watch.Stop();
   watch.Print();
@@ -99,9 +98,9 @@ void sim(UInt_t nEvents, Bool_t msON, Bool_t aripc){
 
 
 //---------------- HITMAKER ------------------
-void hitMaker(UInt_t i, Vertex vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON){
+void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON){
   
-  Particle *part = new Particle(vert.getPoint(), i);
+  Particle *part = new Particle(ptrvert->getPoint(), i);
   
   part->transport(rBP);           //tansport to Beam Pipe
   new((*ptrhitsBP)[i]) Point(part->getPoint());
@@ -119,6 +118,8 @@ void hitMaker(UInt_t i, Vertex vert, TClonesArray* ptrhitsBP, TClonesArray* ptrh
   //new((*ptrhits2L)[i]) Point(part->getPoint());
   Int_t i2L = ptrhits2L->GetEntries();
   if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(part->getPoint());
+
+  delete part;	
 }
 
 
