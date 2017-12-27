@@ -32,8 +32,7 @@ using namespace detector;
 //------------------------------------------
 //---------- FUNCTION DECLARATION ----------
 void sim2(UInt_t nEvents = 10000, bool aripc = kFALSE);
-void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L );
-//void hitMaker(UInt_t i, Vertex& vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L );
+void hitMaker(UInt_t i, Vertex vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L );
 
 
 
@@ -50,7 +49,6 @@ void sim2(UInt_t nEvents, bool aripc){
   TFile sim_file("sim2results.root", "RECREATE");
   
   TTree *simTree = new TTree("simTree", "Sim output tree");
-  //TTree simTree("simTree", "Sim output tree");
 
   TClonesArray *ptrhitsBP = new TClonesArray("Point", 100);
   TClonesArray *ptrhits1L = new TClonesArray("Point", 100);
@@ -79,35 +77,13 @@ void sim2(UInt_t nEvents, bool aripc){
     }
 
     
-    //vert = new Vertex("gaus", 20, 5);
     vert = Vertex("gaus", 20, 5);
     UInt_t mult = vert.getMult();
-    
-    //Vertex vert("gaus", 20, 5); //
-    //UInt_t mult = vert.getMult();
-    
+        
     for(UInt_t i=0; i<mult; i++){ //loop over particles
-      //hitMaker(i, vert, ptrhitsBP, ptrhits1L, ptrhits2L);
-
-      Particle *part = new Particle(vert.getPoint(), i);
-      //Particle part;
-
-      part->transport(rBP);           //tansport to Beam Pipe
-      new(hitsBP[i]) Point(part->getPoint());
-      
-      part->multipleScattering();     //MS in Beam Pipe
-
-      part->transport(r1L);           //tansport BP -> Layer1
-      new((*ptrhits1L)[i]) Point(part->getPoint());
-      
-      part->multipleScattering();     //MS in Layer1
-      
-      part->transport(r2L);           //transport Layer1 -> Layer2
-      new((*ptrhits2L)[i]) Point(part->getPoint());
-      
-      //hitMaker(i, vert, ptrhitsBP, ptrhits1L, ptrhits2L); // PASSA VERTICE COME REFERENZA!!
+      hitMaker(i, vert, ptrhitsBP, ptrhits1L, ptrhits2L);
     } // end particles loop
-    
+
     simTree->Fill();
     ptrhitsBP->Clear();
     ptrhits1L->Clear();
@@ -115,7 +91,6 @@ void sim2(UInt_t nEvents, bool aripc){
     //delete vert;
   }//end events loop
   
-  //vert->Clear();
   sim_file.Write();
   sim_file.Close();
 
@@ -126,24 +101,26 @@ void sim2(UInt_t nEvents, bool aripc){
 
 
 //---------------- HITMAKER ------------------
-void hitMaker(UInt_t i, Vertex* vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L ){
-//void hitMaker(UInt_t i, Vertex &vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L ){
-    
-  //Particle part(vert.getPoint(), i); //oppure
-  Particle part(vert->getPoint(), i);
+void hitMaker(UInt_t i, Vertex vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L ){
   
-  part.transport(rBP);           //tansport to Beam Pipe
-  new((*ptrhitsBP)[i]) Point(part.getPoint());
+  Particle *part = new Particle(vert.getPoint(), i);
   
-  part.multipleScattering();     //MS in Beam Pipe
+  part->transport(rBP);           //tansport to Beam Pipe
+  new((*ptrhitsBP)[i]) Point(part->getPoint());
   
-  part.transport(r1L);           //tansport BP -> Layer1
-  new((*ptrhits1L)[i]) Point(part.getPoint());
+  part->multipleScattering();     //MS in Beam Pipe
   
-  part.multipleScattering();     //MS in Layer1
+  part->transport(r1L);           //tansport BP -> Layer1
+  //new((*ptrhits1L)[i]) Point(part->getPoint());
+  Int_t i1L = ptrhits1L->GetEntries();
+  if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits1L)[i1L]) Point(part->getPoint());
   
-  part.transport(r2L);           //transport Layer1 -> Layer2
-  new((*ptrhits2L)[i]) Point(part.getPoint());
+  part->multipleScattering();     //MS in Layer1
+  
+  part->transport(r2L);           //transport Layer1 -> Layer2
+  //new((*ptrhits2L)[i]) Point(part->getPoint());
+  Int_t i2L = ptrhits2L->GetEntries();
+  if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(part->getPoint());
 }
 
 
