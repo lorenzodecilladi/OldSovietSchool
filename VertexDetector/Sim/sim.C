@@ -44,8 +44,8 @@ void sim(UInt_t nEvents, Bool_t msON, Bool_t aripc){
   TStopwatch watch;
   watch.Start(kTRUE);
   
-  TFile *sim_file = new TFile("simResults.root", "RECREATE");
-  
+  TFile *sim_file = new TFile("simFile.root", "RECREATE");
+
   TTree *simTree = new TTree("simTree", "Sim output tree");
 
   TClonesArray *ptrhitsBP = new TClonesArray("Point", 100);
@@ -119,7 +119,8 @@ void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* 
   Int_t i2L = ptrhits2L->GetEntries();
   if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(part->getPoint());
 
-  delete part;	
+  delete part;
+
 }
 
 

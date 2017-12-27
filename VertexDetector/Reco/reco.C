@@ -4,7 +4,7 @@
   ~           Lorenzo de Cilladi                             ~
   ~ Course:   TANS - 2017/2018                               ~
   ~                                                          ~
-  ~ Last modified: 18/12/2017                                ~
+  ~ Last modified: 27/12/2017                                ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 //errore binomiALe sull'efficienza perché il numeratore (numero di eventi riostruiti) è un sottogruppo del denominatore (numero di eventi generati)
@@ -54,7 +54,7 @@ void reco(){
   Vertex       *vert   = new Vertex();
 
   //open sim tree
-  TFile sim_file("../Sim/sim2results.root");
+  TFile sim_file("../Sim/simFile.root");
   TTree   *tree  = (TTree*)sim_file.Get("simTree");
   TBranch *bVert = tree -> GetBranch("Vertex");
   TBranch *bBP   = tree -> GetBranch("HitsBP");
@@ -69,7 +69,7 @@ void reco(){
 
 
   //open reco file
-  TFile *reco_file = new TFile("reco_results.root", "RECREATE");
+  TFile *reco_file = new TFile("recoFile.root", "RECREATE");
   
   //histograms to be filled with reco analysis results
   TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 510         , -25.45, 25.55); //WITH match hits; bin size 1 mm
