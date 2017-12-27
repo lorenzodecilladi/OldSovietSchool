@@ -21,6 +21,7 @@
 #include "TBranch.h"
 #include "TClonesArray.h"
 #include "TStopwatch.h"
+#include "TString.h"
 
 #endif
 
@@ -29,7 +30,10 @@ using namespace detector;
 
 //------------------------------------------
 //---------- FUNCTION DECLARATION ----------
-void sim(UInt_t nEvents = 10000, Bool_t msON = kTRUE, Bool_t aripc = kFALSE); //if msON == kTRUE --> multiple scattering is switched on
+void sim(UInt_t nEvents = 10000, TString multOpt = "gaus", Bool_t msON = kTRUE, Bool_t aripc = kFALSE);
+//if msON == kTRUE --> multiple scattering is switched on
+//multOpt can be "gaus", "uniform"
+
 void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L, Bool_t msON);
 
 
@@ -39,7 +43,7 @@ void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L
 
 
 //------------------ SIM --------------------
-void sim(UInt_t nEvents, Bool_t msON, Bool_t aripc){
+void sim(UInt_t nEvents, TString multOpt, Bool_t msON, Bool_t aripc){
 
   TStopwatch watch;
   watch.Start(kTRUE);
@@ -66,14 +70,15 @@ void sim(UInt_t nEvents, Bool_t msON, Bool_t aripc){
 
   for(UInt_t event=0; event<nEvents; event++){ //loop over events
 
-    if(event%1000 == 0){cout << "Processing EVENT " << event << endl;}
+    if(event%10000 == 0){cout << "Processing EVENT " << event << endl;}
     if(aripc && event>=35000){
       cout << "\nEvent " << event << " of "<< nEvents <<": too much for ari's pc. No more events processed!!\n" << endl;
       break;
     }
 
-    //ptrvert = new Vertex("gaus", 20, 5);
-    ptrvert = new Vertex("uniform", 0, 20);
+    if(multOpt == "gaus") ptrvert = new Vertex("gaus", 20, 5);
+    else if(multOpt == "uniform") ptrvert = new Vertex("uniform", 0, 20);
+    else cout << "Invalid multiplicity option" << endl;
     
     UInt_t mult = ptrvert->getMult();
         
