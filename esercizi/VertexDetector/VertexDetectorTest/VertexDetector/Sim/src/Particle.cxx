@@ -83,6 +83,7 @@ void Particle::multipleScattering(){
   //SR con apici, after MS
   Double_t theta1 = rootils::rndmGaus(0., detector::thetaSpace);
   Double_t phi1 = rootils::rndmUniform(0., 2*math::pi); //fDirection.phi();
+  //Double_t phi1 = fDirection.phi();
   //Double_t phi1 = gRandom->Rndm(); //rootils::rndmUniform(0., 2*math::pi); //fDirection.phi();
   Direction dir1 = Direction(theta1, phi1); //sempre dei c
     

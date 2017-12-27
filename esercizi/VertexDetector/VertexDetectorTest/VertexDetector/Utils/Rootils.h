@@ -11,6 +11,7 @@ namespace rootils{
   }
 
   Double_t rndmGaus(Double_t mean, Double_t sigma){
+    gRandom->SetSeed(0);
     Double_t x = gRandom -> Gaus(mean, sigma);
     return x;
   }
