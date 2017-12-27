@@ -31,8 +31,8 @@ using namespace detector;
 
 //------------------------------------------
 //---------- FUNCTION DECLARATION ----------
-void sim2(UInt_t nEvents = 10000, bool aripc = kFALSE);
-void hitMaker(UInt_t i, Vertex vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L );
+void sim2(UInt_t nEvents = 10000, Bool_t msON = kTRUE, Bool_t aripc = kFALSE); //if msON == kTRUE --> multiple scattering is switched on
+void hitMaker(UInt_t i, Vertex vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L, Bool_t msON);
 
 
 
@@ -41,7 +41,7 @@ void hitMaker(UInt_t i, Vertex vert, TClonesArray* hitsBP, TClonesArray* hits1L,
 
 
 //------------------ SIM2 --------------------
-void sim2(UInt_t nEvents, bool aripc){
+void sim2(UInt_t nEvents, Bool_t msON, Bool_t aripc){
 
   TStopwatch watch;
   watch.Start(kTRUE);
@@ -81,7 +81,7 @@ void sim2(UInt_t nEvents, bool aripc){
     UInt_t mult = vert.getMult();
         
     for(UInt_t i=0; i<mult; i++){ //loop over particles
-      hitMaker(i, vert, ptrhitsBP, ptrhits1L, ptrhits2L);
+      hitMaker(i, vert, ptrhitsBP, ptrhits1L, ptrhits2L, msON);
     } // end particles loop
 
     simTree->Fill();
@@ -101,21 +101,21 @@ void sim2(UInt_t nEvents, bool aripc){
 
 
 //---------------- HITMAKER ------------------
-void hitMaker(UInt_t i, Vertex vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L ){
+void hitMaker(UInt_t i, Vertex vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON){
   
   Particle *part = new Particle(vert.getPoint(), i);
   
   part->transport(rBP);           //tansport to Beam Pipe
   new((*ptrhitsBP)[i]) Point(part->getPoint());
   
-  part->multipleScattering();     //MS in Beam Pipe
+  if(msON) part->multipleScattering();     //MS in Beam Pipe
   
   part->transport(r1L);           //tansport BP -> Layer1
   //new((*ptrhits1L)[i]) Point(part->getPoint());
   Int_t i1L = ptrhits1L->GetEntries();
   if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits1L)[i1L]) Point(part->getPoint());
   
-  part->multipleScattering();     //MS in Layer1
+  if(msON) part->multipleScattering();     //MS in Layer1
   
   part->transport(r2L);           //transport Layer1 -> Layer2
   //new((*ptrhits2L)[i]) Point(part->getPoint());
