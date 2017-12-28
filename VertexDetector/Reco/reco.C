@@ -115,7 +115,7 @@ void reco(TString simfilePath){
 
 Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult, Double_t &residualZ, Double_t &zVertReco){
 
-  if(event%1000 == 0) {cout << "Processing EVENT " << event << endl;}
+  if(event%10000 == 0) {cout << "Processing EVENT " << event << endl;}
   
   Int_t nHits1L = hits1L -> GetEntries();
   Int_t nHits2L = hits2L -> GetEntries();
@@ -209,7 +209,7 @@ Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Ve
 
 Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin){
   Int_t nbins = maxBin - minBin +1;
-  Int_t binMax = minBin; //evitiamo accumulo 
+  Int_t binMax = minBin; //evitiamo accumulo sul primo o ultimo bin delle entries fuori range
   for(Int_t i=minBin; i<maxBin; i++){
     if(hist->GetBinContent(i+1) > hist->GetBinContent(binMax))
       binMax = i+1;
