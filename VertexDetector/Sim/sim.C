@@ -4,7 +4,7 @@
   ~           Lorenzo de Cilladi                            ~
   ~ Course:   TANS - 2017/2018                              ~
   ~                                                         ~
-  ~ Last modified: 27/12/2017                               ~
+  ~ Last modified: 28/12/2017                               ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 
@@ -30,7 +30,7 @@ using namespace detector;
 
 //------------------------------------------
 //---------- FUNCTION DECLARATION ----------
-void sim(UInt_t nEvents = 10000, TString multOpt = "gaus", Bool_t msON = kTRUE, Bool_t aripc = kFALSE);
+void sim(UInt_t nEvents = 10000, TString multOpt = "gaus", Bool_t msON = kTRUE);
 //if msON == kTRUE --> multiple scattering is switched on
 //multOpt can be "gaus", "uniform"
 
@@ -43,26 +43,25 @@ void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L
 
 
 //------------------ SIM --------------------
-void sim(UInt_t nEvents, TString multOpt, Bool_t msON, Bool_t aripc){
+void sim(UInt_t nEvents, TString multOpt, Bool_t msON){
 
   TStopwatch watch;
   watch.Start(kTRUE);
   
   TFile *sim_file = new TFile("simFile.root", "RECREATE");
 
-  TTree *simTree = new TTree("simTree", "Sim output tree");
+  TTree *simTree  = new TTree("simTree", "Sim output tree");
 
   TClonesArray *ptrhitsBP = new TClonesArray("Point", 100);
   TClonesArray *ptrhits1L = new TClonesArray("Point", 100);
   TClonesArray *ptrhits2L = new TClonesArray("Point", 100);
+  Vertex       *ptrvert   = new Vertex();
   TClonesArray& hitsBP = *ptrhitsBP;
   TClonesArray& hits1L = *ptrhits1L;
   TClonesArray& hits2L = *ptrhits2L;
-  
-  Vertex *ptrvert = new Vertex();
-  Vertex& vert = *ptrvert;
-  
-  simTree->Branch("Vertex", &ptrvert);
+  Vertex&       vert   = *ptrvert;  
+
+  simTree->Branch("Vertex", &ptrvert  );
   simTree->Branch("HitsBP", &ptrhitsBP);
   simTree->Branch("Hits1L", &ptrhits1L);
   simTree->Branch("Hits2L", &ptrhits2L);
@@ -70,14 +69,12 @@ void sim(UInt_t nEvents, TString multOpt, Bool_t msON, Bool_t aripc){
 
   for(UInt_t event=0; event<nEvents; event++){ //loop over events
 
+    
     if(event%10000 == 0){cout << "Processing EVENT " << event << endl;}
-    if(aripc && event>=35000){
-      cout << "\nEvent " << event << " of "<< nEvents <<": too much for ari's pc. No more events processed!!\n" << endl;
-      break;
-    }
-
-    if(multOpt == "gaus") ptrvert = new Vertex("gaus", 20, 5);
-    else if(multOpt == "uniform") ptrvert = new Vertex("uniform", 0, 20);
+   
+    if     (multOpt == "gaus")    ptrvert = new Vertex("gaus"   , 20, 5 );
+    else if(multOpt == "uniform") ptrvert = new Vertex("uniform", 0 , 50);
+    else if(multOpt == "fixed")   ptrvert = new Vertex("fixed"  , 20    );
     else cout << "Invalid multiplicity option" << endl;
     
     UInt_t mult = ptrvert->getMult();
