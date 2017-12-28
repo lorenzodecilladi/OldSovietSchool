@@ -32,7 +32,7 @@ using namespace detector;
 //---------- FUNCTION DECLARATION ----------
 void sim(UInt_t nEvents = 10000, TString multOpt = "gaus", Bool_t msON = kTRUE);
 //if msON == kTRUE --> multiple scattering is switched on
-//multOpt can be "gaus", "uniform"
+//multOpt can be "gaus", "uniform", "fixed"
 
 void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L, Bool_t msON);
 
@@ -143,8 +143,8 @@ void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* 
 
 /*
   //come accedere all'i-esimo elemento di un TClonesArray
-  
+
   Point* ptrhit = (Point*)ptrhitsBP->At(i);   //accedo al puntatore Point* dell'elemento i del TClonsArray
   Point* ptrhit = (Point*)(*ptrhitsBP).At(i); //altro modo
-  Point hit = *( ptrhit ); //per accedere all'oggetto Point vero e proprio devo ancora dereferenziare vedere come funziona      
+  Point hit = *( ptrhit ); //per accedere all'oggetto Point vero e proprio devo ancora dereferenziare vedere come funziona
 */
