@@ -32,8 +32,8 @@
 //--------------------------------------------
 //---------- FUNCTION DECLARATION ------------
 
-void   reco();
-Bool_t   eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult, Double_t &residualZ, Double_t &zVertReco);
+void reco(TString simfilePath);
+Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult, Double_t &residualZ, Double_t &zVertReco);
 Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin);
 
 
@@ -43,7 +43,7 @@ Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin);
 
 
 //---------------- RECO ---------------------
-void reco(){
+void reco(TString simfilePath){
 
   TStopwatch watch;
   watch.Start(kTRUE);
@@ -54,7 +54,7 @@ void reco(){
   Vertex       *vert   = new Vertex();
 
   //open sim tree
-  TFile sim_file("../Sim/simFile.root");
+  TFile sim_file(simfilePath);
   TTree   *tree  = (TTree*)sim_file.Get("simTree");
   TBranch *bVert = tree -> GetBranch("Vertex");
   TBranch *bBP   = tree -> GetBranch("HitsBP");
