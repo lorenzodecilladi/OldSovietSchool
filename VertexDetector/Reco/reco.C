@@ -91,8 +91,8 @@ void reco(TString simfilePath){
     
   } //end events loop
   
-  recoTree->GetEvent(0);
-  cout << residualZ << endl;
+  //recoTree->GetEvent(0);
+  //cout << residualZ << endl;
 
   //write results on reco file
   histCandidates   -> Write(); //only the last one, as an example
