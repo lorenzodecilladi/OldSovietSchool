@@ -47,6 +47,17 @@ void sim(UInt_t nEvents, TString multOpt, Bool_t msON){
 
   TStopwatch watch;
   watch.Start(kTRUE);
+
+  //ifstream in; SERVE??? Non credo...
+  //if(multOpt == "input"){?????
+  //ifstream in("outFile.txt");
+  //if(!in){
+  //  cout<<"Il file non esiste "<<endl;
+  //  return;
+  //}
+  //}?????
+  
+
   
   TFile *sim_file = new TFile("simFile.root", "RECREATE");
 
@@ -75,6 +86,11 @@ void sim(UInt_t nEvents, TString multOpt, Bool_t msON){
     if     (multOpt == "gaus")    ptrvert = new Vertex("gaus"   , 20, 5 );
     else if(multOpt == "uniform") ptrvert = new Vertex("uniform", 0 , 50);
     else if(multOpt == "fixed")   ptrvert = new Vertex("fixed"  , 20    );
+    //else if(multOpt == "input"){
+    //  Int_t mult;
+    //  in>>mult;
+    //  ptrvert = new Vertex("fixed", mult);
+    //}
     else cout << "Invalid multiplicity option" << endl;
     
     UInt_t mult = ptrvert->getMult();
