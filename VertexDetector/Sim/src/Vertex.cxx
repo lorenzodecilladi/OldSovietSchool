@@ -60,7 +60,10 @@ void Vertex::genUniformMult(Double_t minMult, Double_t maxMult){
 }
 
 void Vertex::genGausMult(Double_t mult, Double_t sMult){
-  fMult = static_cast<UInt_t>(rootils::rndmGaus(mult, sMult));
+  Int_t temp;
+  do{temp = static_cast<Int_t>(rootils::rndmGaus(mult, sMult));}
+  while(temp<0);
+  fMult = static_cast<UInt_t>(temp);
 }
 
 void Vertex::genFixedMult(UInt_t mult){
