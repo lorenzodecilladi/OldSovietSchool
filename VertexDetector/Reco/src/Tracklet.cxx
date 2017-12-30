@@ -1,7 +1,7 @@
 #include "Riostream.h"
 #include "Tracklet.h"
 #include "Detector.h"
-
+#include "Math.h"
 
 using namespace detector;
 
@@ -50,6 +50,37 @@ Point Tracklet::extractVertex(){
   Double_t z1L = fHit1L.Z();
   Double_t z2L = fHit2L.Z();
   Double_t zV = z1L-r1L*((z2L-z1L)/(r2L-r1L));
+  Double_t szV = (1. + 2*r1L/(r2L-r1L))*smZhit; //smearing
 
-  return Point(0,0,zV);
+  Point vertex = Point(0,0,zV);
+  vertex.setsZ(szV);
+
+  return vertex;
+}
+
+
+
+
+Double_t Tracklet::evalPhi(Point hit){
+  Double_t x = hit.X();
+  Double_t y = hit.Y();
+  
+  if(x>0 && y>0) return TMath::ATan(y/x);
+  else if(x<0 && y<0) return TMath::ATan(y/x)+math::pi;
+  else if(x>0 && y<0) return TMath::ATan(y/x)+2*math::pi;
+  else if(x<0 && y>0) return TMath::ATan(y/x)+math::pi;
+  else {
+    cout << "WARNING: x or y == 0 !!! phi set to -1 ___ Smearing::evalPhi TO BE DEBUGGED" << endl;
+    return -1.;
+  }
+}
+
+
+Bool_t Tracklet::matchHits(){
+  Double_t phi1L = evalPhi(fHit1L);
+  Double_t phi2L = evalPhi(fHit2L);
+  Double_t deltaPhi = TMath::Abs(phi1L-phi2L);
+
+  if(deltaPhi <= detector::cutPhi) return kTRUE;
+  else return kFALSE;
 }

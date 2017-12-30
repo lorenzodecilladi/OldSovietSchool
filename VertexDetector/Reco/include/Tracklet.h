@@ -17,6 +17,8 @@ class Tracklet : public Point{
   Tracklet& operator= (const Tracklet& source);
 
   Point extractVertex();
+  Double_t evalPhi(Point hit);
+  Bool_t matchHits();
 
   
  private:
