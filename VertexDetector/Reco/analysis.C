@@ -1,0 +1,128 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Macro for the VERTICES ANALYSIS in a barrel detector     ~
+  ~ Authors:  Arianna Corrado                                ~
+  ~           Lorenzo de Cilladi                             ~
+  ~ Course:   TANS - 2017/2018                               ~
+  ~                                                          ~
+  ~ Last modified: 30/12/2017                                ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+//errore binomiALe sull'efficienza perché il numeratore (numero di eventi riostruiti) è un sottogruppo del denominatore (numero di eventi generati)
+
+#if !defined(__CINT__) || defined(__MAKECINT__)
+
+#include <Riostream.h>
+#include "TFile.h"
+#include "TTree.h"
+#include "TBranch.h"
+#include "Detector.h"
+#include "Point.h"
+#include "Vertex.h"
+#include "Tracklet.h"
+#include "TMath.h"
+#include "TClonesArray.h"
+#include "TH1D.h"
+#include "TF1.h"
+#include "TStopwatch.h"
+
+#endif
+
+
+
+void analysis(TString simfilePath, TString recofilePath){
+
+  TStopwatch watch;
+  watch.Start(kTRUE);
+
+  //open sim file and tree
+  Vertex  *simVert   = new Vertex();
+  TFile   *sim_file  = new TFile(simfilePath);
+  TTree   *simTree   = (TTree*)sim_file -> Get("simTree");
+  TBranch *bSimVert  = simTree -> GetBranch("Vertex");
+  bSimVert -> SetAddress(&simVert);
+  UInt_t nSimEvents    = simTree -> GetEntries();
+
+  //open reco file and tree
+  Point   *recoVert  = new Point();
+  UInt_t  label;
+  
+  TFile   *reco_file = new TFile(recofilePath);
+  TTree   *recoTree  = (TTree*)reco_file -> Get("recoTree");
+
+  TBranch *bRecoVert = recoTree -> GetBranch("recoVertex");
+  TBranch *bLabel    = recoTree -> GetBranch("label");
+  bRecoVert -> SetAddress(&recoVert);
+  bLabel    -> SetAddress(&label);
+
+  UInt_t nRecoEvents   = recoTree -> GetEntries();
+  
+
+
+  //crea file analisi
+  TFile *analysis_file = new TFile("analysisFile.root", "RECREATE");
+
+  TH1D *histSimMult      = new TH1D("histSimMults"    , "z Sim Multiplicities", 51          , -0.5  , 50.5); //bin always == 1 //move to sim
+  TH1D *histSimVertices  = new TH1D("histSimVertices" , "z Sim Vertices"      , nSimEvents/200., -25.5, 25.5); //[cm] //move to Sim
+  TH1D *histRecoVertices  = new TH1D("histRecoVertices" , "z Reco Vertices"      , nRecoEvents/200., -25.5, 25.5); //[cm] //move to reco
+
+  TH1D *histResidualZ    = new TH1D("histResidualZ"   , "Residual in Z"       , 1001        ,  -0.10005,  0.10005);
+
+  Double_t meanZGenerated = histSimVertices -> GetMean(); //si può fare un fit e prendere il valor medio
+  Double_t mult = histSimMult -> GetMean(); //obviously, to be used only when "fixed" mult
+
+  TNamed resol("resol","resolution");
+  
+  //Double_t resol;    //resolution
+  Double_t sResol;   //uncertainty on resolution
+  Double_t eff;      //efficiency
+  //TEfficiency *pEff; 
+  Double_t sEff;     //uncertainty on efficiency
+  
+
+  for(UInt_t i=0; i<nSimEvents; i++){
+    if(i%1000==0) cout<<"PROCESSING EVENT "<<i<<endl;
+    simTree->GetEvent(i);
+    histSimMult->Fill(simVert->getMult());
+    histSimVertices->Fill(simVert->getPoint().Z());
+
+    if(i<nRecoEvents){
+      recoTree->GetEvent(i);
+      Double_t zRecoVert = recoVert->Z();
+      histRecoVertices->Fill(zRecoVert);
+      simTree->GetEvent(label);
+      Double_t zSimVert = simVert->getPoint().Z();
+      Double_t residualZ = zRecoVert - zSimVert;   //compute residual along z coord (to be used for resolution)
+      histResidualZ -> Fill(residualZ);
+    }
+  }
+
+  //resolution
+  histResidualZ -> Fit("gaus");
+  //resol = histResidualZ->GetFunction("gaus")->GetParameter(1);
+  resol.SetUniqueID(histResidualZ->GetFunction("gaus")->GetParameter(1));
+  resol.Write("resolution");
+
+  //sResol = histResidualZ->GetFunction("gaus")->GetParameter(2);
+
+  //pEff = new TEfficiency(histRecoVertices, histSimVertices);
+  //eff = static_cast<Double_t>(nRecoEvents/nSimEvents);
+  //sEff = TMath::Sqrt(nSimEvents*eff*(1-eff));
+
+  //efficiency
+  //efficienza= recoTree-GetEntries()/simTree->GetEnries(); oppure sul branch degli zeta
+  
+  histSimVertices  -> Write();
+  histRecoVertices -> Write();
+  histSimMult      -> Write();
+  histResidualZ    -> Write();
+  //resol.Write();
+  //sResol.Write();
+  //eff.Write();
+  //sEff.Write();
+
+  analysis_file -> ls();
+  analysis_file -> Close();
+  reco_file     -> Close();
+  sim_file      -> Close();
+  
+}
