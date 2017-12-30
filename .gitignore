@@ -12,3 +12,9 @@
 
 #ignore all files ending .pcm
 *.pcm
+
+#ignore config file
+config.txt
+
+#ignore distGen output files
+outFile.txt
