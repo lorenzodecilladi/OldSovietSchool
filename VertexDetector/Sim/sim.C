@@ -23,6 +23,7 @@
 #include "TClonesArray.h"
 #include "TStopwatch.h"
 #include "TString.h"
+#include "TH1D.h"
 
 #endif
 
@@ -78,12 +79,12 @@ void sim(){
   cout<<"Mult Scattering  = " << msON    << endl;
   cout<<"Noise            = " << noiseON << endl;
 
+
   
-  //open file to store simulated data  
+  //open file and tree to store simulated data  
   TFile *sim_file = new TFile("simFile.root", "RECREATE");
 
   TTree *simTree  = new TTree("simTree", "Sim output tree");
-
   TClonesArray *ptrhitsBP = new TClonesArray("Point", 100);
   TClonesArray *ptrhits1L = new TClonesArray("Point", 100);
   TClonesArray *ptrhits2L = new TClonesArray("Point", 100);
@@ -97,7 +98,9 @@ void sim(){
   simTree->Branch("HitsBP", &ptrhitsBP);
   simTree->Branch("Hits1L", &ptrhits1L);
   simTree->Branch("Hits2L", &ptrhits2L);
- 
+
+  TH1D *histSimMult      = new TH1D("histSimMults"    , "z Sim Multiplicities", 51          , -0.5  , 50.5); //bin always == 1 //move to sim
+  TH1D *histSimVertices  = new TH1D("histSimVertices" , "z Sim Vertices"      , nEvents/100., -25.5, 25.5); //[cm] //move to Sim
 
   for(UInt_t event=0; event<nEvents; event++){ //loop over events
 
@@ -115,6 +118,8 @@ void sim(){
     else cout << "Invalid multiplicity option" << endl;
     
     UInt_t mult = ptrvert->getMult();
+    histSimMult -> Fill(mult);
+    histSimVertices ->Fill(ptrvert->getPoint().Z());
     
     for(UInt_t i=0; i<mult; i++){ //loop over particles
       hitMaker(i, ptrvert, ptrhitsBP, ptrhits1L, ptrhits2L, msON);
@@ -128,10 +133,13 @@ void sim(){
     ptrhits2L->Clear();
     delete ptrvert;
   }//end events loop
-  
+
   sim_file->Write();
   sim_file->Close();
 
+  //delete histSimMult;
+  //delete histSimVertices;
+  
   watch.Stop();
   watch.Print();  
 }
