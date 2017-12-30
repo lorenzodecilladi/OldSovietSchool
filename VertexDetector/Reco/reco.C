@@ -4,7 +4,7 @@
   ~           Lorenzo de Cilladi                             ~
   ~ Course:   TANS - 2017/2018                               ~
   ~                                                          ~
-  ~ Last modified: 27/12/2017                                ~
+  ~ Last modified: 30/12/2017                                ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 
@@ -72,8 +72,9 @@ void reco(TString simfilePath){
   
   //histograms to be filled with reco results
   TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 510         , -25.45, 25.55); //WITH match hits; bin size 1 mm
-  TH1D *histRecoVertices = new TH1D("histRecoVertices", "z Reco Vertices"     , nEvents/200., -25.5, 25.5);
+  TH1D *histRecoVertices = new TH1D("histRecoVertices", "z Reco Vertices"     , nEvents/100., -25.5, 25.5);
 
+  
   //init reco tree
   TTree *recoTree = new TTree("recoTree", "Reco output tree");
   Point recoVertex;
@@ -158,11 +159,12 @@ Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Ve
       meanSize++;
     }
   }
-  
-  Double_t zVertReco = sumCand/meanSize;
-  histRecoVertices -> Fill(zVertReco);  //fill reco vertices histogram
 
-  recoVertex = Point(0., 0., zVertReco);
+  
+  Double_t zRecoVert = sumCand/meanSize;
+  histRecoVertices -> Fill(zRecoVert);  //fill reco vertices histogram
+
+  recoVertex = Point(0., 0., zRecoVert);
   Double_t szV = 0.01; //deviazione standard?? //(1. + 2*detector::r1L/(detector::r2L-detector::r1L))*detector::smZhit; //smearing
   recoVertex.setsZ(szV);
 
