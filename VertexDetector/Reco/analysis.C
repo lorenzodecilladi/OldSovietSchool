@@ -49,11 +49,11 @@ void analysis(TString simfilePath, TString recofilePath){
   TFile   *reco_file = new TFile(recofilePath);
   TTree   *recoTree  = (TTree*)reco_file -> Get("recoTree");
   Point   *recoVert  = new Point();
-  UInt_t  label;
+  UInt_t  recoLabel;
   TBranch *bRecoVert = recoTree -> GetBranch("recoVertex");
-  TBranch *bLabel    = recoTree -> GetBranch("label");
+  TBranch *bRecoLabel= recoTree -> GetBranch("recoLabel");
   bRecoVert -> SetAddress(&recoVert);
-  bLabel    -> SetAddress(&label);
+  bRecoLabel-> SetAddress(&recoLabel);
   TH1D    *histRecoVertices  = (TH1D*)reco_file->Get("histRecoVertices"); //[cm]
   
   UInt_t nRecoEvents = recoTree -> GetEntries();
@@ -76,20 +76,36 @@ void analysis(TString simfilePath, TString recofilePath){
   Double_t sEff;     //uncertainty on efficiency
   
 
-  for(UInt_t i=0; i<nSimEvents; i++){
+  /*  for(UInt_t i=0; i<nSimEvents; i++){
     if(i%1000==0) cout<<"PROCESSING EVENT "<<i<<endl;
     simTree->GetEvent(i);
 
     if(i<nRecoEvents){
       recoTree->GetEvent(i);
       Double_t zRecoVert = recoVert->Z();
-      simTree->GetEvent(label);
+      simTree->GetEvent(recoLabel);
       Double_t zSimVert = simVert->getPoint().Z();
+      Double_t residualZ = zRecoVert - zSimVert;   //compute residual along z coord (to be used for resolution)
+      histResidualZ -> Fill(residualZ);
+    }
+    }*/
+
+
+    for(UInt_t i=0; i<nRecoEvents; i++){
+    if(i%1000==0) cout<<"PROCESSING EVENT "<<i<<endl;
+    
+      recoTree -> GetEvent(i);
+      Double_t zRecoVert = recoVert->Z();
+      simTree  -> GetEvent(recoLabel);
+      Double_t zSimVert  = simVert ->getPoint().Z();
       Double_t residualZ = zRecoVert - zSimVert;   //compute residual along z coord (to be used for resolution)
       histResidualZ -> Fill(residualZ);
     }
   }
 
+
+
+  
   //resolution
   histResidualZ -> Fit("gaus");
   //resol = histResidualZ->GetFunction("gaus")->GetParameter(1);
@@ -126,5 +142,8 @@ void analysis(TString simfilePath, TString recofilePath){
   analysis_file -> Close();
   reco_file     -> Close();
   sim_file      -> Close();
-  
+
+
+  watch.Stop();
+  watch.Print();
 }

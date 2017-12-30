@@ -78,9 +78,9 @@ void reco(TString simfilePath){
   //init reco tree
   TTree *recoTree = new TTree("recoTree", "Reco output tree");
   Point recoVertex;
-  UInt_t label;
+  UInt_t recoLabel;
   recoTree->Branch("recoVertex", &recoVertex);
-  recoTree->Branch("label", &label, "label/I");
+  recoTree->Branch("recoLabel", &recoLabel, "recoLabel/I");
   
   //vertex reconstruction
   for(Int_t event=0; event<nEvents; event++){ //loop over events
@@ -88,7 +88,7 @@ void reco(TString simfilePath){
     tree -> GetEntry(event);
     //if vertex reco is successful, fill reco tree
     if(eventAnalysis(event, hits1L, hits2L, vert, histRecoVertices, histCandidates, recoVertex)){
-      label = event;
+      recoLabel = event;
       recoTree -> Fill();
     }
   } //end events loop
