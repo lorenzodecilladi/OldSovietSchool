@@ -18,7 +18,6 @@ void compile(TString myopt="fast"){
   gSystem->CompileMacro("../Sim/src/Point.cxx", opt.Data());
   gSystem->CompileMacro("../Sim/src/Vertex.cxx", opt.Data());
   gSystem->CompileMacro("src/Tracklet.cxx", opt.Data());
-  gSystem->CompileMacro("src/Smearing.cxx", opt.Data());
   gSystem->CompileMacro("reco.C", opt.Data());
 
 }

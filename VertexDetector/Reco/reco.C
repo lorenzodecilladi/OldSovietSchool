@@ -18,7 +18,7 @@
 #include "Detector.h"
 #include "Point.h"
 #include "Vertex.h"
-#include "Smearing.h"
+//#include "Smearing.h"
 #include "Tracklet.h"
 #include "TMath.h"
 #include "TClonesArray.h"
@@ -33,7 +33,8 @@
 //---------- FUNCTION DECLARATION ------------
 
 void reco(TString simfilePath);
-Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult, Double_t &residualZ, Double_t &zVertReco);
+//Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult, Double_t &residualZ, Double_t &zVertReco);
+Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult, Double_t &residualZ, Point &recoVertex);
 Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin);
 
 
@@ -80,16 +81,19 @@ void reco(TString simfilePath){
   //init reco tree
   TTree *recoTree = new TTree("recoTree", "Reco output tree");
   Double_t residualZ;
-  Double_t zVertReco;
+  //Double_t zVertReco;
+  Point recoVertex;
   recoTree->Branch("residualZ", &residualZ, "residualZ/D" );
-  recoTree->Branch("zVertReco", &zVertReco, "zVertReco/D");
-
+  //  recoTree->Branch("zVertReco", &zVertReco, "zVertReco/D");
+  recoTree->Branch("recoVertex", &recoVertex);
+  
   //vertex reconstruction
   for(Int_t event=0; event<nEvents; event++){ //loop over events
     if(event%10000 == 0) {cout << "Processing EVENT " << event << endl;}
     tree -> GetEntry(event);
     //if vertex reco is successful, fill reco tree
-    if(eventAnalysis(event, hits1L, hits2L, vert, histRecoVertices, histSimVertices, histCandidates, histSimMult, residualZ, zVertReco))
+    //    if(eventAnalysis(event, hits1L, hits2L, vert, histRecoVertices, histSimVertices, histCandidates, histSimMult, residualZ, zVertReco))
+    if(eventAnalysis(event, hits1L, hits2L, vert, histRecoVertices, histSimVertices, histCandidates, histSimMult, residualZ, recoVertex))
       recoTree -> Fill();  
   } //end events loop
 
@@ -114,10 +118,12 @@ void reco(TString simfilePath){
 
 //--------EVENT ANALYSIS------------
 
-Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult, Double_t &residualZ, Double_t &zVertReco){
+//Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult, Double_t &residualZ, Double_t &zVertReco){
+Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histSimVertices, TH1D *histCandidates, TH1D *histSimMult, Double_t &residualZ, Point &recoVertex){
   
   Int_t nHits1L = hits1L -> GetEntries();
   Int_t nHits2L = hits2L -> GetEntries();
+  Double_t zVertReco;
   
   histCandidates -> Reset();
   char name[20];
@@ -139,9 +145,10 @@ Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Ve
       if(TMath::Abs(hit2L.Z()) > detector::length/2.) continue;  //geometry check: skip hits not on the detector
 
                                                       //e se n1L != n2L ==> mettere un cut!!?????? non serve più...
+      
+      Tracklet trt = Tracklet(hit1L, hit2L);  //generate tracklet
+      //if(trt.matchHits()){
       if(kTRUE){
-	//if(matchHits(hit1L, hit2L)){
-	Tracklet trt = Tracklet(hit1L, hit2L);  //generate tracklet
 	Double_t zCandidate = trt.extractVertex().Z();//extrapolate vertex (z coord)
 	histCandidates -> Fill(zCandidate);     //fill vertex candidate hist
 	vCand.push_back(zCandidate);
@@ -165,7 +172,7 @@ Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Ve
   Double_t yCandMax = histCandidates->GetBinContent(binMax); 
   Double_t xCandMax = histCandidates->GetBinCenter(binMax);
   Double_t thr = yCandMax/2.;
-  if(yCandMax<thr) return kFALSE; // --> no maximum ?????????????????????????????????
+  //if(yCandMax<4.) return kFALSE; // --> no maximum ????????????????????????????????? NESSUN MASSIMO == TANTI MASSIMI!!!!!
 
   /*  if(event == 1499){
     cout << "nbins " << nbins << endl;
@@ -204,7 +211,9 @@ Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Ve
 
   zVertReco = zVertex;
   residualZ = zVertReco - zVertSim;   //compute residual along z coord (to be used for resolution)
-  
+  recoVertex = Point(0., 0., zVertReco);
+  Double_t szV = (1. + 2*detector::r1L/(detector::r2L-detector::r1L))*detector::smZhit; //smearing
+  recoVertex.setsZ(szV);
   return kTRUE;
 }
 
