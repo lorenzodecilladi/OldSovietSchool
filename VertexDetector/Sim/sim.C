@@ -115,12 +115,13 @@ void sim(){
     else cout << "Invalid multiplicity option" << endl;
     
     UInt_t mult = ptrvert->getMult();
-        
+    
     for(UInt_t i=0; i<mult; i++){ //loop over particles
       hitMaker(i, ptrvert, ptrhitsBP, ptrhits1L, ptrhits2L, msON);
-      if(noiseON) noiseMaker(ptrhits1L, ptrhits2L);
     } // end particles loop
-
+    
+    if(noiseON) noiseMaker(ptrhits1L, ptrhits2L);    
+    
     simTree->Fill();
     ptrhitsBP->Clear();
     ptrhits1L->Clear();
@@ -173,7 +174,7 @@ void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L){
   Int_t size1L = ptrhits1L->GetEntries();
   Int_t size2L = ptrhits2L->GetEntries();
   Int_t temp;
-
+  
   //noise hits on Layer1 (cylindric uniform extraction)
   do{temp = static_cast<Int_t>(rootils::rndmGaus(5, 1));}
   while(temp<0 || temp>100);
@@ -184,8 +185,7 @@ void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L){
     Double_t phi = rootils::rndmUniform(0, 2*math::pi);
     new((*ptrhits1L)[size1L+i]) Point(detector::r1L*TMath::Cos(phi), detector::r1L*TMath::Sin(phi), z);
   }
-  cout << "\nall right" << endl;
-  return;
+  
   //noise hits on Layer2 (cylindric uniform extraction)
   do{temp = static_cast<Int_t>(rootils::rndmGaus(5, 1));}
   while(temp<0 || temp>100);
