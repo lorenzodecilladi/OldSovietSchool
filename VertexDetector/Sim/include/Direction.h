@@ -37,12 +37,12 @@ class Direction : public TObject{
   Double_t evalPhi();
   
   // getter funtions
-  Double_t theta(){return fTheta;}
-  Double_t phi(){return fPhi;}
-  Double_t eta(){return fEta;}
-  Double_t c1(){return fC1;}
-  Double_t c2(){return fC2;}
-  Double_t c3(){return fC3;}
+  Double_t theta() const {return fTheta;} 
+  Double_t phi() const {return fPhi;}
+  Double_t eta() const {return fEta;}
+  Double_t c1() const {return fC1;}
+  Double_t c2() const {return fC2;}
+  Double_t c3() const {return fC3;}
   
 
   // setter functions

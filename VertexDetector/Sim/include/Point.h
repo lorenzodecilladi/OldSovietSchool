@@ -17,12 +17,12 @@ class Point : public TObject{
   Point& operator= (const Point& source);
   
   // getter funtions
-  Double_t X(){return fX;}
-  Double_t Y(){return fY;}
-  Double_t Z(){return fZ;}
-  Double_t sX(){return fsX;}
-  Double_t sY(){return fsY;}
-  Double_t sZ(){return fsZ;}
+  Double_t X() const {return fX;}
+  Double_t Y() const {return fY;}
+  Double_t Z() const {return fZ;}
+  Double_t sX() const {return fsX;}
+  Double_t sY() const {return fsY;}
+  Double_t sZ() const {return fsZ;}
   
 
   // setter functions

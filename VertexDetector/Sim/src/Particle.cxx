@@ -114,7 +114,7 @@ void Particle::multipleScattering(){
 
 
 //---------- PRINT PARTICLE ----------
-void Particle::print(){
+void Particle::print() const {
 
   cout << "\nlabel: " << fLabel << endl;
   cout << "\nx: " << fPoint.X() << endl;

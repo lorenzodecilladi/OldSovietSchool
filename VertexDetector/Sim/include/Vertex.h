@@ -23,8 +23,8 @@ class Vertex : public Point {
   void genFixedMult(UInt_t mult = 20);
 
   //get functions
-  Point getPoint(){return fVertex;}
-  UInt_t getMult(){return fMult;}
+  Point getPoint() const {return fVertex;}
+  UInt_t getMult() const {return fMult;}
   
 
 

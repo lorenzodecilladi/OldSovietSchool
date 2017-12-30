@@ -16,9 +16,9 @@ class Particle : public Point, public Direction {
 
   virtual ~Particle();
 
-  Point getPoint(){return fPoint;}
-  Direction getDirection(){return fDirection;}
-  UInt_t getLabel(){return fLabel;}
+  Point getPoint() const {return fPoint;}
+  Direction getDirection() const {return fDirection;}
+  UInt_t getLabel() const {return fLabel;}
   
   void setPoint(Point point);
   void setDirection(Direction dir);
@@ -28,7 +28,7 @@ class Particle : public Point, public Direction {
   void transport(Double_t R);
   Double_t time(Double_t R);
   
-  void print();
+  void print() const;
   
  private:
 
