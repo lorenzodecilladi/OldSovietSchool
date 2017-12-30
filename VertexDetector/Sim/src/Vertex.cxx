@@ -63,7 +63,7 @@ void Vertex::genGausMult(Double_t mult, Double_t sMult){
   Int_t temp;
   do{temp = static_cast<Int_t>(rootils::rndmGaus(mult, sMult));}
   while(temp<0 || temp>100);  // multiplicity: lower limit = 0
-                              //               upper limit = 100 (see also TClonesArray size in sim.C)
+                              //               upper limit = 100 (see also TClonesArray size in sim.C and reco.C)
   fMult = static_cast<UInt_t>(temp);
 }
 

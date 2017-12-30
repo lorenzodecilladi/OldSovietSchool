@@ -16,6 +16,7 @@
 #include "Vertex.h"
 #include "Detector.h"
 #include "Rootils.h"
+#include "Math.h"
 #include "TFile.h"
 #include "TTree.h"
 #include "TBranch.h"
@@ -25,17 +26,17 @@
 
 #endif
 
-using namespace detector;
+//using namespace detector;
 
 
 //------------------------------------------
 //---------- FUNCTION DECLARATION ----------
-void sim(UInt_t nEvents = 10000, TString multOpt = "gaus", Bool_t msON = kTRUE);
+//void sim(UInt_t nEvents = 10000, TString multOpt = "gaus", Bool_t msON = kTRUE);
 //if msON == kTRUE --> multiple scattering is switched on
 //multOpt can be "gaus", "uniform", "fixed"
-
-void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L, TClonesArray* hits2L, Bool_t msON);
-
+void sim();
+void hitMaker(UInt_t i, Vertex* vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON);
+void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L);
 
 
 //--------------------------------------------
@@ -43,22 +44,42 @@ void hitMaker(UInt_t i, Vertex* vert, TClonesArray* hitsBP, TClonesArray* hits1L
 
 
 //------------------ SIM --------------------
-void sim(UInt_t nEvents, TString multOpt, Bool_t msON){
+//void sim(UInt_t nEvents, TString multOpt, Bool_t msON){
+void sim(){
 
   TStopwatch watch;
   watch.Start(kTRUE);
 
-  //ifstream in; SERVE??? Non credo...
-  //if(multOpt == "input"){?????
-  //ifstream in("outFile.txt");
-  //if(!in){
-  //  cout<<"Il file non esiste "<<endl;
-  //  return;
-  //}
-  //}?????
+
+  //get sim parameters from config file 
+  TString comment = "null";
+  UInt_t nEvents = 10000;
+  TString multOpt = "null";
+  Double_t par1 = 0.;
+  Double_t par2 = 0.;
+  Bool_t msON = kTRUE;
+  Bool_t noiseON = kTRUE;
   
+  ifstream in("config.txt");
+  if(!in){
+    cout<<"Il file non esiste "<<endl;
+    return;
+  }
+
+  in>>comment>>nEvents>>multOpt>>par1>>par2>>msON>>noiseON;
+
+  in.close();
+  
+  cout << "--- RUNNING VertexDetector SIM ---" << endl;
+  cout<<"Number of events = " << nEvents << endl;
+  cout<<"Multiplicity     = " << multOpt << endl;
+  cout<<"Par 1            = " << par1    << endl;
+  cout<<"Par2             = " << par2    << endl;
+  cout<<"Mult Scattering  = " << msON    << endl;
+  cout<<"Noise            = " << noiseON << endl;
 
   
+  //open file to store simulated data  
   TFile *sim_file = new TFile("simFile.root", "RECREATE");
 
   TTree *simTree  = new TTree("simTree", "Sim output tree");
@@ -83,9 +104,9 @@ void sim(UInt_t nEvents, TString multOpt, Bool_t msON){
     
     if(event%10000 == 0){cout << "Processing EVENT " << event << endl;}
    
-    if     (multOpt == "gaus")    ptrvert = new Vertex("gaus"   , 20, 5 );
-    else if(multOpt == "uniform") ptrvert = new Vertex("uniform", 0 , 50);
-    else if(multOpt == "fixed")   ptrvert = new Vertex("fixed"  , 20    );
+    if     (multOpt == "gaus")    ptrvert = new Vertex("gaus"   , par1, par2);
+    else if(multOpt == "uniform") ptrvert = new Vertex("uniform", par1, par2);
+    else if(multOpt == "fixed")   ptrvert = new Vertex("fixed"  , par1    );
     //else if(multOpt == "input"){
     //  Int_t mult;
     //  in>>mult;
@@ -97,6 +118,7 @@ void sim(UInt_t nEvents, TString multOpt, Bool_t msON){
         
     for(UInt_t i=0; i<mult; i++){ //loop over particles
       hitMaker(i, ptrvert, ptrhitsBP, ptrhits1L, ptrhits2L, msON);
+      if(noiseON) noiseMaker(ptrhits1L, ptrhits2L);
     } // end particles loop
 
     simTree->Fill();
@@ -110,8 +132,10 @@ void sim(UInt_t nEvents, TString multOpt, Bool_t msON){
   sim_file->Close();
 
   watch.Stop();
-  watch.Print();
+  watch.Print();  
 }
+
+
 
 
 
@@ -120,19 +144,19 @@ void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* 
   
   Particle *part = new Particle(ptrvert->getPoint(), i);
   
-  part->transport(rBP);           //tansport to Beam Pipe
+  part->transport(detector::rBP);           //tansport to Beam Pipe
   new((*ptrhitsBP)[i]) Point(part->getPoint());
   
   if(msON) part->multipleScattering();     //MS in Beam Pipe
   
-  part->transport(r1L);           //tansport BP -> Layer1
+  part->transport(detector::r1L);           //tansport BP -> Layer1
   //new((*ptrhits1L)[i]) Point(part->getPoint());
   Int_t i1L = ptrhits1L->GetEntries();
   if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits1L)[i1L]) Point(part->getPoint());
   
   if(msON) part->multipleScattering();     //MS in Layer1
   
-  part->transport(r2L);           //transport Layer1 -> Layer2
+  part->transport(detector::r2L);           //transport Layer1 -> Layer2
   //new((*ptrhits2L)[i]) Point(part->getPoint());
   Int_t i2L = ptrhits2L->GetEntries();
   if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(part->getPoint());
@@ -143,6 +167,36 @@ void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* 
 
 
 
+//---------------- NOISEMAKER ------------------
+void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L){
+
+  Int_t size1L = ptrhits1L->GetEntries();
+  Int_t size2L = ptrhits2L->GetEntries();
+  Int_t temp;
+
+  //noise hits on Layer1 (cylindric uniform extraction)
+  do{temp = static_cast<Int_t>(rootils::rndmGaus(5, 1));}
+  while(temp<0 || temp>100);
+  UInt_t nNoiseHits1L = temp+size1L<=100 ? temp : 100-size1L;
+
+  for(UInt_t i=0; i<nNoiseHits1L; i++){
+    Double_t z = rootils::rndmUniform(-detector::length/2., detector::length/2.);
+    Double_t phi = rootils::rndmUniform(0, 2*math::pi);
+    new((*ptrhits1L)[size1L+i]) Point(detector::r1L*TMath::Cos(phi), detector::r1L*TMath::Sin(phi), z);
+  }
+  cout << "\nall right" << endl;
+  return;
+  //noise hits on Layer2 (cylindric uniform extraction)
+  do{temp = static_cast<Int_t>(rootils::rndmGaus(5, 1));}
+  while(temp<0 || temp>100);
+  UInt_t nNoiseHits2L = temp+size2L<=100 ? temp : 100-size2L;
+
+  for(UInt_t i=0; i<nNoiseHits2L; i++){
+    Double_t z = rootils::rndmUniform(-detector::length/2., detector::length/2.);
+    Double_t phi = rootils::rndmUniform(0, 2*math::pi);
+    new((*ptrhits2L)[size2L+i]) Point(detector::r2L*TMath::Cos(phi), detector::r2L*TMath::Sin(phi), z);
+  }
+}
 
 
 
