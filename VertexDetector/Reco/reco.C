@@ -54,6 +54,10 @@ void reco(TString simfilePath){
 
   //open tree from simulation output file
   TFile sim_file(simfilePath);
+  if(sim_file.IsZombie()){
+    cout << "File " << simfilePath << " not found!!" << endl;
+    return;
+  }
   TTree   *tree  = (TTree*)sim_file.Get("simTree");
   TBranch *bVert = tree -> GetBranch("Vertex");
   TBranch *bBP   = tree -> GetBranch("HitsBP");

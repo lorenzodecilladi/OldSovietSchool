@@ -72,12 +72,21 @@ void sim(){
   in.close();
   
   cout << "--- RUNNING VertexDetector SIM ---" << endl;
-  cout<<"Number of events = " << nEvents << endl;
-  cout<<"Multiplicity     = " << multOpt << endl;
-  cout<<"Par 1            = " << par1    << endl;
-  cout<<"Par2             = " << par2    << endl;
-  cout<<"Mult Scattering  = " << msON    << endl;
-  cout<<"Noise            = " << noiseON << endl;
+  cout<<  "Number of events = " << nEvents << endl;
+  cout<<  "Multiplicity     = " << multOpt << endl;
+  if(multOpt == "gaus"){
+    cout<<"Mean             = " << par1    << endl;
+    cout<<"Sigma            = " << par2    << endl;
+  }
+  else if(multOpt == "uniform"){
+    cout<<"Min              = " << par1    << endl;
+    cout<<"Max              = " << par2    << endl;
+  }
+  else if(multOpt == "fixed"){
+    cout<<"Mult value       = " << par1    << endl;
+  }
+  cout  <<"Mult Scattering  = " << msON    << endl;
+  cout  <<"Noise            = " << noiseON << endl;
 
 
   
