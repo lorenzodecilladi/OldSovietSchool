@@ -38,6 +38,8 @@ void combinedAnalysis(TString inputListFile){
   Double_t resolArr[50];
   Double_t effArr[50];
   Double_t sEffArr[50];
+  Double_t zGenArr[50]; //z generated
+  Double_t sZGenArr[50]; //z generated
     
   ifstream in(inputListFile);
   if(!in){
@@ -60,6 +62,16 @@ void combinedAnalysis(TString inputListFile){
 
     Double_t mult = ((TH1D*)analysis_file->Get("histSimMult"))->GetMean(); //obviously, to be used only when "fixed" mult
     multArr[count] = mult;
+
+
+    TH1D *histSimVertices = (TH1D*)analysis_file->Get("histSimVertices"); //[cm]
+    histSimVertices->Fit("gaus");    
+    Double_t zGen  = histSimVertices->GetFunction("gaus")->GetParameter(1);
+    Double_t sZGen = histSimVertices->GetFunction("gaus")->GetParameter(2);
+    zGenArr[count] = zGen;
+    sZGenArr[count] = sZGen;
+
+    
     
     TVectorD *vec = (TVectorD*)analysis_file->Get("vec");
     //root > v->Print()
@@ -87,17 +99,37 @@ void combinedAnalysis(TString inputListFile){
   
   histResolMult -> DrawCopy();
 
+  TGraph  *grResolZGen = new TGraph(count, zGenArr, resolArr);
+  grResolZGen->SetTitle("Resolution vs Generated Z");
+  grResolZGen->GetXaxis()->SetTitle("Generated Z [cm]");
+  grResolZGen->GetYaxis()->SetTitle("Resolution [cm]");
+  grResolZGen->SetMarkerStyle(20);
+  grResolZGen->SetMarkerSize(1.0);
+  grResolZGen->SetMarkerColor(6);
+  grResolZGen->Draw("APL");
+  
   TGraph  *grResolMult = new TGraph(count, multArr, resolArr);
   grResolMult->SetTitle("Resolution vs Multiplicity");
+  grResolMult->GetXaxis()->SetTitle("Multiplicity");
+  grResolMult->GetYaxis()->SetTitle("Resolution [cm]");
+  grResolMult->SetMarkerStyle(20);
+  grResolMult->SetMarkerSize(1.0);
+  grResolMult->SetMarkerColor(kRed);
   grResolMult->Draw("APL");
 
   TGraph  *grEffMult = new TGraph(count, multArr, effArr); //aggiungere errore
   grEffMult->SetTitle("Efficiency vs Multiplicity");
+  grEffMult->GetXaxis()->SetTitle("Multiplicity");
+  grEffMult->GetYaxis()->SetTitle("Efficiency");
+  grEffMult->SetMarkerStyle(20);
+  grEffMult->SetMarkerSize(1.0);
+  grEffMult->SetMarkerColor(kBlue);
   grEffMult->Draw("APL");
   
   in.close();
 
   histResolMult->Write();
+  grResolZGen->Write();
   grResolMult->Write();
   grEffMult->Write();
   combAnalysis_file->Write();
