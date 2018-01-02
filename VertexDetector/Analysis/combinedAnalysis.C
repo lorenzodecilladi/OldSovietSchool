@@ -85,7 +85,7 @@ void combinedAnalysis(TString inputListFile){
   histResolVsMult -> DrawCopy();
 
   TGraph  *grResolVsMult = new TGraph(count, multArr, resolArr);
-  grResolVsMult->Draw();
+  grResolVsMult->Draw("APL");
   
   in.close();
 
