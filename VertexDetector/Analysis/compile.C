@@ -22,6 +22,7 @@ void compile(TString myopt="fast"){
   gSystem->CompileMacro("../Reco/src/Tracklet.cxx", opt.Data());
   //gSystem->Exec("compile()");
   gSystem->CompileMacro("analysis.C", opt.Data());
+  gSystem->CompileMacro("combinedAnalysis.C", opt.Data());
   //gSystem->Exec("sim()");
 }
 
