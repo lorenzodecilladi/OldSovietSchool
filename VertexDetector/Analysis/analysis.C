@@ -103,11 +103,11 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
   vec[0] = resol;
   vec[1] = sResol;
  
-  cout << "Resolution = " << vec[0] * 10000 << " um; sigma = " << vec[1] * 10000 << " um"<< endl;
+  cout << "\nResolution = " << vec[0] * 10000 << " um; sigma = " << vec[1] * 10000 << " um"<< endl;
 
   
   //Efficiency //to be checked again
-  eff = static_cast<Double_t>(nRecoEvents/nSimEvents);
+  eff = (static_cast<Double_t>(nRecoEvents)/static_cast<Double_t>(nSimEvents));
   sEff = TMath::Sqrt(nSimEvents*eff*(1-eff));
   vec[2] = eff;
   vec[3] = sEff;
@@ -121,7 +121,10 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
   histRecoVertices -> Write();
   histResidualZ    -> Write();
 
+  cout << "\n---------------------------------------------------" << endl;
   analysis_file -> ls();
+  cout << "---------------------------------------------------" << endl;
+  
   analysis_file -> Close();
   reco_file     -> Close();
   sim_file      -> Close();
