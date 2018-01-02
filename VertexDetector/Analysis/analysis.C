@@ -24,6 +24,7 @@
 #include "TH1D.h"
 #include "TF1.h"
 #include "TStopwatch.h"
+#include "TVectorD.h"
 
 #endif
 
@@ -75,18 +76,12 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
   Double_t meanZGenerated = histSimVertices -> GetMean(); //si può fare un fit e prendere il valor medio
   Double_t mult           = histSimMult     -> GetMean(); //obviously, to be used only when "fixed" mult
 
-  TNamed  resol( "resol", "resolution");
-  TNamed sResol("sResol","sResolution");     //uncertainty on resolution
-  TNamed    eff(   "eff", "efficiency");     //efficiency
-  TNamed   sEff(  "sEff","sEfficiency");     //uncertainty on efficiency
-
-  
-  //oppure facciamo un vector che ha (resol, sResol, eff, sEff)
-  //Double_t resol;    //resolution
-  //Double_t sResol;   //uncertainty on resolution
-  //Double_t eff;      //efficiency
-  //Double_t sEff;     //uncertainty on efficiency
-  //TEfficiency *pEff;
+  //vector = (resol, sResol, eff, sEff)
+  TVectorD vec(4);
+  Double_t resol;    //resolution
+  Double_t sResol;   //uncertainty on resolution
+  Double_t eff;      //efficiency (TEfficiency ??)
+  Double_t sEff;     //uncertainty on efficiency
   
   
   for(UInt_t i=0; i<nRecoEvents; i++){
@@ -103,31 +98,28 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
   
   //Resolution
   histResidualZ -> Fit("gaus");
-  resol.SetUniqueID(  histResidualZ->GetFunction("gaus")->GetParameter(1));
-  sResol.SetUniqueID( histResidualZ->GetFunction("gaus")->GetParameter(2));
+  resol  = histResidualZ->GetFunction("gaus")->GetParameter(1);
+  sResol = histResidualZ->GetFunction("gaus")->GetParameter(2);
+  vec[0] = resol;
+  vec[1] = sResol;
+ 
+  cout << "Resolution = " << vec[0] * 10000 << " um; sigma = " << vec[1] * 10000 << " um"<< endl;
 
+  
   //Efficiency //to be checked again
-  Double_t effTemp = static_cast<Double_t>(nRecoEvents/nSimEvents);
-  eff.SetUniqueID( effTemp);
-  sEff.SetUniqueID(TMath::Sqrt(nSimEvents*effTemp*(1-effTemp)));
+  eff = static_cast<Double_t>(nRecoEvents/nSimEvents);
+  sEff = TMath::Sqrt(nSimEvents*eff*(1-eff));
+  vec[2] = eff;
+  vec[3] = sEff;
 
-  //resol = histResidualZ->GetFunction("gaus")->GetParameter(1);  
-  //sResol = histResidualZ->GetFunction("gaus")->GetParameter(2);
-  //eff = static_cast<Double_t>(nRecoEvents/nSimEvents);
-  //sEff = TMath::Sqrt(nSimEvents*eff*(1-eff));  
-  //pEff = new TEfficiency(histRecoVertices, histSimVertices);
+  cout << "Efficiency = " << vec[2] << " +- " << vec[3] << endl;
 
   
-  resol.Write("resolution");
-  sResol.Write("sResolution");
-  eff.Write("efficiency");
-  sEff.Write("sEfficiency");  
-  
+  vec.Write("vec");
   histSimMult      -> Write();
   histSimVertices  -> Write();
   histRecoVertices -> Write();
   histResidualZ    -> Write();
-
 
   analysis_file -> ls();
   analysis_file -> Close();
