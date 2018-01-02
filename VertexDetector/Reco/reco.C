@@ -30,7 +30,7 @@
 //--------------------------------------------
 //---------- FUNCTION DECLARATION ------------
 
-void reco(TString simfilePath);
+void reco(TString simfilePath, TString outFileName);
 Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histCandidates, Point &recoVertex);
 Bool_t findPeak(TH1D* histCandidates, Double_t &xCandMad);
 Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin);
@@ -42,7 +42,7 @@ Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin);
 
 
 //---------------- RECO ---------------------
-void reco(TString simfilePath){
+void reco(TString simfilePath, TString outFileName){
 
   TStopwatch watch;
   watch.Start(kTRUE);
@@ -72,7 +72,7 @@ void reco(TString simfilePath){
 
 
   //open file to store reconstruction output
-  TFile *reco_file = new TFile("recoFile.root", "RECREATE");
+  TFile *reco_file = new TFile(outFileName, "RECREATE");
   
   //histograms to be filled with reco results
   TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 510         , -25.45, 25.55); //WITH match hits; bin size 1 mm
