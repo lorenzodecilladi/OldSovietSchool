@@ -28,7 +28,7 @@
 #endif
 
 
-void analysis(TString simfilePath, TString recofilePath){
+void analysis(TString simfilePath, TString recofilePath, TString outFileName){
 
   TStopwatch watch;
   watch.Start(kTRUE);
@@ -68,7 +68,7 @@ void analysis(TString simfilePath, TString recofilePath){
 
   
   //crea file analisi
-  TFile *analysis_file    = new TFile("analysisFile.root", "RECREATE");
+  TFile *analysis_file    = new TFile(outFileName, "RECREATE");
   TH1D  *histResidualZ    = new TH1D("histResidualZ", "Residual in Z", nSimEvents/30., -0.10005, 0.10005);
   //uso nSimEvents così ho il controllo dell'ampiezza dei bins
   
