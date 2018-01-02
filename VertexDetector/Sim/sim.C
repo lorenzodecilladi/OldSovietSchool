@@ -35,7 +35,7 @@
 //void sim(UInt_t nEvents = 10000, TString multOpt = "gaus", Bool_t msON = kTRUE);
 //if msON == kTRUE --> multiple scattering is switched on
 //multOpt can be "gaus", "uniform", "fixed"
-void sim();
+void sim(TString outFileName = "simFile.root");
 void hitMaker(UInt_t i, Vertex* vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON);
 void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L);
 
@@ -46,7 +46,7 @@ void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L);
 
 //------------------ SIM --------------------
 //void sim(UInt_t nEvents, TString multOpt, Bool_t msON){
-void sim(){
+void sim(TString outFileName){
 
   TStopwatch watch;
   watch.Start(kTRUE);
@@ -91,7 +91,7 @@ void sim(){
 
   
   //open file and tree to store simulated data  
-  TFile *sim_file = new TFile("simFile.root", "RECREATE");
+  TFile *sim_file = new TFile(outFileName, "RECREATE");
 
   TTree *simTree  = new TTree("simTree", "Sim output tree");
   TClonesArray *ptrhitsBP = new TClonesArray("Point", 100);
