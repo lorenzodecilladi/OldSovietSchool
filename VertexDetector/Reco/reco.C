@@ -30,6 +30,7 @@
 //--------------------------------------------
 //---------- FUNCTION DECLARATION ------------
 
+void exec();
 void reco(TString simfilePath, TString outFileName);
 Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histCandidates, Point &recoVertex);
 Bool_t findPeak(TH1D* histCandidates, Double_t &xCandMad);
@@ -39,6 +40,36 @@ Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin);
 
 //--------------------------------------------
 //--------- FUNCTION IMPLEMENTATION ----------
+
+void exec(){
+  reco("../Sim/simFiles/sim0013.root", "reco0013m.root");
+  reco("../Sim/simFiles/sim0016.root", "reco0016m.root");
+  reco("../Sim/simFiles/sim0019.root", "reco0019m.root");
+  reco("../Sim/simFiles/sim0022.root", "reco0022m.root");
+  reco("../Sim/simFiles/sim0025.root", "reco0025m.root");
+  reco("../Sim/simFiles/sim0028.root", "reco0028m.root");
+  reco("../Sim/simFiles/sim0031.root", "reco0031m.root");
+}
+
+void exec1(){
+  reco("../Sim/simFiles/sim0014.root", "reco0014m.root");
+  reco("../Sim/simFiles/sim0017.root", "reco0017m.root");
+  reco("../Sim/simFiles/sim0020.root", "reco0020m.root");
+  reco("../Sim/simFiles/sim0023.root", "reco0023m.root");
+  reco("../Sim/simFiles/sim0026.root", "reco0026m.root");
+  reco("../Sim/simFiles/sim0029.root", "reco0029m.root");
+  reco("../Sim/simFiles/sim0032.root", "reco0032m.root");
+}
+
+void exec2(){
+  reco("../Sim/simFiles/sim0015.root", "reco0015m.root");
+  reco("../Sim/simFiles/sim0018.root", "reco0018m.root");
+  reco("../Sim/simFiles/sim0021.root", "reco0021m.root");
+  reco("../Sim/simFiles/sim0024.root", "reco0024m.root");
+  reco("../Sim/simFiles/sim0027.root", "reco0027m.root");
+  reco("../Sim/simFiles/sim0030.root", "reco0030m.root");
+}
+
 
 
 //---------------- RECO ---------------------
@@ -141,8 +172,8 @@ Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Ve
       if(TMath::Abs(hit2L.Z()) > detector::length/2.) continue; 
 
       Tracklet trt = Tracklet(hit1L, hit2L);                     //generate tracklet
-      //if(trt.matchHits()){
-      if(kTRUE){
+      if(trt.matchHits()){
+      //if(kTRUE){
 	Double_t zCandidate = trt.extractVertex().Z();           //extrapolate vertex (z coord)
 	histCandidates -> Fill(zCandidate);                      //fill vertex candidate hist
 	vCand.push_back(zCandidate);
