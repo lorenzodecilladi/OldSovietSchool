@@ -1,0 +1,6 @@
+./analysisFiles/analysis0001.root
+./analysisFiles/analysis0002.root
+./analysisFiles/analysis0003.root
+./analysisFiles/analysis0004.root
+./analysisFiles/analysis0005.root
+./analysisFiles/analysis0006.root
