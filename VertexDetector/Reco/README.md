@@ -12,9 +12,9 @@
 #### reco.C
 ```
 void reco(TString simfilePath = "../Sim/simFile.root", TString outFileName = "recoFile.root")
-Bool\_t eventAnalysis(Int\_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histCandidates, Point &recoVertex)
-Bool\_t findPeak(TH1D* histCandidates, Double\_t &xCandMad)
-Int\_t findMaximum(TH1* hist, Int\_t minBin, Int\_t maxBin)
+Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histCandidates, Point &recoVertex)
+Bool_t findPeak(TH1D* histCandidates, Double_t &xCandMad)
+Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin)
 
 ```
 - macro for executing the Vertex Detector reconstruction: **reco**
