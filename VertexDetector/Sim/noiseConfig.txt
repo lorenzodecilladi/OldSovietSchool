@@ -1,0 +1,4 @@
+//noiseOpt,par1,par2
+gaus
+5.
+1.

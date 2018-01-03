@@ -37,7 +37,7 @@
 //multOpt can be "gaus", "uniform", "fixed"
 void sim(TString outFileName = "simFile.root");
 void hitMaker(UInt_t i, Vertex* vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON);
-void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L);
+void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseOpt, Double_t par1, Double_t par2);
 
 
 //--------------------------------------------
@@ -64,7 +64,7 @@ void sim(TString outFileName){
   
   ifstream in("config.txt");
   if(!in){
-    cout<<"Il file non esiste "<<endl;
+    cout<<"[!]\n[!]\n[!] Config file NOT FOUND!\n[!]\n[!]"<<endl;
     return;
   }
 
@@ -92,6 +92,34 @@ void sim(TString outFileName){
   cout  <<"Noise            = " << noiseON << endl;
   cout  <<"zGenVertex       = " << zGenVertex << endl;
 
+  
+  TString  noiseComment  = "null";
+  TString  noiseOpt      = "null";
+  Double_t noisePar1     =     0.;
+  Double_t noisePar2     =     0.;
+
+  ifstream inNoise("noiseConfig.txt");
+  if(!inNoise){
+    cout<<"[!]\n[!]\n[!] Noise config file NOT FOUND!\n[!]\n[!]"<<endl;
+    return;
+  }
+
+  inNoise>>noiseComment>>noiseOpt>>noisePar1>>noisePar2;  
+  inNoise.close();
+
+  cout << "----- Noise parameters -----------" << endl;
+  cout << "Noise hits' number distribution = " << noiseOpt << endl;
+  if(noiseOpt == "gaus"){
+    cout<<"Mean             = " << noisePar1    << endl;
+    cout<<"Sigma            = " << noisePar2    << endl;
+  }
+  else if(noiseOpt == "fixed"){ //noisePar2 must be 0.
+    cout<<"Number of hits   = " << noisePar1    << endl;
+  }
+
+
+
+  
 
   
   //open file and tree to store simulated data  
@@ -138,7 +166,7 @@ void sim(TString outFileName){
       hitMaker(i, ptrvert, ptrhitsBP, ptrhits1L, ptrhits2L, msON);
     } // end particles loop
 
-    if(noiseON) noiseMaker(ptrhits1L, ptrhits2L);    
+    if(noiseON) noiseMaker(ptrhits1L, ptrhits2L, noiseOpt, noisePar1, noisePar2);    
     
     simTree->Fill();
     ptrhitsBP->Clear();
@@ -190,15 +218,19 @@ void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* 
 
 
 //---------------- NOISEMAKER ------------------
-void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L){
-
+void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseOpt, Double_t par1, Double_t par2){
+  
   Int_t size1L = ptrhits1L->GetEntries();
   Int_t size2L = ptrhits2L->GetEntries();
   Int_t temp;
   
   //noise hits on Layer1 (cylindric uniform extraction)
-  do{temp = static_cast<Int_t>(rootils::rndmGaus(5, 1));}
-  while(temp<0 || temp>100);
+  if(noiseOpt=="fixed") temp = static_cast<Int_t>(par1);
+  else if(noiseOpt=="gaus"){
+    do{temp = static_cast<Int_t>(rootils::rndmGaus(par1, par2));}
+    while(temp<0 || temp>100);
+  }
+  else{cout << "[!] Invalid noise option!" << endl;}
   UInt_t nNoiseHits1L = temp+size1L<=100 ? temp : 100-size1L;
 
   for(UInt_t i=0; i<nNoiseHits1L; i++){
@@ -208,10 +240,14 @@ void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L){
   }
   
   //noise hits on Layer2 (cylindric uniform extraction)
-  do{temp = static_cast<Int_t>(rootils::rndmGaus(5, 1));}
-  while(temp<0 || temp>100);
+  if(noiseOpt=="fixed") temp = static_cast<Int_t>(par1);
+  else if(noiseOpt=="gaus"){
+    do{temp = static_cast<Int_t>(rootils::rndmGaus(par1, par2));}
+    while(temp<0 || temp>100);
+  }
+  else{cout << "[!] Invalid noise option!" << endl;}
   UInt_t nNoiseHits2L = temp+size2L<=100 ? temp : 100-size2L;
-
+  
   for(UInt_t i=0; i<nNoiseHits2L; i++){
     Double_t z = rootils::rndmUniform(-detector::length/2., detector::length/2.);
     Double_t phi = rootils::rndmUniform(0, 2*math::pi);
