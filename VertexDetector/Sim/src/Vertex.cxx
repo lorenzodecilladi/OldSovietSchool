@@ -21,11 +21,11 @@ Vertex::Vertex(){
 
 
 //standard constructor (TString, UInt_t)
-Vertex::Vertex(TString multOpt, UInt_t mult){
+Vertex::Vertex(TString multOpt, UInt_t mult, Double_t zVert){
   
   fVertex.setX(rndmGaus(0., sXv));
   fVertex.setY(rndmGaus(0., sYv));
-  fVertex.setZ(rndmGaus(0., sZv));
+  fVertex.setZ(rndmGaus(zVert, sZv));
   fVertex.setsX(sXv);
   fVertex.setsY(sYv);
   fVertex.setsZ(sZv);
@@ -37,11 +37,11 @@ Vertex::Vertex(TString multOpt, UInt_t mult){
 
 
 //standard constructor (TString, Double_t, Double_t)
-Vertex::Vertex(TString multOpt, Double_t par1, Double_t par2){
+Vertex::Vertex(TString multOpt, Double_t par1, Double_t par2, Double_t zVert){
   
   fVertex.setX(rndmGaus(0., sXv));
   fVertex.setY(rndmGaus(0., sYv));
-  fVertex.setZ(rndmGaus(0., sZv));
+  fVertex.setZ(rndmGaus(zVert, sZv));
 
   if(multOpt == "uniform") genUniformMult(par1, par2);
   else if(multOpt == "gaus") genGausMult(par1, par2);
