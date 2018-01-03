@@ -1,7 +1,8 @@
-//nEvents,multOpt,par1,par2,multScatt,noise
-100
+//nEvents,multOpt,par1,par2,multScatt,noise,zGenVertex
+1000000
 fixed
 20.
 0.
 1
 1
+4.
