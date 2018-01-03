@@ -23,12 +23,15 @@ sim.C
 - initialises histograms (for multiplicity and for the z coordinate of the generated vertex)
 - for each event:
     - vertex generation, with a certain associated multiplicity (= number of particles)
+    - each histograms is filled with an entry (multiplicity, z coord of the vertex)
     - for each particle:
-        - transport from vertex to beam pipe
+        - transport from vertex to beam pipe (BP)
         - multiple scattering on beam pipe
-        - transport from beam pipe to 1st layer of the detector and hit generation
+        - transport from beam pipe to 1st layer (1L) of the detector and hit generation
         - multiple scattering on 1st layer of the detector
-        - transport from 1st layer to 2nd layer of the detector and hit generation
+        - transport from 1st layer to 2nd layer (2L) of the detector and hit generation
     - if noise is switched on, noise generation follows. Default: gaussian extraction of the number of hits (mean 5, sigma 1) and cylindric uniform extraction of the noise hits position on the detector.
+    - DATA SAVING: Vertex, hits on BP, hits on 1L and hits on 2L are stored in the simTree corresponding branches
+- histograms and tree are written on the output simFile
 
 
