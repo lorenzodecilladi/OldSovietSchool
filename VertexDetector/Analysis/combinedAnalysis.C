@@ -21,6 +21,7 @@
 #include "TF1.h"
 #include "TStopwatch.h"
 #include "TGraph.h"
+#include "TGraphErrors.h"
 #include "TVectorD.h"
 
 #endif
@@ -35,6 +36,7 @@ void combinedAnalysis(TString inputListFile){
   TH1D  *histResolMult     = new TH1D("histResolMult", "Resolution vs Multiplicity", 51, -0.5, 50.5);
   
   Double_t multArr[50];
+  Double_t sMultArr[50] = {0.};
   Double_t resolArr[50];
   Double_t effArr[50];
   Double_t sEffArr[50];
@@ -43,14 +45,19 @@ void combinedAnalysis(TString inputListFile){
     
   ifstream in(inputListFile);
   if(!in){
-    cout<<"Il file "<<inputListFile<<" non esiste "<<endl;
+    cout<<"[!]\n[!]\n[!]\n[!]Il file "<<inputListFile<<" non esiste!\n[!]\n[!]\n[!]"<<endl;
     return;
   }
 
+  TString comment = "null";
   TString inFile;
   Int_t count = 0;
+
+  in>>comment;
   
   while(in>>inFile){
+    if(inFile=="break")break;
+    
     cout << inFile << endl;
 
     //open input analysis file and tree
@@ -117,7 +124,7 @@ void combinedAnalysis(TString inputListFile){
   grResolMult->SetMarkerColor(kRed);
   grResolMult->Draw("APL");
 
-  TGraph  *grEffMult = new TGraph(count, multArr, effArr); //aggiungere errore
+  TGraphErrors  *grEffMult = new TGraphErrors(count, multArr, effArr, sMultArr, sEffArr); //aggiungere errore
   grEffMult->SetTitle("Efficiency vs Multiplicity");
   grEffMult->GetXaxis()->SetTitle("Multiplicity");
   grEffMult->GetYaxis()->SetTitle("Efficiency");
