@@ -45,6 +45,6 @@ void sim(TString outFileName = "simFile.root")
 - histograms and tree are written on the **output simFile**
 ```
 ~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l
-root [0] .L compile.C
+root [0] .X compile.C
 root [1] sim("sim_file.root");
 ```
