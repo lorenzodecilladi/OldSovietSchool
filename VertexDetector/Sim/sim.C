@@ -60,6 +60,7 @@ void sim(TString outFileName){
   Double_t par2 = 0.;
   Bool_t msON = kTRUE;
   Bool_t noiseON = kTRUE;
+  Double_t zGenVertex = 0.;
   
   ifstream in("config.txt");
   if(!in){
@@ -67,8 +68,10 @@ void sim(TString outFileName){
     return;
   }
 
-  in>>comment>>nEvents>>multOpt>>par1>>par2>>msON>>noiseON;
+  in>>comment>>nEvents>>multOpt>>par1>>par2>>msON>>noiseON>>zGenVertex;
 
+  cout << multOpt << endl;
+  
   in.close();
   
   cout << "--- RUNNING VertexDetector SIM ---" << endl;
@@ -87,6 +90,7 @@ void sim(TString outFileName){
   }
   cout  <<"Mult Scattering  = " << msON    << endl;
   cout  <<"Noise            = " << noiseON << endl;
+  cout  <<"zGenVertex       = " << zGenVertex << endl;
 
 
   
@@ -115,25 +119,25 @@ void sim(TString outFileName){
 
     
     if(event%10000 == 0){cout << "Processing EVENT " << event << endl;}
-   
-    if     (multOpt == "gaus")    ptrvert = new Vertex("gaus"   , par1, par2);
-    else if(multOpt == "uniform") ptrvert = new Vertex("uniform", par1, par2);
-    else if(multOpt == "fixed")   ptrvert = new Vertex("fixed"  , par1    );
+
+    if     (multOpt == "gaus")    ptrvert = new Vertex("gaus"   , par1, par2, zGenVertex);
+    else if(multOpt == "uniform") ptrvert = new Vertex("uniform", par1, par2, zGenVertex);
+    else if(multOpt == "fixed")   ptrvert = new Vertex("fixed"  , par1      , zGenVertex);
     //else if(multOpt == "input"){
     //  Int_t mult;
     //  in>>mult;
     //  ptrvert = new Vertex("fixed", mult);
     //}
     else cout << "Invalid multiplicity option" << endl;
-    
+
     UInt_t mult = ptrvert->getMult();
     histSimMult -> Fill(mult);
     histSimVertices ->Fill(ptrvert->getPoint().Z());
-    
+    //return;        
     for(UInt_t i=0; i<mult; i++){ //loop over particles
       hitMaker(i, ptrvert, ptrhitsBP, ptrhits1L, ptrhits2L, msON);
     } // end particles loop
-    
+
     if(noiseON) noiseMaker(ptrhits1L, ptrhits2L);    
     
     simTree->Fill();

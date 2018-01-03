@@ -11,8 +11,8 @@ class Vertex : public Point {
  public:
   
   Vertex();
-  Vertex(TString multOpt, UInt_t mult = 20); //multOption: option for specifying the generation distribution for the muliplicity
-  Vertex(TString multOpt, Double_t par1, Double_t par2);
+  Vertex(TString multOpt, UInt_t mult, Double_t zVert); //multOption: option for specifying the generation distribution for the muliplicity
+  Vertex(TString multOpt, Double_t par1, Double_t par2, Double_t zVert);
   
   virtual ~Vertex();
 
