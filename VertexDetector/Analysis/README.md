@@ -50,4 +50,26 @@ root [1] analysis("../Sim/simFile.root", "../Reco/recoFile.root", "analysisFile.
 
 
 #### combinedAnalysis.C
+```
+void combinedAnalysis(TString inputListFile, TString outFileName = "combAnalysisFile.root")
+```
+- macro for executing the Vertex Detector combined analysis for multiple data sets
+- input files are the analysis' output files
+- for each input file:
+  - opens analysisFile
+    1) gets the simulated multiplicity
+    2) gets mean and sigma of the distribution of generated vertices' z coordinate
+    3) gets resolution, efficiency and efficiency for particles generated within 1 sigma
+- initialises a root file (combAnalysisFile) for storing the output
+- output plots:
+  - resolution vs mean generated z
+  - resolution vs multiplicity
+  - efficiency vs multiplicity
+  - efficiency (for particles generated within 1 sigma) vs multiplicity
+- plots are stored on the output file
+```
+~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l
+root [0] .X compile.C
+root [1] combinedAnalysis("inputFileList.txt", "combAnalysisFile.root");
+```
 
