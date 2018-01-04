@@ -25,7 +25,7 @@
 #endif
 
 
-void combinedAnalysis(TString inputListFile,  TString outFileName = "combAnalysis.root"){
+void combinedAnalysis(TString inputListFile,  TString outFileName = "combAnalysisFile.root"){
 
   TStopwatch watch;
   watch.Start(kTRUE);
