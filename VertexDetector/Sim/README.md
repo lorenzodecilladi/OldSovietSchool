@@ -21,6 +21,17 @@ multiple scattering | 1 if ON, 0 if OFF
 (gaussian) noise | 1 if ON, 0 if OFF
 z of generated vertex | float mean value of gaussian distribution
 
+
+#### noiseConfig.txt
+- contains noise input parameters for the simulation
+
+Parameter | Value
+------------ | -------------
+noise option (distribution of noise hits' number) | gaus, fixed
+par1 | mean if gaus, hits' number if fixed
+par2 | sigma if gaus, 0. if fixed
+
+
 #### sim.C
 ```
 void sim(TString outFileName = "simFile.root")
@@ -39,7 +50,8 @@ void sim(TString outFileName = "simFile.root")
         - multiple scattering on 1st layer of the detector
         - transport from 1st layer to 2nd layer (2L) of the detector and **hit** generation
     - if **noise** is switched on, noise generation follows
-        - default: gaussian extraction of the number of noise hits (mean 5, sigma 1)
+        - noise parameters are passed throung the *noiseConfig.txt* file
+        - extraction of the number of noise hits, than can follow a gaussian (e.g. mean 5, sigma 1) or fixed distribution
         - cylindric uniform extraction of the noise hits' position on the detector
     - **data saving**: Vertex, hits on BP, hits on 1L and hits on 2L are stored in the simTree's corresponding branches
 - histograms and tree are written on the **output simFile**
