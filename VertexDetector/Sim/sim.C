@@ -161,7 +161,14 @@ void sim(TString outFileName){
     UInt_t mult = ptrvert->getMult();
     histSimMult -> Fill(mult);
     histSimVertices ->Fill(ptrvert->getPoint().Z());
-    //return;        
+
+    //used for later evaluation of efficiency for particles generated within 1 sigma (alonz z)
+    //UInt_t nSimEvents1sig = 0;
+    //if(TMath::Abs(ptrvert->GetPoint().Z()) <= vres::sZv) //sZv is the sigma of the gaussian distribution for Vertex's z coord extraction
+    //  {nSimEvents1sig++}
+    //TVectorD vec(1);
+    //vec[0] = nSimEvents1sig;    //resolution
+    
     for(UInt_t i=0; i<mult; i++){ //loop over particles
       hitMaker(i, ptrvert, ptrhitsBP, ptrhits1L, ptrhits2L, msON);
     } // end particles loop
@@ -175,6 +182,7 @@ void sim(TString outFileName){
     delete ptrvert;
   }//end events loop
 
+  //vec.Write("nSimEvents1sig");
   sim_file->Write();
   sim_file->Close();
 
