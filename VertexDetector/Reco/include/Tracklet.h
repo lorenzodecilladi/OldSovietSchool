@@ -3,30 +3,57 @@
 
 #include "Point.h"
 
+/**
+ * Tracklet class. Used to initialise a Tracklet, which is a line joining two hits (data members fHits1L and fHits2L, which are Points) on two different layers of the detectors. If accepted as a viable candidate for a high momentum Particle's trajectory, according to geometrical constraints defined in the method matchHits(), the tracklet is used to extrapolate the reconstructed vertex position as intersection between the tracklet and the beam line (see extractVertex()).
+ */
 class Tracklet : public Point{
 
  public:
 
+  /**
+   * Default constructor.
+   * fHits1L and fHits2L are set using Point's default constructor.
+   */
   Tracklet();
+
+  /**
+   * Standard constructor.
+   * The tho hits joined by the Tracklet are passed as arguments (hit1L, hit2L).
+   */
   Tracklet(Point hit1L, Point hit2L);
-  Tracklet(const Tracklet& source);
+  
+  Tracklet(const Tracklet& source);  ///< Copy constructor
+  virtual ~Tracklet();               ///< Default destructor
+  Tracklet& operator= (const Tracklet& source); ///< assignment operator
 
-  virtual ~Tracklet();
-
-  //assignment operator
-  Tracklet& operator= (const Tracklet& source);
-
+  /**
+   * Extrapolates the reconstructed vertex position on the beam line.
+   * A line joining the two hits on the two detector's layers is used to extrapolate the z coordinate of the reconstructed vertex.
+   * The x and y coordinates of the reconstructed vertex are set to 0. (see the constraint decribed in matchHits() for an explanation).
+   * The uncertainty on the reconstructed z coordinate is propagated taking into account the smearing of the hits on the detector.
+   */
   Point extractVertex();
+
+  /**
+   * Returns the azimutal angle &phi; of the hit passed as argument.
+   * Given the (x,y,z) coordinates of the hit position, the method evaluates and returns its azimutal &phi; coordinate.
+   */
   Double_t evalPhi(Point hit);
+
+  /**
+   * Checks whether the Tracklet is to be accepted.
+   * A Tracklet is accepted only if the distance between the azimutal &phi; coordinates of the two hits (Tracklet's data members) is <= cutPhi.
+   *cutPhi is hardcoded in ~/VertexDetector/Geometry/Detector.h and is a variable of the namespace detector. Its value is set to 0.01 rad and let us consider negligible the distance in &phi; between the two hits of accepted tracklets.
+   */
   Bool_t matchHits();
 
   
  private:
 
-  Point fHit1L;
-  Point fHit2L;
+  Point fHit1L; ///< Hit on the first layer of the detector
+  Point fHit2L; ///< Hit on the second layer of the detector
 
-  ClassDef(Tracklet,1) //coordinates of a point
+  ClassDef(Tracklet,1)
 };
 
 
