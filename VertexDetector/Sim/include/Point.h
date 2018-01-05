@@ -3,49 +3,67 @@
 
 #include "TObject.h"
 
+
+/**
+ * Point class. Used to initialise points in the 3-dimensional space.
+ */
 class Point : public TObject{
 
  public:
-
-  Point();
-  Point(Double_t x, Double_t y, Double_t z);
-  Point(const Point& source);
   
+  /**
+   * Default constructor.
+   * Sets (x,y,z) to (0.,0.,0.) and (sX, sY, sZ) to (0.01, 0.01, 0.01) [cm].
+   */
+  Point();
+
+  /**
+   * Standard constructor.
+   */
+  Point(Double_t x, Double_t y, Double_t z);
+
+  /**
+   * Copy constructor.
+   */
+  Point(const Point& source);
+
+  /**
+   * Default destructor.
+   */
   virtual ~Point();
 
-  //assignment operator
-  Point& operator= (const Point& source);
+
+  Point& operator= (const Point& source);   ///< Assignment operator
   
   // getter funtions
-  Double_t X() const {return fX;}
-  Double_t Y() const {return fY;}
-  Double_t Z() const {return fZ;}
-  Double_t sX() const {return fsX;}
-  Double_t sY() const {return fsY;}
-  Double_t sZ() const {return fsZ;}
+  Double_t X() const {return fX;}    ///< Returns x coordinate
+  Double_t Y() const {return fY;}    ///< Returns y coordinate
+  Double_t Z() const {return fZ;}    ///< Returns z coordinate
+  Double_t sX() const {return fsX;}  ///< Returns error on x coordinate
+  Double_t sY() const {return fsY;}  ///< Returns error on y coordinate
+  Double_t sZ() const {return fsZ;}  ///< Returns error on z coordinate
   
 
   // setter functions
-  void setX(Double_t x);
-  void setY(Double_t y);
-  void setZ(Double_t z);
-  void setsX(Double_t sX);
-  void setsY(Double_t sY);
-  void setsZ(Double_t sZ);
-  void setCoords(Double_t x, Double_t y, Double_t z);
+  void setX(Double_t x);             ///< Sets x coordinate
+  void setY(Double_t y);             ///< Sets y coordinate
+  void setZ(Double_t z);             ///< Sets z coordinate
+  void setsX(Double_t sX);           ///< Sets error on x coordinate
+  void setsY(Double_t sY);           ///< Sets error on y coordinate
+  void setsZ(Double_t sZ);           ///< Sets error on z coordinate
+  void setCoords(Double_t x, Double_t y, Double_t z); ///< Setx (x,y,z) coordinates
 
   
  private:
   
-  Double_t fX; //x coord
-  Double_t fY; //y coord
-  Double_t fZ; //z coord
-  Double_t fsX; //x sigma
-  Double_t fsY; //y sigma
-  Double_t fsZ; //z sigma
-  
+  Double_t fX; ///< x coordinate
+  Double_t fY; ///< y coordinate
+  Double_t fZ; ///< z coordinate
+  Double_t fsX; ///< error on x coordinate
+  Double_t fsY; ///< error on y coordinate
+  Double_t fsZ; ///< error on z coordinate
 
-  ClassDef(Point,1) //coordinates of a point
+  ClassDef(Point,1)
     };
 
 #endif
