@@ -24,9 +24,12 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "VertexDetector", "index.html", [
+    [ "README FILE for /VertexDetector", "md_README.html", null ],
     [ "README FILE for /VertexDetector/Sim", "md_Sim_README.html", null ],
     [ "README FILE for /VertexDetector/Reco", "md_Reco_README.html", null ],
     [ "README FILE for /VertexDetector/Analysis", "md_Analysis_README.html", null ],
+    [ "README FILE for /VertexDetector/Geometry", "md_Geometry_README.html", null ],
+    [ "README FILE for /VertexDetector/Utils", "md_Utils_README.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -45,7 +48,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"Direction_8h_source.html"
+"Detector_8h_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
