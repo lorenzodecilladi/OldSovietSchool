@@ -21,13 +21,22 @@ class Particle : public Point {
    */
   Particle();
 
-    /**
+  /**
    * Standard constructor.
    * fPoint is set to the Point (point) passed as argument.
    * fDirection is set using Direction's default constructor.
    * fLabel is set to the integer value (label) passed as argument.
    */
   Particle(Point point, UInt_t label);
+  
+  /**
+   * Standard constructor.
+   * fPoint is set to the Point (point) passed as argument.
+   * fDirection is set to the Direction (dir) passed as argument.
+   * fLabel is set to the integer value (label) passed as argument.
+   */
+  Particle(Point point, Direction dir, UInt_t label);
+  
   //Particle(const Particle& source); ci serve??
 
   virtual ~Particle(); ///< Default destructor.

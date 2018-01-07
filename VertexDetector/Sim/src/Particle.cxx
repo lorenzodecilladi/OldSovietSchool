@@ -19,6 +19,12 @@ Particle::Particle(Point point, UInt_t label){ //Particle(vertice.getPoint(),...
   fLabel = label;
 }
 
+Particle::Particle(Point point, Direction dir, UInt_t label){ //Particle(vertice.getPoint(),...)
+  fPoint = point; //gli passeremo il vertice
+  fDirection = dir;
+  fLabel = label;
+}
+
 Particle::~Particle(){}
 
 
