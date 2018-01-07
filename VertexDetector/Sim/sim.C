@@ -28,17 +28,18 @@
 
 #endif
 
-//using namespace detector;
 
 
 //------------------------------------------
 //---------- FUNCTION DECLARATION ----------
-//void sim(UInt_t nEvents = 10000, TString multOpt = "gaus", Bool_t msON = kTRUE);
+
 //if msON == kTRUE --> multiple scattering is switched on
-//multOpt can be "gaus", "uniform", "fixed"
+//multOpt can be "gaus", "uniform", "fixed", "hist"
 void sim(TString outFileName = "simFile.root");
 void hitMaker(UInt_t i, Vertex* vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON, Bool_t inputEta, TH1F* histInputEta);
 void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseOpt, Double_t par1, Double_t par2);
+void printInfo(UInt_t nEvents, TString multOpt, Double_t par1, Double_t par2, Bool_t msON, Bool_t noiseON, Double_t zGenVertex, Bool_t inputEta, TString noiseOpt, Double_t noisePar1, Double_t noisePar2);
+
 
 
 //--------------------------------------------
@@ -46,80 +47,43 @@ void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseO
 
 
 //------------------ SIM --------------------
-//void sim(UInt_t nEvents, TString multOpt, Bool_t msON){
 void sim(TString outFileName){
 
   TStopwatch watch;
   watch.Start(kTRUE);
 
-
   //get sim parameters from config file 
-  TString comment = "null";
-  UInt_t nEvents = 10000;
-  TString multOpt = "null";
-  Double_t par1 = 0.;
-  Double_t par2 = 0.;
-  Bool_t msON = kTRUE;
-  Bool_t noiseON = kTRUE;
+  TString  comment    = "null";
+  UInt_t   nEvents    = 10000;
+  TString  multOpt    = "null";
+  Double_t par1       = 0.;
+  Double_t par2       = 0.;
+  Bool_t   msON       = kTRUE;
+  Bool_t   noiseON    = kTRUE;
   Double_t zGenVertex = 0.;
-  Bool_t inputEta = kFALSE;
+  Bool_t   inputEta   = kFALSE;
   
   ifstream in("config.txt");
-  if(!in){
-    cout<<"[!]\n[!]\n[!] Config file NOT FOUND!\n[!]\n[!]"<<endl;
-    return;
-  }
-
+  if(!in){cout<<"[!]\n[!] Config file NOT FOUND!\n[!]"<<endl;
+    return;}  
   in>>comment>>nEvents>>multOpt>>par1>>par2>>msON>>noiseON>>zGenVertex>>inputEta;
-  
   in.close();
-  
-  cout << "--- RUNNING VertexDetector SIM ---" << endl;
-  cout<<  "Number of events = " << nEvents << endl;
-  cout<<  "Multiplicity     = " << multOpt << endl;
-  if(multOpt == "gaus"){
-    cout<<"Mean             = " << par1    << endl;
-    cout<<"Sigma            = " << par2    << endl;
-  }
-  else if(multOpt == "uniform"){
-    cout<<"Min              = " << par1    << endl;
-    cout<<"Max              = " << par2    << endl;
-  }
-  else if(multOpt == "fixed"){
-    cout<<"Mult value       = " << par1    << endl;
-  }
-  cout  <<"Mult Scattering  = " << msON    << endl;
-  cout  <<"Noise            = " << noiseON << endl;
-  cout  <<"zGenVertex       = " << zGenVertex << endl;
 
-  if(inputEta)
-    cout << "Pseudorapdity from input distribution." << endl;
-  else cout << "Uniform pseudorapidity extraction in [-2.,2.]" << endl;
-
-  TString  noiseComment  = "null";
-  TString  noiseOpt      = "null";
-  Double_t noisePar1     =     0.;
-  Double_t noisePar2     =     0.;
+  //get noise parameters from noise config file
+  TString  noiseComment = "null";
+  TString  noiseOpt     = "null";
+  Double_t noisePar1    =     0.;
+  Double_t noisePar2    =     0.;
 
   ifstream inNoise("noiseConfig.txt");
-  if(!inNoise){
-    cout<<"[!]\n[!]\n[!] Noise config file NOT FOUND!\n[!]\n[!]"<<endl;
-    return;
-  }
-
+  if(!inNoise){cout<<"[!]\n[!] Noise config file NOT FOUND!\n[!]"<<endl;
+    return;}
   inNoise>>noiseComment>>noiseOpt>>noisePar1>>noisePar2;  
   inNoise.close();
 
-  cout << "----- Noise parameters -----------" << endl;
-  cout << "Noise hits' number distribution = " << noiseOpt << endl;
-  if(noiseOpt == "gaus"){
-    cout<<"Mean             = " << noisePar1    << endl;
-    cout<<"Sigma            = " << noisePar2    << endl;
-  }
-  else if(noiseOpt == "fixed"){ //noisePar2 must be 0.
-    cout<<"Number of hits   = " << noisePar1    << endl;
-  }
+  printInfo(nEvents, multOpt, par1, par2, msON, noiseON, zGenVertex, inputEta, noiseOpt, noisePar1, noisePar2);
 
+  
   
   //multiplicity from input histogram distribution
   TH1F *histInputMult = new TH1F();
@@ -211,6 +175,46 @@ void sim(TString outFileName){
 
 
 
+void printInfo(UInt_t nEvents, TString multOpt, Double_t par1, Double_t par2, Bool_t msON, Bool_t noiseON, Double_t zGenVertex, Bool_t inputEta, TString noiseOpt, Double_t noisePar1, Double_t noisePar2){
+
+  cout << "--- RUNNING VertexDetector SIM ---" << endl;
+  cout<<  "Number of events = " << nEvents << endl;
+  cout<<  "Multiplicity     = " << multOpt << endl;
+  if(multOpt == "gaus"){
+    cout<<"Mean             = " << par1    << endl;
+    cout<<"Sigma            = " << par2    << endl;
+  }
+  else if(multOpt == "uniform"){
+    cout<<"Min              = " << par1    << endl;
+    cout<<"Max              = " << par2    << endl;
+  }
+  else if(multOpt == "fixed"){
+    cout<<"Mult value       = " << par1    << endl;
+  }
+  cout  <<"Mult Scattering  = " << msON    << endl;
+  cout  <<"Noise            = " << noiseON << endl;
+  cout  <<"zGenVertex       = " << zGenVertex << endl;
+
+  if(inputEta)
+    cout << "Pseudorapdity from input distribution." << endl;
+  else cout << "Uniform pseudorapidity extraction in [-2.,2.]" << endl;
+
+
+  cout << "----- Noise parameters -----------" << endl;
+  cout << "Noise hits' number distribution = " << noiseOpt << endl;
+  if(noiseOpt == "gaus"){
+    cout<<"Mean             = " << noisePar1    << endl;
+    cout<<"Sigma            = " << noisePar2    << endl;
+  }
+  else if(noiseOpt == "fixed"){ //noisePar2 must be 0.
+    cout<<"Number of hits   = " << noisePar1    << endl;
+  }
+  
+}
+
+
+
+
 
 //---------------- HITMAKER ------------------
 void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON, Bool_t inputEta, TH1F* histInputEta){
@@ -292,7 +296,6 @@ void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseO
 
 
 
-
 /*
   //come accedere all'i-esimo elemento di un TClonesArray
 
@@ -300,3 +303,4 @@ void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseO
   Point* ptrhit = (Point*)(*ptrhitsBP).At(i); //altro modo
   Point hit = *( ptrhit ); //per accedere all'oggetto Point vero e proprio devo ancora dereferenziare vedere come funziona
 */
+
