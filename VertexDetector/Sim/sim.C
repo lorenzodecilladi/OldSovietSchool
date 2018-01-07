@@ -37,7 +37,7 @@
 //if msON == kTRUE --> multiple scattering is switched on
 //multOpt can be "gaus", "uniform", "fixed"
 void sim(TString outFileName = "simFile.root");
-void hitMaker(UInt_t i, Vertex* vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON);
+void hitMaker(UInt_t i, Vertex* vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON, Bool_t inputEta, TH1F* histInputEta);
 void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseOpt, Double_t par1, Double_t par2);
 
 
@@ -62,6 +62,7 @@ void sim(TString outFileName){
   Bool_t msON = kTRUE;
   Bool_t noiseON = kTRUE;
   Double_t zGenVertex = 0.;
+  Bool_t inputEta = kFALSE;
   
   ifstream in("config.txt");
   if(!in){
@@ -69,9 +70,7 @@ void sim(TString outFileName){
     return;
   }
 
-  in>>comment>>nEvents>>multOpt>>par1>>par2>>msON>>noiseON>>zGenVertex;
-
-  cout << multOpt << endl;
+  in>>comment>>nEvents>>multOpt>>par1>>par2>>msON>>noiseON>>zGenVertex>>inputEta;
   
   in.close();
   
@@ -93,7 +92,10 @@ void sim(TString outFileName){
   cout  <<"Noise            = " << noiseON << endl;
   cout  <<"zGenVertex       = " << zGenVertex << endl;
 
-  
+  if(inputEta)
+    cout << "Pseudorapdity from input distribution." << endl;
+  else cout << "Uniform pseudorapidity extraction in [-2.,2.]" << endl;
+
   TString  noiseComment  = "null";
   TString  noiseOpt      = "null";
   Double_t noisePar1     =     0.;
@@ -121,8 +123,7 @@ void sim(TString outFileName){
   
   //multiplicity from input histogram distribution
   TH1F *histInputMult = new TH1F();
-  histInputMult -> SetDirectory(0);
-  
+  histInputMult -> SetDirectory(0);  
   if(multOpt == "hist"){
     TFile *hist_file = new TFile("kinem.root");
     histInputMult = (TH1F*)hist_file->Get("hmul");
@@ -130,6 +131,15 @@ void sim(TString outFileName){
     hist_file->Close();
   }
 
+  //pseudorapidity from input histogram distribution
+  TH1F *histInputEta = new TH1F();
+  histInputEta -> SetDirectory(0);
+  if(inputEta){
+    TFile *hist_file = new TFile("kinem.root");
+    histInputEta = (TH1F*)hist_file->Get("heta");
+    histInputEta -> SetDirectory(0);
+    hist_file->Close();
+  }
 
   //open file and tree to store simulated data  
   TFile *sim_file = new TFile(outFileName, "RECREATE");
@@ -175,7 +185,7 @@ void sim(TString outFileName){
     //vec[0] = nSimEvents1sig;    //resolution
     
     for(UInt_t i=0; i<mult; i++){ //loop over particles
-      hitMaker(i, ptrvert, ptrhitsBP, ptrhits1L, ptrhits2L, msON);
+      hitMaker(i, ptrvert, ptrhitsBP, ptrhits1L, ptrhits2L, msON, inputEta, histInputEta);
     } // end particles loop
 
     if(noiseON) noiseMaker(ptrhits1L, ptrhits2L, noiseOpt, noisePar1, noisePar2);    
@@ -203,23 +213,25 @@ void sim(TString outFileName){
 
 
 //---------------- HITMAKER ------------------
-void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON){
+void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON, Bool_t inputEta, TH1F* histInputEta){
+
+  Particle *part = new Particle();
+  if(inputEta){*part = Particle(ptrvert->getPoint(), histInputEta, i);}
+  else{*part = Particle(ptrvert->getPoint(), i);}
   
-  Particle *part = new Particle(ptrvert->getPoint(), i);
-  
-  part->transport(detector::rBP);           //tansport to Beam Pipe
+  part->transport(detector::rBP);          //transport to Beam Pipe
   new((*ptrhitsBP)[i]) Point(part->getPoint());
   
   if(msON) part->multipleScattering();     //MS in Beam Pipe
   
-  part->transport(detector::r1L);           //tansport BP -> Layer1
+  part->transport(detector::r1L);          //tansport BP -> Layer1
   //new((*ptrhits1L)[i]) Point(part->getPoint());
   Int_t i1L = ptrhits1L->GetEntries();
   if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits1L)[i1L]) Point(part->getPoint());
   
   if(msON) part->multipleScattering();     //MS in Layer1
   
-  part->transport(detector::r2L);           //transport Layer1 -> Layer2
+  part->transport(detector::r2L);          //transport Layer1 -> Layer2
   //new((*ptrhits2L)[i]) Point(part->getPoint());
   Int_t i2L = ptrhits2L->GetEntries();
   if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(part->getPoint());
