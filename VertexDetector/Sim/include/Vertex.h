@@ -3,6 +3,7 @@
 
 #include "Point.h"
 #include "TString.h"
+#include "TH1F.h"
 
 
 /**
@@ -39,6 +40,8 @@ class Vertex : public Point {
    */
   Vertex(TString multOpt, Double_t par1, Double_t par2, Double_t zVert);
   
+  Vertex(TString multOpt, TH1F* histMult, Double_t zVert);
+  
   virtual ~Vertex(); ///< Default destructor.
 
 
@@ -65,6 +68,10 @@ class Vertex : public Point {
    */
   void genFixedMult(UInt_t mult = 20);
 
+
+  void genHistMult(TH1F* histMult);
+    
+  
   //get functions
   Point getPoint() const {return fVertex;}  ///< Returns fPoint
   UInt_t getMult() const {return fMult;}    ///< Returns fMult
@@ -77,6 +84,7 @@ class Vertex : public Point {
 
   Point fVertex;  ///< Point indicating the 3-dimensional position of the Vertex
   UInt_t fMult;   ///< Multiplicity
+  //TH1F* fHistMult;
 
   
   ClassDef(Vertex, 1)

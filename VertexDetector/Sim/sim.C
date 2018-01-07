@@ -24,6 +24,7 @@
 #include "TStopwatch.h"
 #include "TString.h"
 #include "TH1D.h"
+#include "TH1F.h"
 
 #endif
 
@@ -117,11 +118,19 @@ void sim(TString outFileName){
     cout<<"Number of hits   = " << noisePar1    << endl;
   }
 
-
-
   
-
+  //multiplicity from input histogram distribution
+  TH1F *histInputMult = new TH1F();
+  histInputMult -> SetDirectory(0);
   
+  if(multOpt == "hist"){
+    TFile *hist_file = new TFile("kinem.root");
+    histInputMult = (TH1F*)hist_file->Get("hmul");
+    histInputMult -> SetDirectory(0);
+    hist_file->Close();
+  }
+
+
   //open file and tree to store simulated data  
   TFile *sim_file = new TFile(outFileName, "RECREATE");
 
@@ -143,19 +152,15 @@ void sim(TString outFileName){
   TH1D *histSimMult      = new TH1D("histSimMult"    , "z Sim Multiplicities", 51          , -0.5  , 50.5); //bin always == 1 //move to sim
   TH1D *histSimVertices  = new TH1D("histSimVertices" , "z Sim Vertices"      , nEvents/100., -25.5, 25.5); //[cm] //move to Sim
 
+  
   for(UInt_t event=0; event<nEvents; event++){ //loop over events
-
     
     if(event%10000 == 0){cout << "Processing EVENT " << event << endl;}
 
     if     (multOpt == "gaus")    ptrvert = new Vertex("gaus"   , par1, par2, zGenVertex);
     else if(multOpt == "uniform") ptrvert = new Vertex("uniform", par1, par2, zGenVertex);
     else if(multOpt == "fixed")   ptrvert = new Vertex("fixed"  , par1      , zGenVertex);
-    //else if(multOpt == "input"){
-    //  Int_t mult;
-    //  in>>mult;
-    //  ptrvert = new Vertex("fixed", mult);
-    //}
+    else if(multOpt == "hist")    ptrvert = new Vertex("hist", histInputMult, zGenVertex);
     else cout << "Invalid multiplicity option" << endl;
 
     UInt_t mult = ptrvert->getMult();

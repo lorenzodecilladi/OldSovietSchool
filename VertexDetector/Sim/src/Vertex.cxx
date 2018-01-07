@@ -50,6 +50,19 @@ Vertex::Vertex(TString multOpt, Double_t par1, Double_t par2, Double_t zVert){
 }
 
 
+
+//standard constructor (TString, )
+Vertex::Vertex(TString multOpt, TH1F* histMult, Double_t zVert)
+{
+  fVertex.setX(rndmGaus(0., sXv));
+  fVertex.setY(rndmGaus(0., sYv));
+  fVertex.setZ(rndmGaus(zVert, sZv));
+  
+  if(multOpt == "hist") genHistMult(histMult);
+  else cout << "Invalid multiplicity option" << endl;
+}
+
+
 //destructor
 Vertex::~Vertex(){}
 
@@ -69,4 +82,8 @@ void Vertex::genGausMult(Double_t mult, Double_t sMult){
 
 void Vertex::genFixedMult(UInt_t mult){
   fMult = mult;
+}
+
+void Vertex::genHistMult(TH1F* histMult){
+  fMult = histMult -> GetRandom();
 }
