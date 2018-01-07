@@ -125,9 +125,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a40f4c7e248029d72e7714b7802d5e5e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a40f4c7e248029d72e7714b7802d5e5e1">More...</a><br /></td></tr>
 <tr class="separator:a40f4c7e248029d72e7714b7802d5e5e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a0794fa9ddfa984a344fc1d9a507711"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classParticle.html#a7a0794fa9ddfa984a344fc1d9a507711">Particle</a> (<a class="el" href="classPoint.html">Point</a> point, UInt_t label)</td></tr>
-<tr class="memdesc:a7a0794fa9ddfa984a344fc1d9a507711"><td class="mdescLeft">&#160;</td><td class="mdescRight"><br />
-Standard constructor.  <a href="#a7a0794fa9ddfa984a344fc1d9a507711">More...</a><br /></td></tr>
+<tr class="memdesc:a7a0794fa9ddfa984a344fc1d9a507711"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard constructor.  <a href="#a7a0794fa9ddfa984a344fc1d9a507711">More...</a><br /></td></tr>
 <tr class="separator:a7a0794fa9ddfa984a344fc1d9a507711"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19c1c982a500af054d7f28777ab07376"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classParticle.html#a19c1c982a500af054d7f28777ab07376">Particle</a> (<a class="el" href="classPoint.html">Point</a> point, <a class="el" href="classDirection.html">Direction</a> dir, UInt_t label)</td></tr>
+<tr class="memdesc:a19c1c982a500af054d7f28777ab07376"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard constructor.  <a href="#a19c1c982a500af054d7f28777ab07376">More...</a><br /></td></tr>
+<tr class="separator:a19c1c982a500af054d7f28777ab07376"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad030d0fe7b88cf81744b127c99244ff4"><td class="memItemLeft" align="right" valign="top"><a id="ad030d0fe7b88cf81744b127c99244ff4"></a>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classParticle.html#ad030d0fe7b88cf81744b127c99244ff4">~Particle</a> ()</td></tr>
 <tr class="memdesc:ad030d0fe7b88cf81744b127c99244ff4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor. <br /></td></tr>
@@ -259,7 +261,7 @@ UInt_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 <p>Used to initialise a <a class="el" href="classParticle.html" title="Particle class. ">Particle</a>, which is always characterised by a <a class="el" href="classPoint.html" title="Point class. ">Point</a> and a <a class="el" href="classDirection.html" title="Direction class. ">Direction</a>, which are its data members fPoint and fDirection. The third data member of a <a class="el" href="classParticle.html" title="Particle class. ">Particle</a> is an integer label (fLabel), that can be used to keep track of the generated particles. The original position of a <a class="el" href="classParticle.html" title="Particle class. ">Particle</a> is, usually, represented by a <a class="el" href="classVertex.html" title="Vertex class. ">Vertex</a>, in which a number of Particles equal to the <a class="el" href="classVertex.html" title="Vertex class. ">Vertex</a>'s multiplicity are generated. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a40f4c7e248029d72e7714b7802d5e5e1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40f4c7e248029d72e7714b7802d5e5e1">&#9670;&nbsp;</a></span>Particle() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a40f4c7e248029d72e7714b7802d5e5e1">&#9670;&nbsp;</a></span>Particle() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -279,7 +281,7 @@ UInt_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </div>
 </div>
 <a id="a7a0794fa9ddfa984a344fc1d9a507711"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a0794fa9ddfa984a344fc1d9a507711">&#9670;&nbsp;</a></span>Particle() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a0794fa9ddfa984a344fc1d9a507711">&#9670;&nbsp;</a></span>Particle() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -304,9 +306,45 @@ UInt_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
       </table>
 </div><div class="memdoc">
 
-<p><br />
-Standard constructor. </p>
+<p>Standard constructor. </p>
 <p>fPoint is set to the <a class="el" href="classPoint.html" title="Point class. ">Point</a> (point) passed as argument. fDirection is set using <a class="el" href="classDirection.html" title="Direction class. ">Direction</a>'s default constructor. fLabel is set to the integer value (label) passed as argument. </p>
+
+</div>
+</div>
+<a id="a19c1c982a500af054d7f28777ab07376"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19c1c982a500af054d7f28777ab07376">&#9670;&nbsp;</a></span>Particle() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Particle::Particle </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classPoint.html">Point</a>&#160;</td>
+          <td class="paramname"><em>point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classDirection.html">Direction</a>&#160;</td>
+          <td class="paramname"><em>dir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">UInt_t&#160;</td>
+          <td class="paramname"><em>label</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Standard constructor. </p>
+<p>fPoint is set to the <a class="el" href="classPoint.html" title="Point class. ">Point</a> (point) passed as argument. fDirection is set to the <a class="el" href="classDirection.html" title="Direction class. ">Direction</a> (dir) passed as argument. fLabel is set to the integer value (label) passed as argument. </p>
 
 </div>
 </div>

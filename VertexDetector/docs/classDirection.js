@@ -1,6 +1,7 @@
 var classDirection =
 [
     [ "Direction", "classDirection.html#aba0c848f9db9831e6feb64d978e6d019", null ],
+    [ "Direction", "classDirection.html#a650b03eef56fdbdb72b0aa599a88b53a", null ],
     [ "Direction", "classDirection.html#a9dcdb0b5633e205b549813cb6ee04aff", null ],
     [ "Direction", "classDirection.html#abaa8b8cb26d8c84bcf0f5a307cb44eaa", null ],
     [ "Direction", "classDirection.html#a88c9987015c7e8c11ce898803ba98dfd", null ],
