@@ -7,7 +7,6 @@ ClassImp(Direction)
 
 //default constructor
 Direction::Direction():TObject(){
-
   fPhi = rootils::rndmUniform(0., 2*math::pi);
   fEta = rootils::rndmUniform(-2., 2.);
   fTheta = etaToTheta();
@@ -15,6 +14,17 @@ Direction::Direction():TObject(){
   fC2 = evalC2();
   fC3 = evalC3();
 }
+
+//standard constructor; direction from given pseudorapidity distribution
+Direction::Direction(TH1F* histEta):TObject(){
+  fPhi = rootils::rndmUniform(0., 2*math::pi);
+  fEta = histEta -> GetRandom();
+  fTheta = etaToTheta();
+  fC1 = evalC1();
+  fC2 = evalC2();
+  fC3 = evalC3();
+}
+
 
 //standard constructor
 Direction::Direction(Double_t theta, Double_t phi):TObject(){

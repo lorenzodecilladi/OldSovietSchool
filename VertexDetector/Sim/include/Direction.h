@@ -2,7 +2,7 @@
 #define DIRECTION_H
 
 #include "TObject.h"
-
+#include "TH1F.h"
 
 /**
  * Direction class. Used to initialise a direction in the 3-dimensional space.
@@ -14,10 +14,15 @@ class Direction : public TObject{
   /**
    * Default constructor.
    * Uniform extraction of &phi; in [0, 2*&pi;]
-   * Uniform extraction of peudorapidity &eta; in [-2., 2.]
+   * Uniform extraction of pseudorapidity &eta; in [-2., 2.]
    */
   Direction();
-  
+  /**
+   * Standard constructor.
+   * Uniform extraction of &phi; in [0, 2*&pi;]
+   * Pseudorapidity (&eta;) distribution passed as argument through input histogram (heta, stored in kinem.root)
+   */
+  Direction(TH1F* histEta);
   Direction(Double_t theta, Double_t phi);           /**< Standard constructor. Polar and azimutal angles passed as arguments. */
   Direction(Double_t c1, Double_t c2, Double_t c3);  /**< Standard constructor. %Direction cosines passed as arguments. */
   Direction(const Direction& source);                ///< Copy constructor.
