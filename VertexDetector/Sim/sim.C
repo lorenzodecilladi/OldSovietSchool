@@ -35,16 +35,18 @@
 
 //if msON == kTRUE --> multiple scattering is switched on
 //multOpt can be "gaus", "uniform", "fixed", "hist"
+
 void sim(TString outFileName = "simFile.root");
 void hitMaker(UInt_t i, Vertex* vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON, Bool_t inputEta, TH1F* histInputEta);
 void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseOpt, Double_t par1, Double_t par2);
 void printInfo(UInt_t nEvents, TString multOpt, Double_t par1, Double_t par2, Bool_t msON, Bool_t noiseON, Double_t zGenVertex, Bool_t inputEta, TString noiseOpt, Double_t noisePar1, Double_t noisePar2);
+TH1F* getHistInputMult();
+TH1F* getHistInputEta();
 
 
 
 //--------------------------------------------
 //---------- FUNCTION IMPLMENTATION ----------
-
 
 //------------------ SIM --------------------
 void sim(TString outFileName){
@@ -53,15 +55,15 @@ void sim(TString outFileName){
   watch.Start(kTRUE);
 
   //get sim parameters from config file 
-  TString  comment    = "null";
-  UInt_t   nEvents    = 10000;
-  TString  multOpt    = "null";
-  Double_t par1       = 0.;
-  Double_t par2       = 0.;
-  Bool_t   msON       = kTRUE;
-  Bool_t   noiseON    = kTRUE;
-  Double_t zGenVertex = 0.;
-  Bool_t   inputEta   = kFALSE;
+  TString  comment      = "null";
+  UInt_t   nEvents      = 10000;
+  TString  multOpt      = "null";
+  Double_t par1         = 0.;
+  Double_t par2         = 0.;
+  Bool_t   msON         = kTRUE;
+  Bool_t   noiseON      = kTRUE;
+  Double_t zGenVertex   = 0.;
+  Bool_t   inputEta     = kFALSE;
   
   ifstream in("config.txt");
   if(!in){cout<<"[!]\n[!] Config file NOT FOUND!\n[!]"<<endl;
@@ -84,27 +86,17 @@ void sim(TString outFileName){
   printInfo(nEvents, multOpt, par1, par2, msON, noiseON, zGenVertex, inputEta, noiseOpt, noisePar1, noisePar2);
 
   
-  
   //multiplicity from input histogram distribution
   TH1F *histInputMult = new TH1F();
-  histInputMult -> SetDirectory(0);  
-  if(multOpt == "hist"){
-    TFile *hist_file = new TFile("kinem.root");
-    histInputMult = (TH1F*)hist_file->Get("hmul");
-    histInputMult -> SetDirectory(0);
-    hist_file->Close();
-  }
-
+  if(multOpt == "hist") histInputMult = getHistInputMult();
+  histInputMult -> SetDirectory(0);
+  
   //pseudorapidity from input histogram distribution
-  TH1F *histInputEta = new TH1F();
+  TH1F *histInputEta  = new TH1F();
+  if(inputEta) histInputEta = getHistInputEta();
   histInputEta -> SetDirectory(0);
-  if(inputEta){
-    TFile *hist_file = new TFile("kinem.root");
-    histInputEta = (TH1F*)hist_file->Get("heta");
-    histInputEta -> SetDirectory(0);
-    hist_file->Close();
-  }
 
+  
   //open file and tree to store simulated data  
   TFile *sim_file = new TFile(outFileName, "RECREATE");
 
@@ -123,12 +115,12 @@ void sim(TString outFileName){
   simTree->Branch("Hits1L", &ptrhits1L);
   simTree->Branch("Hits2L", &ptrhits2L);
 
-  TH1D *histSimMult      = new TH1D("histSimMult"    , "z Sim Multiplicities", 51          , -0.5  , 50.5); //bin always == 1 //move to sim
-  TH1D *histSimVertices  = new TH1D("histSimVertices" , "z Sim Vertices"      , nEvents/100., -25.5, 25.5); //[cm] //move to Sim
+  TH1D *histSimMult      = new TH1D("histSimMult"    , "z Sim Multiplicities", 51          , -0.5 , 50.5); //bin size: 1
+  TH1D *histSimVertices  = new TH1D("histSimVertices", "z Sim Vertices"      , nEvents/100., -25.5, 25.5); //[cm]
 
   
   for(UInt_t event=0; event<nEvents; event++){ //loop over events
-    
+
     if(event%10000 == 0){cout << "Processing EVENT " << event << endl;}
 
     if     (multOpt == "gaus")    ptrvert = new Vertex("gaus"   , par1, par2, zGenVertex);
@@ -137,9 +129,9 @@ void sim(TString outFileName){
     else if(multOpt == "hist")    ptrvert = new Vertex("hist", histInputMult, zGenVertex);
     else cout << "Invalid multiplicity option" << endl;
 
-    UInt_t mult = ptrvert->getMult();
-    histSimMult -> Fill(mult);
-    histSimVertices ->Fill(ptrvert->getPoint().Z());
+    UInt_t mult      = ptrvert -> getMult();
+    histSimMult     -> Fill(mult);
+    histSimVertices -> Fill(ptrvert -> getPoint().Z());
 
     //used for later evaluation of efficiency for particles generated within 1 sigma (alonz z)
     //UInt_t nSimEvents1sig = 0;
@@ -150,24 +142,20 @@ void sim(TString outFileName){
     
     for(UInt_t i=0; i<mult; i++){ //loop over particles
       hitMaker(i, ptrvert, ptrhitsBP, ptrhits1L, ptrhits2L, msON, inputEta, histInputEta);
-    } // end particles loop
-
+    }                             // end particles loop
+    
     if(noiseON) noiseMaker(ptrhits1L, ptrhits2L, noiseOpt, noisePar1, noisePar2);    
     
-    simTree->Fill();
-    ptrhitsBP->Clear();
-    ptrhits1L->Clear();
-    ptrhits2L->Clear();
+    simTree   -> Fill();
+    ptrhitsBP -> Clear();
+    ptrhits1L -> Clear();
+    ptrhits2L -> Clear();
     delete ptrvert;
   }//end events loop
 
-  //vec.Write("nSimEvents1sig");
-  sim_file->Write();
-  sim_file->Close();
+  sim_file -> Write();
+  sim_file -> Close();
 
-  //delete histSimMult;
-  //delete histSimVertices;
-  
   watch.Stop();
   watch.Print();  
 }
@@ -175,43 +163,100 @@ void sim(TString outFileName){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void printInfo(UInt_t nEvents, TString multOpt, Double_t par1, Double_t par2, Bool_t msON, Bool_t noiseON, Double_t zGenVertex, Bool_t inputEta, TString noiseOpt, Double_t noisePar1, Double_t noisePar2){
 
-  cout << "--- RUNNING VertexDetector SIM ---" << endl;
-  cout<<  "Number of events = " << nEvents << endl;
-  cout<<  "Multiplicity     = " << multOpt << endl;
+  cout   << "--- RUNNING VertexDetector SIM ---"  << endl;
+  cout   << "Number of events = " << nEvents      << endl;
+  cout   << "Multiplicity     = " << multOpt      << endl;
   if(multOpt == "gaus"){
-    cout<<"Mean             = " << par1    << endl;
-    cout<<"Sigma            = " << par2    << endl;
+    cout << "Mean             = " << par1         << endl;
+    cout << "Sigma            = " << par2         << endl;
   }
   else if(multOpt == "uniform"){
-    cout<<"Min              = " << par1    << endl;
-    cout<<"Max              = " << par2    << endl;
+    cout << "Min              = " << par1         << endl;
+    cout << "Max              = " << par2         << endl;
   }
   else if(multOpt == "fixed"){
-    cout<<"Mult value       = " << par1    << endl;
+    cout << "Mult value       = " << par1         << endl;
   }
-  cout  <<"Mult Scattering  = " << msON    << endl;
-  cout  <<"Noise            = " << noiseON << endl;
-  cout  <<"zGenVertex       = " << zGenVertex << endl;
+  cout   << "Mult Scattering  = " << msON         << endl;
+  cout   << "Noise            = " << noiseON      << endl;
+  cout   << "zGenVertex       = " << zGenVertex   << endl;
 
   if(inputEta)
     cout << "Pseudorapdity from input distribution." << endl;
   else cout << "Uniform pseudorapidity extraction in [-2.,2.]" << endl;
 
 
-  cout << "----- Noise parameters -----------" << endl;
-  cout << "Noise hits' number distribution = " << noiseOpt << endl;
+  cout   << "----- Noise parameters -----------"  << endl;
+  cout   << "Noise hits' number distribution = "  << noiseOpt << endl;
   if(noiseOpt == "gaus"){
-    cout<<"Mean             = " << noisePar1    << endl;
-    cout<<"Sigma            = " << noisePar2    << endl;
+    cout << "Mean             = " << noisePar1    << endl;
+    cout << "Sigma            = " << noisePar2    << endl;
   }
   else if(noiseOpt == "fixed"){ //noisePar2 must be 0.
-    cout<<"Number of hits   = " << noisePar1    << endl;
+    cout << "Number of hits   = " << noisePar1    << endl;
   }
   
 }
 
+
+
+//-----------GET HIST INPUT MULT -------------
+TH1F* getHistInputMult(){
+  TFile *hist_file = new TFile("kinem.root");
+  TH1F  *hMult     = (TH1F*)hist_file->Get("hmul");
+  hMult     -> SetDirectory(0);
+  hist_file -> Close();
+  return hMult;
+}
+
+
+//-----------GET HIST INPUT ETA --------------
+TH1F* getHistInputEta(){
+  
+  TFile *hist_file = new TFile("kinem.root");
+  TH1F  *hEta1     = (TH1F*)hist_file->Get("heta");
+  hEta1     -> SetDirectory(0);
+  hist_file -> Close();
+  
+  TAxis   *xaxis = hEta1 -> GetXaxis();
+  Double_t step  = xaxis -> GetBinWidth(1);
+  Int_t    b1    = xaxis -> FindBin(-2.);
+  Int_t    b2    = xaxis -> FindBin(2.);
+  Double_t xLow  = xaxis -> GetBinLowEdge(b1);
+  Double_t xHigh = xaxis -> GetBinUpEdge(b2);
+  Int_t    nBins = b2-b1+1;
+  Double_t step2 = (xHigh-xLow)/nBins;
+  TH1F    *hEta2 = new TH1F("hEta2","#eta distribution 2",nBins,xLow,xHigh);
+  Int_t j = 1;
+  for(Int_t i=b1; i<=b2; i++) hEta2 -> SetBinContent(j++, hEta1->GetBinContent(i));
+  hEta1 -> Draw();
+  hEta2 -> SetLineColor(2);
+  hEta2 -> Draw("same");
+  return hEta2;
+}
 
 
 
@@ -220,28 +265,25 @@ void printInfo(UInt_t nEvents, TString multOpt, Double_t par1, Double_t par2, Bo
 void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON, Bool_t inputEta, TH1F* histInputEta){
 
   Particle *part = new Particle();
-  if(inputEta){*part = Particle(ptrvert->getPoint(), histInputEta, i);}
-  else{*part = Particle(ptrvert->getPoint(), i);}
+  if(inputEta){ *part = Particle(ptrvert->getPoint(), histInputEta, i);}
+  else{         *part = Particle(ptrvert->getPoint(), i);              }
   
-  part->transport(detector::rBP);          //transport to Beam Pipe
-  new((*ptrhitsBP)[i]) Point(part->getPoint());
+  part -> transport(detector::rBP);          //transport to Beam Pipe
+  new((*ptrhitsBP)[i]) Point(part -> getPoint());
   
-  if(msON) part->multipleScattering();     //MS in Beam Pipe
+  if(msON) part -> multipleScattering();     //MS in Beam Pipe
   
-  part->transport(detector::r1L);          //tansport BP -> Layer1
-  //new((*ptrhits1L)[i]) Point(part->getPoint());
-  Int_t i1L = ptrhits1L->GetEntries();
+  part -> transport(detector::r1L);          //tansport BP -> Layer1
+  Int_t i1L = ptrhits1L -> GetEntries();
   if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits1L)[i1L]) Point(part->getPoint());
   
-  if(msON) part->multipleScattering();     //MS in Layer1
+  if(msON) part -> multipleScattering();     //MS in Layer1
   
-  part->transport(detector::r2L);          //transport Layer1 -> Layer2
-  //new((*ptrhits2L)[i]) Point(part->getPoint());
-  Int_t i2L = ptrhits2L->GetEntries();
+  part -> transport(detector::r2L);          //transport Layer1 -> Layer2
+  Int_t i2L = ptrhits2L -> GetEntries();
   if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(part->getPoint());
 
   delete part;
-
 }
 
 
@@ -259,11 +301,14 @@ void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseO
     do{temp = static_cast<Int_t>(rootils::rndmGaus(par1, par2));}
     while(temp<0 || temp>100);
   }
-  else{cout << "[!] Invalid noise option!" << endl;}
+  else{
+    cout << "[!] Invalid noise option!" << endl;
+    return;
+  }
+  
   UInt_t nNoiseHits1L = temp+size1L<=100 ? temp : 100-size1L;
-
   for(UInt_t i=0; i<nNoiseHits1L; i++){
-    Double_t z = rootils::rndmUniform(-detector::length/2., detector::length/2.);
+    Double_t z   = rootils::rndmUniform(-detector::length/2., detector::length/2.);
     Double_t phi = rootils::rndmUniform(0, 2*math::pi);
     new((*ptrhits1L)[size1L+i]) Point(detector::r1L*TMath::Cos(phi), detector::r1L*TMath::Sin(phi), z);
   }
@@ -278,7 +323,7 @@ void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseO
   UInt_t nNoiseHits2L = temp+size2L<=100 ? temp : 100-size2L;
   
   for(UInt_t i=0; i<nNoiseHits2L; i++){
-    Double_t z = rootils::rndmUniform(-detector::length/2., detector::length/2.);
+    Double_t z   = rootils::rndmUniform(-detector::length/2., detector::length/2.);
     Double_t phi = rootils::rndmUniform(0, 2*math::pi);
     new((*ptrhits2L)[size2L+i]) Point(detector::r2L*TMath::Cos(phi), detector::r2L*TMath::Sin(phi), z);
   }
