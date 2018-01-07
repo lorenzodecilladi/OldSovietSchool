@@ -29,6 +29,7 @@ class Vertex : public Point {
    * @param zVert mean value for the gaussia distribution of the z coordinate
    */
   Vertex(TString multOpt, UInt_t mult, Double_t zVert); //multOption: option for specifying the generation distribution for the muliplicity
+
   /**
    * Standard constructor.
    * Coordinates are extracted following a gaussian distribution around (0., 0., zVert)cm, with sigmas (0.01, 0.01, 5.3)cm.
@@ -39,7 +40,15 @@ class Vertex : public Point {
    * @param zVert mean value for the gaussia distribution of the z coordinate
    */
   Vertex(TString multOpt, Double_t par1, Double_t par2, Double_t zVert);
-  
+
+  /**
+   * Standard constructor.
+   * Coordinates are extracted following a gaussian distribution around (0., 0., zVert)cm, with sigmas (0.01, 0.01, 5.3)cm.
+   * Multiplicity follows a distribution which is passed through an input histogram (hmul, stored in kinem.root).
+   * @param multOpt option for specifying the generation distribution for the multiplicity (here it can only be "hist")
+   * @param histMult input histogram with multiplicity distribution
+   * @param zVert mean value for the gaussia distribution of the z coordinate
+   */  
   Vertex(TString multOpt, TH1F* histMult, Double_t zVert);
   
   virtual ~Vertex(); ///< Default destructor.
@@ -49,26 +58,30 @@ class Vertex : public Point {
 
   /**
    * Extracts uniform multiplicity
-   * The funcion extracts an integer value for the multiplicity and assigns it to fMult (data member).
+   * The function extracts an integer value for the multiplicity and assigns it to fMult (data member).
    * The multiplicity is extracted following a uniform distribution in [minMult, maxMult] (passed as arguments).
    */
   void genUniformMult(Double_t minMult = 0., Double_t maxMult = 50.);
 
   /**
    * Extracts gaussian multiplicity
-   * The funcion extracts an integer value for the multiplicity and assigns it to fMult (data member).
+   * The function extracts an integer value for the multiplicity and assigns it to fMult (data member).
    * The multiplicity is extracted following a gaussian distribution with mean = mult and sigma = sMult, passed as arguments.
    */
   void genGausMult(Double_t mult = 20., Double_t sMult = 5.);
 
   /**
    * Extracts fixed multiplicity
-   * The funcion extracts an integer value for the multiplicity and assigns it to fMult (data member).
+   * The function extracts an integer value for the multiplicity and assigns it to fMult (data member).
    * The value of the multiplicity is fixed to mult, passed as argument.
    */
   void genFixedMult(UInt_t mult = 20);
 
-
+  /**
+   * Extracts multiplicity following an input distribution
+   * The function extracts an integer value for the multiplicity and assigns it to fMult (data member).
+   * The value of the multiplicity follows the distribution stored in the input histogram histMult.
+   */
   void genHistMult(TH1F* histMult);
     
   

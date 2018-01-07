@@ -2,6 +2,7 @@ var searchData=
 [
   ['genfixedmult',['genFixedMult',['../classVertex.html#aaf4eb40a903b6f17978ab5cf83291b69',1,'Vertex']]],
   ['gengausmult',['genGausMult',['../classVertex.html#a37eb0dba31cbdf53d5575669c9c9e46d',1,'Vertex']]],
+  ['genhistmult',['genHistMult',['../classVertex.html#a17c1d9d91448c5a54b586c465b96db87',1,'Vertex']]],
   ['genuniformmult',['genUniformMult',['../classVertex.html#a9427b7e3924f3306fe9524bab6f882f0',1,'Vertex']]],
   ['getdirection',['getDirection',['../classParticle.html#a78ffeaa99b7307a28ff90813a3918094',1,'Particle']]],
   ['getlabel',['getLabel',['../classParticle.html#a83ab20e7658bff17104e4f6107fe5ebc',1,'Particle']]],
