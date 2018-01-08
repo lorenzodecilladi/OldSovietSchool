@@ -4,7 +4,7 @@
   ~           Lorenzo de Cilladi                                      ~
   ~ Course:   TANS - 2017/2018                                        ~
   ~                                                                   ~
-  ~ Last modified: 04/01/2017                                         ~
+  ~ Last modified: 08/01/2017                                         ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
@@ -25,7 +25,7 @@
 #endif
 
 
-void combinedAnalysis(TString inputListFile,  TString outFileName = "combAnalysisFile.root"){
+void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outFileName = "combAnalysisFile.root"){
 
   TStopwatch watch;
   watch.Start(kTRUE);
@@ -76,9 +76,9 @@ void combinedAnalysis(TString inputListFile,  TString outFileName = "combAnalysi
 
     TVectorD *vec = (TVectorD*)analysis_file->Get("vec");
     
-    double resol    = (*vec)[0];
-    double sResol   = (*vec)[1];
-    resolArr[count] = sResol;
+    double meanResZ    = (*vec)[0];
+    double resol   = (*vec)[1];
+    resolArr[count] = resol;
 
     double eff      = (*vec)[2];
     double sEff     = (*vec)[3];
@@ -91,11 +91,11 @@ void combinedAnalysis(TString inputListFile,  TString outFileName = "combAnalysi
     sEff1sigArr[count]  = sEff1sig;
     
     cout << "Multiplicity: " << mult << endl;
-    cout << "Resolution: "   << sResol
+    cout << "Resolution: "   << resol
 	 << "; Efficiency: " << eff
       	 << "; Efficiency (within 1 sigma): " << eff1sig  << endl;
     
-    //histResolMult->Fill(mult, sResol);    
+    //histResolMult->Fill(mult, resol);    
 
     count++;
     analysis_file -> Close();
