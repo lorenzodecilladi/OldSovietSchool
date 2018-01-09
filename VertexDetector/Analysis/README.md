@@ -5,7 +5,8 @@
 - contains instruction for compiling classes and macros used in the analysis
 - to be executed as follows:
 ```
-~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l compile.C
+~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l
+root [0] .x compile.C("force");
 ```
 
 
@@ -39,7 +40,7 @@ on)
     - residuals along the z coordinate
 ```
 ~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l
-root [0] .X compile.C
+root [0] .X compile.C("force");
 root [1] analysis("../Sim/simFile.root", "../Reco/recoFile.root", "analysisFile.root");
 ```
 

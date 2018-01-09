@@ -5,7 +5,8 @@
 - contains instruction for compiling classes and macros used in the reconstruction
 - to be executed as follows:
 ```
-~/OldSovietSchool/esercizi/VertexDetector/Reco$ root -l compile.C
+~/OldSovietSchool/esercizi/VertexDetector/Reco$ root -l
+root [0] .x compile.C("force");
 ```
 
 
@@ -41,6 +42,6 @@ Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin)
 - histograms and tree are written on the **output recoFile**
 ```
 ~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l
-root [0] .X compile.C
+root [0] .X compile.C("force");
 root [1] reco("../Sim/simFile.root", "recoFile.root");
 ```
