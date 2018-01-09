@@ -106,10 +106,10 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
   Double_t meanZGenerated   = histSimVertices -> GetMean(); //si può fare un fit e prendere il valor medio???
   Double_t mult             = histSimMult     -> GetMean(); //obviously, to be used only when "fixed" mult
 
-  
-  TVectorD vec(6);   //vector = (meanResZ, resol, eff, sEff)
   Double_t meanResZ; //mean residual in Z
+  TVectorD vec(6);   //vector = (resol, sResol, eff, sEff, eff1sig, sEff1sig)
   Double_t resol;    //resolution (sigma residual in Z)
+  Double_t sResol;
   Double_t eff;      //efficiency
   Double_t sEff;     //uncertainty on eff
   Double_t eff1sig;  //efficiency for particles generated within 1 sigma
@@ -135,17 +135,18 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
   
   //Resolution
   histResidualZ->Fit("gaus");
-  meanResZ  = histResidualZ->GetFunction("gaus")->GetParameter(1);
-  resol = histResidualZ->GetFunction("gaus")->GetParameter(2);
-  vec[0] = meanResZ;
-  vec[1] = resol; 
-  cout << "\nResidual mean = " << vec[0] * 10000 << " um; Resolution (residual sigma) = " << vec[1] * 10000 << " um"<< endl;
+  meanResZ = histResidualZ->GetFunction("gaus")->GetParameter(1);
+  resol    = histResidualZ->GetFunction("gaus")->GetParameter(2);
+  sResol   = histResidualZ->GetFunction("gaus")->GetParError(2);
+  vec[0]   = resol;
+  vec[1]   = sResol; 
+  cout << "\nResolution (residual sigma) = " << vec[0] * 10000 << " +- " << vec[1] * 10000 << " um"<< endl;
 
   //Efficiency
-  eff    = (static_cast<Double_t>(nRecoEvents)/static_cast<Double_t>(nSimEvents));
-  sEff   = (1/nSimEvents)*TMath::Sqrt(nRecoEvents*(1-nRecoEvents/nSimEvents));  //binomial error because numerator (nRecoEvents)
-  vec[2] = eff;                                                                 //is a subset of denominatr (nSimEvents)
-  vec[3] = sEff;
+  eff      = (static_cast<Double_t>(nRecoEvents)/static_cast<Double_t>(nSimEvents));
+  sEff     = (1/nSimEvents)*TMath::Sqrt(nRecoEvents*(1-nRecoEvents/nSimEvents));  //binomial error because numerator (nRecoEvents)
+  vec[2]   = eff;                                                                 //is a subset of denominatr (nSimEvents)
+  vec[3]   = sEff;
   cout << "Efficiency = " << vec[2] << " +- " << vec[3] << endl;
 
   //Efficiency for particles generated within 1 sigma

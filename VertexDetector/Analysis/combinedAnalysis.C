@@ -15,7 +15,6 @@
 #include "TBranch.h"
 #include "TMath.h"
 #include "TH1D.h"
-//#include "TH2D.h"
 #include "TF1.h"
 #include "TStopwatch.h"
 #include "TGraph.h"
@@ -35,12 +34,13 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   Double_t  multArr[50]; //multipliciy
   Double_t sMultArr[50] = {0.};
   Double_t resolArr[50]; //resolution
+  Double_t sResolArr[50];
   Double_t   effArr[50]; //efficiency
   Double_t  sEffArr[50];
   Double_t   eff1sigArr[50]; //efficiency (within 1 sigma)
   Double_t  sEff1sigArr[50];
   Double_t  zGenArr[50]; //z generated
-  Double_t sZGenArr[50];
+  Double_t sZGenArr[50] = {0.};
     
   ifstream in(inputListFile);
   if(!in){
@@ -69,21 +69,22 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
 
     TH1D *histSimVertices = (TH1D*)analysis_file->Get("histSimVertices"); //[cm]
     histSimVertices -> Fit("gaus");    
-    Double_t zGen   = histSimVertices->GetFunction("gaus")->GetParameter(1); //così??? con il fit???
-    Double_t sZGen  = histSimVertices->GetFunction("gaus")->GetParameter(2); //???
-    zGenArr[count]  = zGen;
-    sZGenArr[count] = sZGen;
+    Double_t zGen    = histSimVertices->GetFunction("gaus")->GetParameter(1);
+    //Double_t sZGen   = histSimVertices->GetFunction("gaus")->GetParameter(2);
+    zGenArr[count]   = zGen;
+    //sZGenArr[count]  = sZGen;
 
     TVectorD *vec = (TVectorD*)analysis_file->Get("vec");
     
-    double meanResZ    = (*vec)[0];
-    double resol   = (*vec)[1];
-    resolArr[count] = resol;
+    double resol     = (*vec)[0];
+    double sResol    = (*vec)[1];
+    resolArr[count]  = resol;
+    sResolArr[count] = sResol;
 
-    double eff      = (*vec)[2];
-    double sEff     = (*vec)[3];
-    effArr[count]   = eff;
-    sEffArr[count]  = sEff;
+    double eff       = (*vec)[2];
+    double sEff      = (*vec)[3];
+    effArr[count]    = eff;
+    sEffArr[count]   = sEff;
 
     double eff1sig      = (*vec)[4];
     double sEff1sig     = (*vec)[5];
@@ -106,41 +107,45 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   
   //histResolMult -> DrawCopy();
 
-  TGraph *grResolZGen = new TGraph(count, zGenArr, resolArr);
+  TGraphErrors *grResolZGen = new TGraphErrors(count, zGenArr, resolArr, sZGenArr, sResolArr);
   grResolZGen -> SetTitle("Resolution vs Generated Z");
   grResolZGen -> GetXaxis()->SetTitle("Generated Z [cm]");
   grResolZGen -> GetYaxis()->SetTitle("Resolution [cm]");
   grResolZGen -> SetMarkerStyle(20);
-  grResolZGen -> SetMarkerSize(1.0);
+  grResolZGen -> SetMarkerSize(0.5);
   grResolZGen -> SetMarkerColor(6);
-  grResolZGen -> Draw("APL");
+  grResolZGen -> SetLineColor(6);
+  grResolZGen -> Draw();
   
-  TGraph *grResolMult = new TGraph(count, multArr, resolArr);
+  TGraphErrors *grResolMult = new TGraphErrors(count, multArr, resolArr, sMultArr, sResolArr);
   grResolMult -> SetTitle("Resolution vs Multiplicity");
   grResolMult -> GetXaxis()->SetTitle("Multiplicity");
   grResolMult -> GetYaxis()->SetTitle("Resolution [cm]");
   grResolMult -> SetMarkerStyle(20);
-  grResolMult -> SetMarkerSize(1.0);
+  grResolMult -> SetMarkerSize(0.5);
   grResolMult -> SetMarkerColor(kRed);
-  grResolMult -> Draw("APL");
+  grResolMult -> SetLineColor(kRed);
+  grResolMult -> Draw("AP");
 
   TGraphErrors *grEffMult = new TGraphErrors(count, multArr, effArr, sMultArr, sEffArr); //aggiungere errore
   grEffMult   -> SetTitle("Efficiency vs Multiplicity");
   grEffMult   -> GetXaxis()->SetTitle("Multiplicity");
   grEffMult   -> GetYaxis()->SetTitle("Efficiency");
   grEffMult   -> SetMarkerStyle(20);
-  grEffMult   -> SetMarkerSize(1.0);
+  grEffMult   -> SetMarkerSize(0.5);
   grEffMult   -> SetMarkerColor(kBlue);
-  grEffMult   -> Draw("APL");
+  grEffMult   -> SetLineColor(kBlue);
+  grEffMult   -> Draw("AP");
 
   TGraphErrors *grEff1sigMult = new TGraphErrors(count, multArr, eff1sigArr, sMultArr, sEff1sigArr); //aggiungere errore
   grEff1sigMult   -> SetTitle("Efficiency (for particles generated within 1 sigma) vs Multiplicity");
   grEff1sigMult   -> GetXaxis()->SetTitle("Multiplicity");
   grEff1sigMult   -> GetYaxis()->SetTitle("Efficiency");
   grEff1sigMult   -> SetMarkerStyle(20);
-  grEff1sigMult   -> SetMarkerSize(1.0);
+  grEff1sigMult   -> SetMarkerSize(0.5);
   grEff1sigMult   -> SetMarkerColor(kBlue);
-  grEff1sigMult   -> Draw("APL");
+  grEff1sigMult   -> SetLineColor(kBlue);
+  grEff1sigMult   -> Draw("AP");
   
   in.close();
 
