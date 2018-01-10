@@ -103,7 +103,7 @@ $(document).ready(function(){initNavTree('md_Reco_README.html','');});
 <div class="textblock"><h4>compile.C</h4>
 <ul>
 <li>contains instruction for compiling classes and macros used in the reconstruction</li>
-<li>to be executed as follows: <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Reco$ root -l compile.C</div></div><!-- fragment --></li>
+<li>to be executed as follows: <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Reco$ root -l</div><div class="line">root [0] .x compile.C(&quot;force&quot;);</div></div><!-- fragment --></li>
 </ul>
 <p>#### reco.C </p><div class="fragment"><div class="line">void reco(TString simfilePath = &quot;../Sim/simFile.root&quot;, TString outFileName = &quot;recoFile.root&quot;)</div><div class="line">Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histCandidates, Point &amp;recoVertex)</div><div class="line">Bool_t findPeak(TH1D* histCandidates, Double_t &amp;xCandMad)</div><div class="line">Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin)</div></div><!-- fragment --><ul>
 <li>macro for executing the <a class="el" href="classVertex.html" title="Vertex class. ">Vertex</a> Detector reconstruction: <b>reco</b></li>
@@ -139,7 +139,7 @@ $(document).ready(function(){initNavTree('md_Reco_README.html','');});
 <li><b>data saving</b>: reconstructed <a class="el" href="classVertex.html" title="Vertex class. ">Vertex</a> and corresponding label are stored in the recoTree's branches</li>
 </ul>
 </li>
-<li>histograms and tree are written on the <b>output recoFile</b> <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l</div><div class="line">root [0] .X compile.C</div><div class="line">root [1] reco(&quot;../Sim/simFile.root&quot;, &quot;recoFile.root&quot;);</div></div><!-- fragment --> </li>
+<li>histograms and tree are written on the <b>output recoFile</b> <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l</div><div class="line">root [0] .X compile.C(&quot;force&quot;);</div><div class="line">root [1] reco(&quot;../Sim/simFile.root&quot;, &quot;recoFile.root&quot;);</div></div><!-- fragment --> </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->

@@ -46,9 +46,9 @@ void sim(TString outFileName = "simFile.root")
     - for each particle:
         - transport from vertex to beam pipe (BP)
         - multiple scattering on beam pipe
-        - transport from beam pipe to 1st layer (1L) of the detector and **hit** generation
+        - transport from beam pipe to 1st layer (1L) of the detector and **hit** generation (with gaussian smearing)
         - multiple scattering on 1st layer of the detector
-        - transport from 1st layer to 2nd layer (2L) of the detector and **hit** generation
+        - transport from 1st layer to 2nd layer (2L) of the detector and **hit** generation (with gaussian smearing)
     - if **noise** is switched on, noise generation follows
         - noise parameters are passed throung the *noiseConfig.txt* file
         - extraction of the number of noise hits, than can follow a gaussian (e.g. mean 5, sigma 1) or fixed distribution

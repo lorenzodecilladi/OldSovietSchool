@@ -12,6 +12,7 @@ var classPoint =
     [ "setX", "classPoint.html#a753fb00c27b545bd509766ea20267666", null ],
     [ "setY", "classPoint.html#af78383c6b51201e4e6776db5ce7acf57", null ],
     [ "setZ", "classPoint.html#a44a044a948ce95c0d32d7a1f5ca01aff", null ],
+    [ "smearing", "classPoint.html#a583d53750012e53852e2fd7a5c3eebd9", null ],
     [ "sX", "classPoint.html#aab2e5f7fbce8831dabe2ef4444ebdcca", null ],
     [ "sY", "classPoint.html#abe446d102480de6acf75dbd7bddad2a6", null ],
     [ "sZ", "classPoint.html#a114979d2ccd4fdfad7089a1e58dab87e", null ],

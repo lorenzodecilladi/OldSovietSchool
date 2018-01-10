@@ -103,7 +103,7 @@ $(document).ready(function(){initNavTree('md_Analysis_README.html','');});
 <div class="textblock"><h4>compile.C</h4>
 <ul>
 <li>contains instruction for compiling classes and macros used in the analysis</li>
-<li>to be executed as follows: <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l compile.C</div></div><!-- fragment --></li>
+<li>to be executed as follows: <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l</div><div class="line">root [0] .x compile.C(&quot;force&quot;);</div></div><!-- fragment --></li>
 </ul>
 <p>#### analysis.C </p><div class="fragment"><div class="line">void analysis(TString simfilePath, TString recofilePath, TString outFileName)</div></div><!-- fragment --><ul>
 <li>macro for executing the <a class="el" href="classVertex.html" title="Vertex class. ">Vertex</a> Detector analysis for a single data set (a simFile and the corresponding recoFile)</li>
@@ -127,7 +127,7 @@ $(document).ready(function(){initNavTree('md_Analysis_README.html','');});
 <li>generated multiplicity</li>
 <li>zSimVertices distribution</li>
 <li>zRecoVertices distribution</li>
-<li>residuals along the z coordinate <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l</div><div class="line">root [0] .X compile.C</div><div class="line">root [1] analysis(&quot;../Sim/simFile.root&quot;, &quot;../Reco/recoFile.root&quot;, &quot;analysisFile.root&quot;);</div></div><!-- fragment --></li>
+<li>residuals along the z coordinate <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l</div><div class="line">root [0] .X compile.C(&quot;force&quot;);</div><div class="line">root [1] analysis(&quot;../Sim/simFile.root&quot;, &quot;../Reco/recoFile.root&quot;, &quot;analysisFile.root&quot;);</div></div><!-- fragment --></li>
 </ul>
 </li>
 </ul>

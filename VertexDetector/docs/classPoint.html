@@ -194,6 +194,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPoint.html#af1bb6d79d0f3e25826c776aacbd229d3">setCoords</a> (Double_t x, Double_t y, Double_t z)</td></tr>
 <tr class="memdesc:af1bb6d79d0f3e25826c776aacbd229d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setx (x,y,z) coordinates. <br /></td></tr>
 <tr class="separator:af1bb6d79d0f3e25826c776aacbd229d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a583d53750012e53852e2fd7a5c3eebd9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPoint.html#a583d53750012e53852e2fd7a5c3eebd9">smearing</a> (Double_t R)</td></tr>
+<tr class="memdesc:a583d53750012e53852e2fd7a5c3eebd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Smearing of <a class="el" href="classPoint.html" title="Point class. ">Point</a>'s coordinates on a detector layer at radius R.  <a href="#a583d53750012e53852e2fd7a5c3eebd9">More...</a><br /></td></tr>
+<tr class="separator:a583d53750012e53852e2fd7a5c3eebd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -243,6 +246,28 @@ Double_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 
 <p>Default constructor. </p>
 <p>Sets (x,y,z) to (0.,0.,0.) and (sX, sY, sZ) to (0.01, 0.01, 0.01) [cm]. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a583d53750012e53852e2fd7a5c3eebd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a583d53750012e53852e2fd7a5c3eebd9">&#9670;&nbsp;</a></span>smearing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Point::smearing </td>
+          <td>(</td>
+          <td class="paramtype">Double_t&#160;</td>
+          <td class="paramname"><em>R</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Smearing of <a class="el" href="classPoint.html" title="Point class. ">Point</a>'s coordinates on a detector layer at radius R. </p>
+<p>Function intended to be used when the <a class="el" href="classPoint.html" title="Point class. ">Point</a> is a hit on a detector's layer. The coordinates of the point receive a gaussian smearing. The parameters for the smearing along the Z coordinate and along the r&phi; direction are hardcoded in the file <a class="el" href="Detector_8h_source.html">VertexDetector/Geometry/Detector.h</a> (suggested values are 120 &mu;m along the z coordinate and 30 &mu;m in th r&phi; direction). </p>
 
 </div>
 </div>
