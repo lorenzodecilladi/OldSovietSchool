@@ -207,17 +207,19 @@ void printInfo(UInt_t nEvents, TString multOpt, Double_t par1, Double_t par2, Bo
   if(inputEta)
     cout << "Pseudorapdity from input distribution." << endl;
   else cout << "Uniform pseudorapidity extraction in [-2.,2.]" << endl;
-
-
-  cout   << "----- Noise parameters -----------"  << endl;
-  cout   << "Noise hits' number distribution = "  << noiseOpt << endl;
-  if(noiseOpt == "gaus"){
-    cout << "Mean             = " << noisePar1    << endl;
-    cout << "Sigma            = " << noisePar2    << endl;
+  
+  if(noiseON){
+    cout   << "----- Noise parameters -----------"  << endl;
+    cout   << "Noise hits' number distribution = "  << noiseOpt << endl;
+    if(noiseOpt == "gaus"){
+      cout << "Mean             = " << noisePar1    << endl;
+      cout << "Sigma            = " << noisePar2    << endl;
+    }
+    else if(noiseOpt == "fixed"){ //noisePar2 must be 0.
+      cout << "Number of hits   = " << noisePar1    << endl;
+    }
   }
-  else if(noiseOpt == "fixed"){ //noisePar2 must be 0.
-    cout << "Number of hits   = " << noisePar1    << endl;
-  }
+  else cout << "Noise OFF" << endl;
   
 }
 
