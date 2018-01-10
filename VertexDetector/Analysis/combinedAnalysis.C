@@ -4,7 +4,7 @@
   ~           Lorenzo de Cilladi                                      ~
   ~ Course:   TANS - 2017/2018                                        ~
   ~                                                                   ~
-  ~ Last modified: 08/01/2017                                         ~
+  ~ Last modified: 10/01/2018                                         ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
@@ -31,16 +31,16 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
 
   //TH1D *histResolMult = new TH1D("histResolMult", "Resolution vs Multiplicity", 51, -0.5, 50.5);
   
-  Double_t  multArr[50]; //multipliciy
-  Double_t sMultArr[50] = {0.};
-  Double_t resolArr[50]; //resolution
-  Double_t sResolArr[50];
-  Double_t   effArr[50]; //efficiency
-  Double_t  sEffArr[50];
-  Double_t   eff1sigArr[50]; //efficiency (within 1 sigma)
-  Double_t  sEff1sigArr[50];
-  Double_t  zGenArr[50]; //z generated
-  Double_t sZGenArr[50] = {0.};
+  Double_t     multArr[50]; //multipliciy
+  Double_t    sMultArr[50] = {0.};
+  Double_t    resolArr[50]; //resolution
+  Double_t   sResolArr[50];
+  Double_t      effArr[50]; //efficiency
+  Double_t     sEffArr[50];
+  Double_t  eff1sigArr[50]; //efficiency (within 1 sigma)
+  Double_t sEff1sigArr[50];
+  Double_t     zGenArr[50]; //z generated
+  Double_t    sZGenArr[50] = {0.};
     
   ifstream in(inputListFile);
   if(!in){
@@ -108,6 +108,7 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   //histResolMult -> DrawCopy();
 
   TGraphErrors *grResolZGen = new TGraphErrors(count, zGenArr, resolArr, sZGenArr, sResolArr);
+  grResolZGen -> SetName("ResolVsZGen");
   grResolZGen -> SetTitle("Resolution vs Generated Z");
   grResolZGen -> GetXaxis()->SetTitle("Generated Z [cm]");
   grResolZGen -> GetYaxis()->SetTitle("Resolution [cm]");
@@ -115,9 +116,10 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   grResolZGen -> SetMarkerSize(0.5);
   grResolZGen -> SetMarkerColor(6);
   grResolZGen -> SetLineColor(6);
-  grResolZGen -> Draw();
+  grResolZGen -> Draw("AP");
   
   TGraphErrors *grResolMult = new TGraphErrors(count, multArr, resolArr, sMultArr, sResolArr);
+  grResolMult -> SetName("ResolVsMult");
   grResolMult -> SetTitle("Resolution vs Multiplicity");
   grResolMult -> GetXaxis()->SetTitle("Multiplicity");
   grResolMult -> GetYaxis()->SetTitle("Resolution [cm]");
@@ -127,7 +129,8 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   grResolMult -> SetLineColor(kRed);
   grResolMult -> Draw("AP");
 
-  TGraphErrors *grEffMult = new TGraphErrors(count, multArr, effArr, sMultArr, sEffArr); //aggiungere errore
+  TGraphErrors *grEffMult = new TGraphErrors(count, multArr, effArr, sMultArr, sEffArr);
+  grEffMult   -> SetName("EffVsMult");
   grEffMult   -> SetTitle("Efficiency vs Multiplicity");
   grEffMult   -> GetXaxis()->SetTitle("Multiplicity");
   grEffMult   -> GetYaxis()->SetTitle("Efficiency");
@@ -137,7 +140,8 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   grEffMult   -> SetLineColor(kBlue);
   grEffMult   -> Draw("AP");
 
-  TGraphErrors *grEff1sigMult = new TGraphErrors(count, multArr, eff1sigArr, sMultArr, sEff1sigArr); //aggiungere errore
+  TGraphErrors *grEff1sigMult = new TGraphErrors(count, multArr, eff1sigArr, sMultArr, sEff1sigArr);
+  grEff1sigMult   -> SetName("Eff1sigVsMult");
   grEff1sigMult   -> SetTitle("Efficiency (for particles generated within 1 sigma) vs Multiplicity");
   grEff1sigMult   -> GetXaxis()->SetTitle("Multiplicity");
   grEff1sigMult   -> GetYaxis()->SetTitle("Efficiency");
