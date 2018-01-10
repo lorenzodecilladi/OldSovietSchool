@@ -54,7 +54,10 @@ class Point : public TObject{
   void setCoords(Double_t x, Double_t y, Double_t z); ///< Setx (x,y,z) coordinates
 
 
-  // smearing (changes Point coordinates on detector layers)
+  /**
+   * Smearing of Point's coordinates on a detector layer at radius R.
+   * Function intended to be used when the Point is a hit on a detector's layer. The coordinates of the point receive a gaussian smearing. The parameters for the smearing along the Z coordinate and along the r&phi; direction are hardcoded in the file VertexDetector/Geometry/Detector.h (suggested values are 120 &mu;m along the z coordinate and 30 &mu;m in th r&phi; direction).
+   */
   void smearing(Double_t R);
   
   
