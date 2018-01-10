@@ -50,7 +50,7 @@ Point Tracklet::extractVertex(){
   Double_t z1L = fHit1L.Z();
   Double_t z2L = fHit2L.Z();
   Double_t zV = z1L-r1L*((z2L-z1L)/(r2L-r1L));
-  Double_t szV = (1. + 2*r1L/(r2L-r1L))*smZhit; //smearing
+  Double_t szV = (1. + 2*r1L/(r2L-r1L))*smZ;
 
   Point vertex = Point(0,0,zV);
   vertex.setsZ(szV);
