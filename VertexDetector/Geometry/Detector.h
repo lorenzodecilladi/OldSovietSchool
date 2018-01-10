@@ -19,8 +19,8 @@ namespace detector {
   static const Double_t etaMin = -2.; // pseudorapidity acceptance  
   static const Double_t etaMax = 2.;
   
-  static const Double_t smZhit = 0.012; //cm  smearing Z direction  (120 #mum)
-  static const Double_t smRhit = 0.003; //cm  smearing r#phi direction (30 #mum)
+  static const Double_t smZ = 0.012; //cm  smearing Z direction  (120 #mum)
+  static const Double_t smRPhi = 0.003; //cm  smearing r#phi direction (30 #mum)
 
   static const Double_t cutPhi = 0.01; // rad = 10 mrad
 
