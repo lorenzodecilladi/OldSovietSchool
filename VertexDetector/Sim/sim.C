@@ -261,6 +261,7 @@ TH1F* getHistInputEta(){
 
 
 
+
 //---------------- HITMAKER ------------------
 void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON, Bool_t inputEta, TH1F* histInputEta){
 
@@ -269,19 +270,28 @@ void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* 
   else{         *part = Particle(ptrvert->getPoint(), i);              }
   
   part -> transport(detector::rBP);          //transport to Beam Pipe
-  new((*ptrhitsBP)[i]) Point(part -> getPoint());
+  new((*ptrhitsBP)[i]) Point( part->getPoint() );
   
   if(msON) part -> multipleScattering();     //MS in Beam Pipe
-  
+
   part -> transport(detector::r1L);          //tansport BP -> Layer1
   Int_t i1L = ptrhits1L -> GetEntries();
-  if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits1L)[i1L]) Point(part->getPoint());
-  
+
+  Point hit1L = part->getPoint();
+  hit1L.smearing(detector::r1L);             //smearing on Layer1
+  //if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits1L)[i1L]) Point(part->getPoint());
+  if(TMath::Abs(hit1L.Z())<=detector::length/2.) new((*ptrhits1L)[i1L]) Point(hit1L);
+
   if(msON) part -> multipleScattering();     //MS in Layer1
-  
+
   part -> transport(detector::r2L);          //transport Layer1 -> Layer2
   Int_t i2L = ptrhits2L -> GetEntries();
-  if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(part->getPoint());
+
+  Point hit2L = part->getPoint();  
+  hit2L.smearing(detector::r2L);             //smearing on Layer 2
+  
+  //if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(part->getPoint());
+  if(TMath::Abs(hit2L.Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(hit2L);
 
   delete part;
 }
