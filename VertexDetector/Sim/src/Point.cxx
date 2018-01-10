@@ -1,6 +1,8 @@
 //#include "../include/Point.h"
 #include "Riostream.h"
 #include "Point.h"
+#include "Rootils.h"
+#include "Detector.h"
 //#endif
 
 ClassImp(Point)
@@ -58,4 +60,21 @@ void Point::setCoords(Double_t x, Double_t y, Double_t z){
   setX(x);
   setY(y);
   setZ(z);
+}
+
+
+void Point::smearing(Double_t R){
+  Double_t x0 = fX;
+  Double_t y0 = fY;
+  Double_t z0 = fZ;
+
+  //namespace rootils  in /Utils/Rootils.h
+  //namespace detector in /Geometry/Detector.h
+  Double_t smearZ    = rootils::rndmGaus(0., detector::smZ);
+  Double_t smearRPhi = rootils::rndmGaus(0., detector::smRPhi);
+  Double_t smearPhi  = smearRPhi/R;
+
+  fX = x0*TMath::Cos(smearPhi) - y0*TMath::Sin(smearPhi);
+  fY = y0*TMath::Cos(smearPhi) + x0*TMath::Sin(smearPhi);
+  fZ = z0 + smearZ;
 }

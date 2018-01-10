@@ -53,6 +53,10 @@ class Point : public TObject{
   void setsZ(Double_t sZ);           ///< Sets error on z coordinate
   void setCoords(Double_t x, Double_t y, Double_t z); ///< Setx (x,y,z) coordinates
 
+
+  // smearing (changes Point coordinates on detector layers)
+  void smearing(Double_t R);
+  
   
  private:
   
