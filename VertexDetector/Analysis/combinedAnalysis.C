@@ -92,9 +92,9 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
     sEff1sigArr[count]  = sEff1sig;
     
     cout << "Multiplicity: " << mult << endl;
-    cout << "Resolution: "   << resol
-	 << "; Efficiency: " << eff
-      	 << "; Efficiency (within 1 sigma): " << eff1sig  << endl;
+    cout << "Resolution: "   << resol << " +- " << sResol << endl;
+    cout << "Efficiency: "   << eff   << " +- " << sEff   << endl;
+    cout << "Efficiency (within 1 sigma): " << eff1sig << " +- " << sEff1sig << endl;
     
     //histResolMult->Fill(mult, resol);    
 
