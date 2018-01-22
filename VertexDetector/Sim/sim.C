@@ -113,7 +113,12 @@ void sim(TString outFileName){
   simTree->Branch("Hits2L", &ptrhits2L);
 
   TH1D *histSimMult      = new TH1D("histSimMult"    , "z Sim Multiplicities", 51          , -0.5 , 50.5); //bin size: 1
+  histSimMult -> GetXaxis() -> SetTitle("multiplicity");
+  histSimMult -> GetYaxis() -> SetTitle("counts");
+  
   TH1D *histSimVertices  = new TH1D("histSimVertices", "z Sim Vertices"      , nEvents/100., -25.5, 25.5); //[cm]
+  histSimVertices -> GetXaxis() -> SetTitle("z coord of sim verteices [cm]");
+  histSimVertices -> GetYaxis() -> SetTitle("counts");
 
 
   for(UInt_t event=0; event<nEvents; event++){ //loop over events
