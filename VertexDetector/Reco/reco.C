@@ -180,7 +180,7 @@ Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Ve
   char name[20];
   char title[50];
   sprintf(name , "hEvt%d"                               , event);
-  sprintf(title, "Reco vertices distribution - event %d", event);
+  sprintf(title, "z coord of Reco Vertex - Candidates for event %d", event);
   histCandidates->SetNameTitle(name,title);
 
   std::vector<Double_t>vCand;       //vector to store z coord of vertex candidates
