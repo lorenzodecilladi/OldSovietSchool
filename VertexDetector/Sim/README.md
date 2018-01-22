@@ -9,6 +9,38 @@
 root [0] .x compile.C("force");
 ```
 
+
+#### config.txt
+- contains simulation input parameters
+
+Parameter | Value
+------------ | -------------
+**nEvents** = number of events | integer >= 0
+**multOpt** = vertex' multiplicity option | gaus, fixed, uniform, hist (multiplicity distribution from input histogram hmul stored in kinem.root)
+**par1** | mean (if gaus), multiplicity (if fixed), lowest multiplicity (if uniform), 0. (if hist)
+**par2** | sigma (if gaus), 0. (if fixed), highest multiplicity (if uniform), 0. (if hist)
+**multScatt** = multiple scattering | 1 if ON, 0 if OFF
+**noise** = gaussian noise | 1 if ON, 0 if OFF
+**zGenVertex** = z-coordinate of generated vertex | (float) mean value of gaussian distribution for vertex' z coordinate
+**inputEta** | 1 if pseudorapidity distribution is obtained as input from histogram heta stored in kinem.root; 0 if uniformly generated in [-2., 2.]
+
+
+#### kinem.root
+contains:
+- histogram hmul, from which multiplicity distribution is extracted if multOpt = hist in *config.txt*
+- histogram heta, from which pseudorapidity distribution is extracted if inputEta = 1 in *config.txt*
+
+
+#### noiseConfig.txt
+- contains noise input parameters for the simulation
+
+Parameter | Value
+------------ | -------------
+noise option (distribution of noise hits' number) | gaus, fixed
+par1 | mean (if gaus), noise hits' number (if fixed)
+par2 | sigma (if gaus), 0. (if fixed)
+
+
 #### sim.C
 ```
 void sim(TString outFileName = "simFile.root")
@@ -43,35 +75,3 @@ root [1] sim("sim_file.root");
 ~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l simFile.root
 root [0] TBrowser a;
 ```
-
-
-#### config.txt
-- contains simulation input parameters
-
-Parameter | Value
------------- | -------------
-**nEvents** = number of events | integer >= 0
-**multOpt** = vertex' multiplicity option | gaus, fixed, uniform, hist (multiplicity distribution from input histogram hmul stored in kinem.root)
-**par1** | mean (if gaus), multiplicity (if fixed), lowest multiplicity (if uniform), 0. (if hist)
-**par2** | sigma (if gaus), 0. (if fixed), highest multiplicity (if uniform), 0. (if hist)
-**multScatt** = multiple scattering | 1 if ON, 0 if OFF
-**noise** = gaussian noise | 1 if ON, 0 if OFF
-**zGenVertex** = z-coordinate of generated vertex | (float) mean value of gaussian distribution for vertex' z coordinate
-**inputEta** | 1 if pseudorapidity distribution is obtained as input from histogram heta stored in kinem.root; 0 if uniformly generated in [-2., 2.]
-
-
-#### kinem.root
-contains:
-- histogram hmul, from which multiplicity distribution is extracted if multOpt = hist in *config.txt*
-- histogram heta, from which pseudorapidity distribution is extracted if inputEta = 1 in *config.txt*
-
-
-#### noiseConfig.txt
-- contains noise input parameters for the simulation
-
-Parameter | Value
------------- | -------------
-noise option (distribution of noise hits' number) | gaus, fixed
-par1 | mean (if gaus), noise hits' number (if fixed)
-par2 | sigma (if gaus), 0. (if fixed)
-
