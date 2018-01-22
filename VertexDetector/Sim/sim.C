@@ -201,7 +201,8 @@ void printInfo(UInt_t nEvents, TString multOpt, Double_t par1, Double_t par2, Bo
     }
   }
   else cout << "Noise OFF" << endl;
-  
+
+  cout << endl;
 }
 
 
