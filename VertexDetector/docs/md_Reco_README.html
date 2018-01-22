@@ -105,8 +105,9 @@ $(document).ready(function(){initNavTree('md_Reco_README.html','');});
 <li>contains instruction for compiling classes and macros used in the reconstruction</li>
 <li>to be executed as follows: <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Reco$ root -l</div><div class="line">root [0] .x compile.C(&quot;force&quot;);</div></div><!-- fragment --></li>
 </ul>
-<p>#### reco.C </p><div class="fragment"><div class="line">void reco(TString simfilePath = &quot;../Sim/simFile.root&quot;, TString outFileName = &quot;recoFile.root&quot;)</div><div class="line">Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histCandidates, Point &amp;recoVertex)</div><div class="line">Bool_t findPeak(TH1D* histCandidates, Double_t &amp;xCandMad)</div><div class="line">Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin)</div></div><!-- fragment --><ul>
+<p>#### reco.C </p><div class="fragment"><div class="line">void reco(TString simfilePath = &quot;../Sim/simFile.root&quot;, TString outFileName = &quot;recoFile.root&quot;)</div></div><!-- fragment --><ul>
 <li>macro for executing the <a class="el" href="classVertex.html" title="Vertex class. ">Vertex</a> Detector reconstruction: <b>reco</b></li>
+<li>input simFile path and output recoFile name are passed as arguments</li>
 <li>opens simFile and gets the tree stored in it, which contains info on generated Vertices and hits on beam pipe and detector's layers</li>
 <li>creates recoFile to store reconstruction output</li>
 <li>creates recoTree to store<ul>
@@ -124,7 +125,7 @@ $(document).ready(function(){initNavTree('md_Reco_README.html','');});
 <li>loop over 2nd layer's hits + geometry check<ul>
 <li>if checks are passed, then a tracklet is generated as a line joining the two hits (one per layer)</li>
 <li>azimutal distance check (<a class="el" href="classTracklet.html#a25fbd4de81a7752bfa9ab20de57d2ed1" title="Checks whether the Tracklet is to be accepted. ">Tracklet::matchHits()</a>): the tracklet is assumed as a viable candidate for a particle's trajectory only if the distance in phi between the two hits on the two layers is lower than a certain value, set to 0.01 rad<ul>
-<li>if the hits are matched and the tracklet accepted, then a vertex candidate is extrapolated as intersection between the tracklet and the beam line (<a class="el" href="classTracklet.html#a088be16d84d9c578ef4b766418eb6021" title="Extrapolates the reconstructed vertex position on the beam line. ">Tracklet::extractVertex()</a>). Only its z coordinate is considered (<em>zCandidate</em>).</li>
+<li>if the hits are matched and the tracklet accepted, then a vertex candidate is extrapolated as intersection between the tracklet and the beam line (<a class="el" href="classTracklet.html#a088be16d84d9c578ef4b766418eb6021" title="Extrapolates the reconstructed vertex position (z coordinate only) on the beam line. ">Tracklet::extractVertex()</a>). Only its z coordinate is considered (<em>zCandidate</em>).</li>
 <li><em>zCandidate</em> is added to the histogram <em>histCandidates</em></li>
 <li><em>zCandidate</em> is added to a vector storing all the z coordinates of the vertex candidates</li>
 </ul>
@@ -139,7 +140,8 @@ $(document).ready(function(){initNavTree('md_Reco_README.html','');});
 <li><b>data saving</b>: reconstructed <a class="el" href="classVertex.html" title="Vertex class. ">Vertex</a> and corresponding label are stored in the recoTree's branches</li>
 </ul>
 </li>
-<li>histograms and tree are written on the <b>output recoFile</b> <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l</div><div class="line">root [0] .X compile.C(&quot;force&quot;);</div><div class="line">root [1] reco(&quot;../Sim/simFile.root&quot;, &quot;recoFile.root&quot;);</div></div><!-- fragment --> </li>
+<li>histograms and tree are written on the <b>output recoFile</b> <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l</div><div class="line">root [0] .X compile.C(&quot;force&quot;);</div><div class="line">root [1] reco(&quot;../Sim/simFile.root&quot;, &quot;recoFile.root&quot;);</div></div><!-- fragment --></li>
+<li>in order to open the reconstruction output file: <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l recoFile.root</div><div class="line">root [0] TBrowser a;</div></div><!-- fragment --> </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->

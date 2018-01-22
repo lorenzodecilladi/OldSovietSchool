@@ -140,7 +140,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <tr class="memdesc:a2147b98ac3b414e98f866a299939c397"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator <br /></td></tr>
 <tr class="separator:a2147b98ac3b414e98f866a299939c397"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a088be16d84d9c578ef4b766418eb6021"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classPoint.html">Point</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTracklet.html#a088be16d84d9c578ef4b766418eb6021">extractVertex</a> ()</td></tr>
-<tr class="memdesc:a088be16d84d9c578ef4b766418eb6021"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extrapolates the reconstructed vertex position on the beam line.  <a href="#a088be16d84d9c578ef4b766418eb6021">More...</a><br /></td></tr>
+<tr class="memdesc:a088be16d84d9c578ef4b766418eb6021"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extrapolates the reconstructed vertex position (z coordinate only) on the beam line.  <a href="#a088be16d84d9c578ef4b766418eb6021">More...</a><br /></td></tr>
 <tr class="separator:a088be16d84d9c578ef4b766418eb6021"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8affacd2155896e22d164f1d491f442f"><td class="memItemLeft" align="right" valign="top">Double_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTracklet.html#a8affacd2155896e22d164f1d491f442f">evalPhi</a> (<a class="el" href="classPoint.html">Point</a> hit)</td></tr>
 <tr class="memdesc:a8affacd2155896e22d164f1d491f442f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the azimutal angle &phi; of the hit passed as argument.  <a href="#a8affacd2155896e22d164f1d491f442f">More...</a><br /></td></tr>
@@ -237,7 +237,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classTracklet.html" title="Tracklet class. ">Tracklet</a> class. </p>
-<p>Used to initialise a <a class="el" href="classTracklet.html" title="Tracklet class. ">Tracklet</a>, which is a line joining two hits (data members fHits1L and fHits2L, which are Points) on two different layers of the detectors. If accepted as a viable candidate for a high momentum <a class="el" href="classParticle.html" title="Particle class. ">Particle</a>'s trajectory, according to geometrical constraints defined in the method <a class="el" href="classTracklet.html#a25fbd4de81a7752bfa9ab20de57d2ed1" title="Checks whether the Tracklet is to be accepted. ">matchHits()</a>, the tracklet is used to extrapolate the reconstructed vertex position as intersection between the tracklet and the beam line (see <a class="el" href="classTracklet.html#a088be16d84d9c578ef4b766418eb6021" title="Extrapolates the reconstructed vertex position on the beam line. ">extractVertex()</a>). </p>
+<p>Used to initialise a <a class="el" href="classTracklet.html" title="Tracklet class. ">Tracklet</a>, which is a line joining two hits (data members fHits1L and fHits2L. These hits are Points located on two different layers of the detector. The tracklet can be accepted, or not, as a viable candidate for a high momentum <a class="el" href="classParticle.html" title="Particle class. ">Particle</a>'s trajectory according to geometrical constraints defined in the method <a class="el" href="classTracklet.html#a25fbd4de81a7752bfa9ab20de57d2ed1" title="Checks whether the Tracklet is to be accepted. ">matchHits()</a>. If the tracklet is accepted, then it is used to extrapolate the reconstructed vertex position: the intersection between the tracklet and the beam line (see <a class="el" href="classTracklet.html#a088be16d84d9c578ef4b766418eb6021" title="Extrapolates the reconstructed vertex position (z coordinate only) on the beam line. ">extractVertex()</a>). </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab64903158530bc2b8d9fc82e7784689f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab64903158530bc2b8d9fc82e7784689f">&#9670;&nbsp;</a></span>Tracklet() <span class="overload">[1/2]</span></h2>
@@ -327,8 +327,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Extrapolates the reconstructed vertex position on the beam line. </p>
-<p>A line joining the two hits on the two detector's layers is used to extrapolate the z coordinate of the reconstructed vertex. The x and y coordinates of the reconstructed vertex are set to 0. (see the constraint decribed in <a class="el" href="classTracklet.html#a25fbd4de81a7752bfa9ab20de57d2ed1" title="Checks whether the Tracklet is to be accepted. ">matchHits()</a> for an explanation). The uncertainty on the reconstructed z coordinate is propagated taking into account the smearing of the hits on the detector. </p>
+<p>Extrapolates the reconstructed vertex position (z coordinate only) on the beam line. </p>
+<p>A line joining the two hits on the two detector's layers is used to extrapolate the z coordinate of the reconstructed vertex. The x and y coordinates of the reconstructed vertex are set to 0. (see the constraint decribed in <a class="el" href="classTracklet.html#a25fbd4de81a7752bfa9ab20de57d2ed1" title="Checks whether the Tracklet is to be accepted. ">matchHits()</a> for an explanation). The uncertainty on the reconstructed z coordinate is propagated taking into account the smearing of the hits on the detector's layers. </p>
 
 </div>
 </div>
