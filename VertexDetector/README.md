@@ -9,12 +9,12 @@ Simulation:
 ~/VertexDetector/Sim/
 ```
 
-Reconsruction:
+Reconstruction:
 ```
 ~/VertexDetector/Reco/
 ```
 
-Scripts for output's analysis:
+Scripts for analysis:
 ```
 ~/VertexDetector/Analysis/
 ```
@@ -27,9 +27,9 @@ Geometrical features of the detector and a few utils:
 
 Each one of the above-mentioned folders contains a **README** file, which guides the user through the usage and the understanding of scripts and files.
 
-Both the simulation and the reconstruction programs are object-oriented. The header files for the **classes** are grouped in the folders ~/Sim/include/ and ~/Reco/include/; the implementation files can be found in ~/Sim/src/ and ~/Reco/src/.
+Both the simulation and the reconstruction programs are object-oriented. The header files for the **classes** are grouped in the folders ~/Sim/include/ and ~/Reco/include/, while the implementation files can be found in ~/Sim/src/ and ~/Reco/src/.
 The **documentation** of the classes can be accessed opening the file ~/docs/index.html through a browser, e.g.
 ```
 ~/OldSovietSchool/VertexDetector/docs$ firefox index.html
 ```
-In the html documentation, above-mentioned README files for Sim, Reco and Analysis can also be accessed.
+In the html documentation, the above-mentioned README files for Sim, Reco and Analysis can also be accessed.
