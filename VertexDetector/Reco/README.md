@@ -13,12 +13,9 @@ root [0] .x compile.C("force");
 #### reco.C
 ```
 void reco(TString simfilePath = "../Sim/simFile.root", TString outFileName = "recoFile.root")
-Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histCandidates, Point &recoVertex)
-Bool_t findPeak(TH1D* histCandidates, Double_t &xCandMad)
-Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin)
-
 ```
 - macro for executing the Vertex Detector reconstruction: **reco**
+- input simFile path and output recoFile name are passed as arguments
 - opens simFile and gets the tree stored in it, which contains info on generated Vertices and hits on beam pipe and detector's layers
 - creates recoFile to store reconstruction output
 - creates recoTree to store
@@ -44,4 +41,9 @@ Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin)
 ~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l
 root [0] .X compile.C("force");
 root [1] reco("../Sim/simFile.root", "recoFile.root");
+```
+- in order to open the reconstruction output file:
+```
+~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l recoFile.root
+root [0] TBrowser a;
 ```
