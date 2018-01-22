@@ -13,14 +13,14 @@ Particle::Particle(){
   fLabel = 0;
 }
 
-Particle::Particle(Point point, UInt_t label){ //Particle(vertice.getPoint(),...)
-  fPoint = point; //gli passeremo il vertice
+Particle::Particle(Point point, UInt_t label){
+  fPoint = point;
   fDirection = Direction();
   fLabel = label;
 }
 
-Particle::Particle(Point point, Direction dir, UInt_t label){ //Particle(vertice.getPoint(),...)
-  fPoint = point; //gli passeremo il vertice
+Particle::Particle(Point point, Direction dir, UInt_t label){
+  fPoint = point;
   fDirection = dir;
   fLabel = label;
 }
@@ -88,12 +88,10 @@ void Particle::multipleScattering(){
 
   //SR con apici, after MS
   Double_t theta1 = rootils::rndmGaus(0., detector::thetaSpace);
-  Double_t phi1 = rootils::rndmUniform(0., 2*math::pi); //fDirection.phi();
-  //Double_t phi1 = fDirection.phi();
-  //Double_t phi1 = gRandom->Rndm(); //rootils::rndmUniform(0., 2*math::pi); //fDirection.phi();
-  Direction dir1 = Direction(theta1, phi1); //sempre dei c
+  Double_t phi1 = rootils::rndmUniform(0., 2*math::pi);
+  Direction dir1 = Direction(theta1, phi1);
     
-  //back to SR lab (sempre i coefficienti c)
+  //back to SR lab
 
   Double_t mat[3][3];
   mat[0][0] = -TMath::Sin(_phi);

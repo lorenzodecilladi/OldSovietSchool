@@ -1,9 +1,9 @@
-#include "Vertex.h" //VertexDetector/Sim/include
-#include "Rootils.h" //VertexDetector/Utils
+#include "Vertex.h"
+#include "Rootils.h"
 using namespace rootils;
-#include "VertexResolution.h" //VertexDetector/Geometry
+#include "VertexResolution.h"
 using namespace vres;
-#include "Math.h" //VertexDetector/Utils
+#include "Math.h"
 #include "Riostream.h"
 
 
@@ -20,7 +20,7 @@ Vertex::Vertex(){
 }
 
 
-//standard constructor (TString, UInt_t)
+//standard constructor
 Vertex::Vertex(TString multOpt, UInt_t mult, Double_t zVert){
   
   fVertex.setX(rndmGaus(0., sXv));
@@ -36,7 +36,7 @@ Vertex::Vertex(TString multOpt, UInt_t mult, Double_t zVert){
 }
 
 
-//standard constructor (TString, Double_t, Double_t)
+//standard constructor
 Vertex::Vertex(TString multOpt, Double_t par1, Double_t par2, Double_t zVert){
   
   fVertex.setX(rndmGaus(0., sXv));
@@ -51,7 +51,7 @@ Vertex::Vertex(TString multOpt, Double_t par1, Double_t par2, Double_t zVert){
 
 
 
-//standard constructor (TString, )
+//standard constructor
 Vertex::Vertex(TString multOpt, TH1F* histMult, Double_t zVert)
 {
   fVertex.setX(rndmGaus(0., sXv));

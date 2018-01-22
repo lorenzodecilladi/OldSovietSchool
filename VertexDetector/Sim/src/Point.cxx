@@ -1,9 +1,7 @@
-//#include "../include/Point.h"
 #include "Riostream.h"
 #include "Point.h"
 #include "Rootils.h"
 #include "Detector.h"
-//#endif
 
 ClassImp(Point)
 
@@ -38,7 +36,7 @@ Point::Point(const Point& source):TObject(source){
 }
 
 //destructor
-Point::~Point(){}//cout << "Destroying Point..."<< endl;}
+Point::~Point(){}
 
 //assignment operator
 Point& Point::operator= (const Point& source){

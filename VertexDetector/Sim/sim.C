@@ -4,9 +4,8 @@
   ~           Lorenzo de Cilladi                            ~
   ~ Course:   TANS - 2017/2018                              ~
   ~                                                         ~
-  ~ Last modified: 28/12/2017                               ~
+  ~ Last modified: 22/01/2018                               ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
@@ -33,9 +32,6 @@
 //------------------------------------------
 //---------- FUNCTION DECLARATION ----------
 
-//if msON == kTRUE --> multiple scattering is switched on
-//multOpt can be "gaus", "uniform", "fixed", "hist"
-
 void sim(TString outFileName = "simFile.root");
 void hitMaker(UInt_t i, Vertex* vert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON, Bool_t inputEta, TH1F* histInputEta);
 void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseOpt, Double_t par1, Double_t par2);
@@ -48,7 +44,7 @@ TH1F* getHistInputEta();
 //--------------------------------------------
 //---------- FUNCTION IMPLMENTATION ----------
 
-//------------------ SIM --------------------
+//------------------ SIM ---------------------
 void sim(TString outFileName){
 
   TStopwatch watch;
@@ -83,9 +79,10 @@ void sim(TString outFileName){
   inNoise>>noiseComment>>noiseOpt>>noisePar1>>noisePar2;  
   inNoise.close();
 
+  //print configuration info
   printInfo(nEvents, multOpt, par1, par2, msON, noiseON, zGenVertex, inputEta, noiseOpt, noisePar1, noisePar2);
 
-  
+ 
   //multiplicity from input histogram distribution
   TH1F *histInputMult = new TH1F();
   if(multOpt == "hist") histInputMult = getHistInputMult();
@@ -118,7 +115,7 @@ void sim(TString outFileName){
   TH1D *histSimMult      = new TH1D("histSimMult"    , "z Sim Multiplicities", 51          , -0.5 , 50.5); //bin size: 1
   TH1D *histSimVertices  = new TH1D("histSimVertices", "z Sim Vertices"      , nEvents/100., -25.5, 25.5); //[cm]
 
-  
+
   for(UInt_t event=0; event<nEvents; event++){ //loop over events
 
     if(event%10000 == 0){cout << "Processing EVENT " << event << endl;}
@@ -166,27 +163,11 @@ void sim(TString outFileName){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//------------------ PRINT CONFIGURATION INFO ---------------------
 void printInfo(UInt_t nEvents, TString multOpt, Double_t par1, Double_t par2, Bool_t msON, Bool_t noiseON, Double_t zGenVertex, Bool_t inputEta, TString noiseOpt, Double_t noisePar1, Double_t noisePar2){
 
-  cout   << "--- RUNNING VertexDetector SIM ---"  << endl;
+  cout   << "\n--- RUNNING VertexDetector SIM ---\n"  << endl;
+  cout   << "\n---- Configuration parameters ----"  << endl;
   cout   << "Number of events = " << nEvents      << endl;
   cout   << "Multiplicity     = " << multOpt      << endl;
   if(multOpt == "gaus"){
@@ -209,8 +190,8 @@ void printInfo(UInt_t nEvents, TString multOpt, Double_t par1, Double_t par2, Bo
   else cout << "Uniform pseudorapidity extraction in [-2.,2.]" << endl;
   
   if(noiseON){
-    cout   << "----- Noise parameters -----------"  << endl;
-    cout   << "Noise hits' number distribution = "  << noiseOpt << endl;
+    cout   << "\n----- Noise parameters -----------"  << endl;
+    cout   << "Distribution of noise hits' number = "  << noiseOpt << endl;
     if(noiseOpt == "gaus"){
       cout << "Mean             = " << noisePar1    << endl;
       cout << "Sigma            = " << noisePar2    << endl;
@@ -225,7 +206,8 @@ void printInfo(UInt_t nEvents, TString multOpt, Double_t par1, Double_t par2, Bo
 
 
 
-//-----------GET HIST INPUT MULT -------------
+//----------- GET INPUT distribution for MULTIPLICITY -------------
+//----------- from histogram hmul stored in kinem.root ------------
 TH1F* getHistInputMult(){
   TFile *hist_file = new TFile("kinem.root");
   TH1F  *hMult     = (TH1F*)hist_file->Get("hmul");
@@ -236,8 +218,10 @@ TH1F* getHistInputMult(){
 
 
 //-----------GET HIST INPUT ETA --------------
+//----------- GET INPUT distribution for PSEUDORAPIDITY eta -------
+//----------- from histogram heta stored in kinem.root ------------
+//----------- and selects the range [-2.; 2.] for eta  ------------
 TH1F* getHistInputEta(){
-  
   TFile *hist_file = new TFile("kinem.root");
   TH1F  *hEta1     = (TH1F*)hist_file->Get("heta");
   hEta1     -> SetDirectory(0);
@@ -268,8 +252,8 @@ TH1F* getHistInputEta(){
 void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, Bool_t msON, Bool_t inputEta, TH1F* histInputEta){
 
   Particle *part = new Particle();
-  if(inputEta){ *part = Particle(ptrvert->getPoint(), histInputEta, i);}
-  else{         *part = Particle(ptrvert->getPoint(), i);              }
+  if(inputEta){ *part = Particle(ptrvert->getPoint(), histInputEta, i);}  //pseudorapidity from input distribution
+  else{         *part = Particle(ptrvert->getPoint(), i);              }  //uniform pseudorapidity in [-2.; 2.]
   
   part -> transport(detector::rBP);          //transport to Beam Pipe
   new((*ptrhitsBP)[i]) Point( part->getPoint() );
@@ -281,8 +265,7 @@ void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* 
 
   Point hit1L = part->getPoint();
   hit1L.smearing(detector::r1L);             //smearing on Layer1
-  //if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits1L)[i1L]) Point(part->getPoint());
-  if(TMath::Abs(hit1L.Z())<=detector::length/2.) new((*ptrhits1L)[i1L]) Point(hit1L);
+  if(TMath::Abs(hit1L.Z())<=detector::length/2.) new((*ptrhits1L)[i1L]) Point(hit1L);  //geometry check and storage
 
   if(msON) part -> multipleScattering();     //MS in Layer1
 
@@ -291,9 +274,7 @@ void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* 
 
   Point hit2L = part->getPoint();  
   hit2L.smearing(detector::r2L);             //smearing on Layer 2
-  
-  //if(TMath::Abs(part->getPoint().Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(part->getPoint());
-  if(TMath::Abs(hit2L.Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(hit2L);
+  if(TMath::Abs(hit2L.Z())<=detector::length/2.) new((*ptrhits2L)[i2L]) Point(hit2L);  //geometry check and storage
 
   delete part;
 }
@@ -353,6 +334,19 @@ void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseO
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
   //come accedere all'i-esimo elemento di un TClonesArray
 
@@ -360,4 +354,3 @@ void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseO
   Point* ptrhit = (Point*)(*ptrhitsBP).At(i); //altro modo
   Point hit = *( ptrhit ); //per accedere all'oggetto Point vero e proprio devo ancora dereferenziare vedere come funziona
 */
-

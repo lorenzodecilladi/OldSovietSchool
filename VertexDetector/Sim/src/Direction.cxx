@@ -15,7 +15,7 @@ Direction::Direction():TObject(){
   fC3 = evalC3();
 }
 
-//standard constructor; direction from given pseudorapidity distribution
+//standard constructor; direction from input pseudorapidity distribution
 Direction::Direction(TH1F* histEta):TObject(){
   fPhi = rootils::rndmUniform(0., 2*math::pi);
   fEta = histEta -> GetRandom();
@@ -36,6 +36,7 @@ Direction::Direction(Double_t theta, Double_t phi):TObject(){
   fC3 = evalC3();
 }
 
+//standard constructor
 Direction::Direction(Double_t c1, Double_t c2, Double_t c3):TObject(){
   fC1 = c1;
   fC2 = c2;
@@ -90,7 +91,7 @@ Double_t Direction::evalC3(){
 Double_t Direction::evalTheta(){
   return TMath::ACos(fC3);
 }
-Double_t Direction::evalPhi(){ //se fC1 o fC2 == 0??
+Double_t Direction::evalPhi(){
   if(fC1>0 && fC2>0) return TMath::ATan(fC2/fC1);
   else if(fC1<0 && fC2<0) return TMath::ATan(fC2/fC1)+math::pi;
   else if(fC1>0 && fC2<0) return TMath::ATan(fC2/fC1)+2*math::pi;
@@ -100,10 +101,3 @@ Double_t Direction::evalPhi(){ //se fC1 o fC2 == 0??
     return -1.;
   }
 }
-
-
-
-
-
-//setter functions
-//???
