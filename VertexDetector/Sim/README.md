@@ -14,12 +14,12 @@
 Parameter | Value
 ------------ | -------------
 number of events | integer >= 0
-multiplicity option | gaus, fixed, uniform
-par1 | mean if gaus, multiplicity if fixed, lowest multiplicity if uniform
-par2 | sigma if gaus, 0. if fixed, highest multiplicity if uniform
+vertex' multiplicity option | gaus, fixed, uniform, hist
+par1 | mean (if gaus), multiplicity (if fixed), lowest multiplicity (if uniform), 0. (if hist)
+par2 | sigma (if gaus), 0. (if fixed), highest multiplicity (if uniform), 0. (if hist)
 multiple scattering | 1 if ON, 0 if OFF
-(gaussian) noise | 1 if ON, 0 if OFF
-z of generated vertex | float mean value of gaussian distribution
+gaussian noise | 1 if ON, 0 if OFF
+z-coordinate of generated vertex | (float) mean value of gaussian distribution for vertex' z coordinate
 
 
 #### noiseConfig.txt

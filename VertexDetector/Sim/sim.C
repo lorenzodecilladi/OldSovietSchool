@@ -239,9 +239,9 @@ TH1F* getHistInputEta(){
   TH1F    *hEta2 = new TH1F("hEta2","#eta distribution 2",nBins,xLow,xHigh);
   Int_t j = 1;
   for(Int_t i=b1; i<=b2; i++) hEta2 -> SetBinContent(j++, hEta1->GetBinContent(i));
-  hEta1 -> Draw();
+  //  hEta1 -> Draw();
   hEta2 -> SetLineColor(2);
-  hEta2 -> Draw("same");
+  //  hEta2 -> Draw("same");
   return hEta2;
 }
 
