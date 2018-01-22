@@ -17,17 +17,19 @@ class Direction : public TObject{
    * Uniform extraction of pseudorapidity &eta; in [-2., 2.]
    */
   Direction();
+  
   /**
    * Standard constructor.
    * Uniform extraction of &phi; in [0, 2*&pi;]
    * Pseudorapidity (&eta;) distribution passed as argument through input histogram (heta, stored in kinem.root)
    */
   Direction(TH1F* histEta);
+  
   Direction(Double_t theta, Double_t phi);           /**< Standard constructor. Polar and azimutal angles passed as arguments. */
   Direction(Double_t c1, Double_t c2, Double_t c3);  /**< Standard constructor. %Direction cosines passed as arguments. */
   Direction(const Direction& source);                ///< Copy constructor.
   virtual ~Direction();                              ///< Default destructor.
-  Direction& operator= (const Direction& source);    ///< Assignment operator
+  Direction& operator= (const Direction& source);    ///< Assignment operator.
 
   Double_t thetaToEta(); ///< Performs conversion from polar angle &theta; to preudorapidity &eta;. Operates on data members.
    
@@ -43,17 +45,13 @@ class Direction : public TObject{
   
   // getter funtions
   Double_t theta() const {return fTheta;} ///< Returns fTheta
-  Double_t phi() const {return fPhi;}     ///< Returns fPhi
-  Double_t eta() const {return fEta;}     ///< Returns fEta
-  Double_t c1() const {return fC1;}       ///< Returns fC1
-  Double_t c2() const {return fC2;}       ///< Returns fC2
-  Double_t c3() const {return fC3;}       ///< Returns fC3
+  Double_t   phi() const {return fPhi;}   ///< Returns fPhi
+  Double_t   eta() const {return fEta;}   ///< Returns fEta
+  Double_t    c1() const {return fC1;}    ///< Returns fC1
+  Double_t    c2() const {return fC2;}    ///< Returns fC2
+  Double_t    c3() const {return fC3;}    ///< Returns fC3
   
 
-  // setter functions
-  // ???
-
-  
  private:
   
   Double_t fEta;   ///< Pseudorapidity
