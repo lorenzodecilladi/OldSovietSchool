@@ -4,7 +4,7 @@
   ~           Lorenzo de Cilladi                             ~
   ~ Course:   TANS - 2017/2018                               ~
   ~                                                          ~
-  ~ Last modified: 30/12/2017                                ~
+  ~ Last modified: 22/01/2018                                ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 
@@ -42,17 +42,30 @@ Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin);
 //--------- FUNCTION IMPLEMENTATION ----------
 
 void exec(){
-  reco("../Sim/simFiles/sim0033.root", "reco0033m.root");
-  reco("../Sim/simFiles/sim0034.root", "reco0034m.root");
-  reco("../Sim/simFiles/sim0035.root", "reco0035m.root");
-  reco("../Sim/simFiles/sim0036.root", "reco0036m.root");
-  reco("../Sim/simFiles/sim0037.root", "reco0037m.root");
-  reco("../Sim/simFiles/sim0038.root", "reco0038m.root");
-  reco("../Sim/simFiles/sim0039.root", "reco0039m.root");
-  reco("../Sim/simFiles/sim0040.root", "reco0040m.root");
-  reco("../Sim/simFiles/sim0041.root", "reco0041m.root");
+  reco("../Sim/simFiles/sim0080.root", "reco0080.root");
+  reco("../Sim/simFiles/sim0081.root", "reco0081.root");
+  reco("../Sim/simFiles/sim0082.root", "reco0082.root");
+  reco("../Sim/simFiles/sim0083.root", "reco0083.root");
+  reco("../Sim/simFiles/sim0084.root", "reco0084.root");
+}
+void exec1(){
+  reco("../Sim/simFiles/sim0085.root", "reco0085.root");
+  reco("../Sim/simFiles/sim0086.root", "reco0086.root");
+  reco("../Sim/simFiles/sim0087.root", "reco0087.root");
+  reco("../Sim/simFiles/sim0088.root", "reco0088.root");
+  reco("../Sim/simFiles/sim0089.root", "reco0089.root");
+}
+void exec2(){
+  reco("../Sim/simFiles/sim0090.root", "reco0090.root");
+  reco("../Sim/simFiles/sim0091.root", "reco0091.root");
+  reco("../Sim/simFiles/sim0092.root", "reco0092.root");
+  reco("../Sim/simFiles/sim0093.root", "reco0093.root");
+  reco("../Sim/simFiles/sim0094.root", "reco0094.root");
 }
 
+
+
+/*
 void exec1(){
   reco("../Sim/simFiles/sim0042.root", "reco0042m.root");
   reco("../Sim/simFiles/sim0043.root", "reco0043m.root");
@@ -74,7 +87,7 @@ void exec2(){
   reco("../Sim/simFiles/sim0059.root", "reco0059m.root");
   reco("../Sim/simFiles/sim0060.root", "reco0060m.root");
 }
-
+*/
 
 
 //---------------- RECO ---------------------
@@ -111,9 +124,13 @@ void reco(TString simfilePath, TString outFileName){
   TFile *reco_file = new TFile(outFileName, "RECREATE");
   
   //histograms to be filled with reco results
-  TH1D *histCandidates   = new TH1D("histCandidates"  , "z Reco Candidates"   , 510         , -25.45, 25.55); //WITH match hits; bin size 1 mm
-  TH1D *histRecoVertices = new TH1D("histRecoVertices", "z Reco Vertices"     , nEvents/100., -25.5, 25.5);
-
+  TH1D *histCandidates   = new TH1D("histCandidates"  , "z coord of Reco Vertex - Candidates"  , 510 , -25.45, 25.55); //bin size 1 mm
+  histCandidates -> GetXaxis() -> SetTitle("z coord of reco vertex' candidates [cm]");
+  histCandidates -> GetYaxis() -> SetTitle("counts");
+  
+  TH1D *histRecoVertices = new TH1D("histRecoVertices", "z coord of Reco Vertices"     , nEvents/100., -25.5 , 25.5 );
+  histRecoVertices -> GetXaxis() -> SetTitle("z coord of reco vertices [cm]");
+  histRecoVertices -> GetYaxis() -> SetTitle("counts");
   
   //init reco tree
   TTree *recoTree = new TTree("recoTree", "Reco output tree");
@@ -126,6 +143,7 @@ void reco(TString simfilePath, TString outFileName){
   for(Int_t event=0; event<nEvents; event++){ //loop over events
     if(event%10000 == 0) {cout << "Processing EVENT " << event << endl;}
     tree -> GetEntry(event);
+    
     //if vertex reco is successful, fill reco tree
     if(eventAnalysis(event, hits1L, hits2L, vert, histRecoVertices, histCandidates, recoVertex)){
       recoLabel = event;
@@ -135,7 +153,7 @@ void reco(TString simfilePath, TString outFileName){
 
   
   //write results on reco file
-  histCandidates   -> Write(); //only the last one, as an example
+  histCandidates   -> Write(); //only the last one is stored, as an example
   histRecoVertices -> Write();
   recoTree         -> Write();
 
@@ -163,7 +181,7 @@ Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Ve
   char title[50];
   sprintf(name , "hEvt%d"                               , event);
   sprintf(title, "Reco vertices distribution - event %d", event);
-  histCandidates->SetNameTitle(name,title);     //the run is faster if not used: for 10000 events, 7.67 vs 6.56 seconds
+  histCandidates->SetNameTitle(name,title);
 
   std::vector<Double_t>vCand;       //vector to store z coord of vertex candidates
 
@@ -234,7 +252,6 @@ Bool_t findPeak(TH1D* histCandidates, Double_t &xCandMax){
   Double_t yCandMaxL = histCandidates->GetBinContent(binMaxL);
   Double_t xCandMaxL = histCandidates->GetBinCenter(binMaxL);
   if(yCandMaxL>=thr){
-  //  if(event<400) histCandidates->DrawCopy();
     return kFALSE;}
 
   Int_t binMaxR = findMaximum(histCandidates, binMax+4, nbins -1);
@@ -250,7 +267,7 @@ Bool_t findPeak(TH1D* histCandidates, Double_t &xCandMax){
 
 
 
-//-------- FIND HIGHEST BIN IN HISTOGRAM in a GIVEN RANGE --------- (TH1::GetMaximumBin() does not always work!!!)
+//-------- FIND HIGHEST BIN IN HISTOGRAM in a GIVEN RANGE --------- (redefined because TH1::GetMaximumBin() does not always work!!!)
 Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin){
   Int_t binMax = minBin+1; //evitiamo accumulo sul primo o ultimo bin delle entries fuori range
   for(Int_t i=minBin; i<maxBin; i++){
@@ -259,6 +276,20 @@ Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin){
   }
   return binMax;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

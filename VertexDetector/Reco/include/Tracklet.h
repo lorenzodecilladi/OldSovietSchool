@@ -4,7 +4,7 @@
 #include "Point.h"
 
 /**
- * Tracklet class. Used to initialise a Tracklet, which is a line joining two hits (data members fHits1L and fHits2L, which are Points) on two different layers of the detectors. If accepted as a viable candidate for a high momentum Particle's trajectory, according to geometrical constraints defined in the method matchHits(), the tracklet is used to extrapolate the reconstructed vertex position as intersection between the tracklet and the beam line (see extractVertex()).
+ * Tracklet class. Used to initialise a Tracklet, which is a line joining two hits (data members fHits1L and fHits2L. These hits are Points located on two different layers of the detector. The tracklet can be accepted, or not, as a viable candidate for a high momentum Particle's trajectory according to geometrical constraints defined in the method matchHits(). If the tracklet is accepted, then it is used to extrapolate the reconstructed vertex position: the intersection between the tracklet and the beam line (see extractVertex()).
  */
 class Tracklet : public Point{
 
@@ -27,10 +27,10 @@ class Tracklet : public Point{
   Tracklet& operator= (const Tracklet& source); ///< assignment operator
 
   /**
-   * Extrapolates the reconstructed vertex position on the beam line.
+   * Extrapolates the reconstructed vertex position (z coordinate only) on the beam line.
    * A line joining the two hits on the two detector's layers is used to extrapolate the z coordinate of the reconstructed vertex.
    * The x and y coordinates of the reconstructed vertex are set to 0. (see the constraint decribed in matchHits() for an explanation).
-   * The uncertainty on the reconstructed z coordinate is propagated taking into account the smearing of the hits on the detector.
+   * The uncertainty on the reconstructed z coordinate is propagated taking into account the smearing of the hits on the detector's layers.
    */
   Point extractVertex();
 
@@ -50,7 +50,7 @@ class Tracklet : public Point{
   
  private:
 
-  Point fHit1L; ///< Hit on the first layer of the detector
+  Point fHit1L; ///< Hit on the first  layer of the detector
   Point fHit2L; ///< Hit on the second layer of the detector
 
   ClassDef(Tracklet,1)
