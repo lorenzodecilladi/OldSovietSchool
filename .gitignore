@@ -13,6 +13,9 @@
 #ignore all files ending .pcm
 *.pcm
 
+#ignore all files ending .pdf
+*.pdf
+
 #ignore config file
 config.txt
 
