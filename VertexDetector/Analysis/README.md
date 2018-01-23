@@ -17,7 +17,7 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName)
 - macro for executing the Vertex Detector analysis for a single data set (a simFile and the corresponding recoFile)
 - opens simFile, gets simTree and histograms (reconstructed vertices' z coordinate (zRecoVertex) distribution)
   1) gets number of simulated events (*nSimEvents*)
-  2) evaluates number of simulated events with vertex's z coordinate withing 1 sigma (= 5.3 cm) (*nSimEvents1sig*) (2 possibilities)
+  2) evaluates number of simulated events with vertex's z coordinate withing 1 sigma (= 5.3 cm) (*nSimEvents1sig*)
 - opens recoFile, gets recoTree and histograms (generated multiplicity distribution, generated vertices' z coordinate (zSimVertex) distribution)
 on)
   1) gets number of reconstructed events (*nRecoEvents*)
@@ -28,21 +28,27 @@ on)
   - evaluates the residual along the Z coordinate (residualZ = zRecoVertex - zSimVertex)
   - the residual value is stored in the residuals' histogram
 - evaluates the number of reconstructed events among those events whose vertex's z coord was generated within 1 sigma (*nRecoEvents1sig*)
-- **resolution** = sigma of gaussian fit of residuals' histogram (??? o forse dobbiamo prendere l'RMS senza fit???)
+- **resolution** = sigma of gaussian fit of residuals' histogram
 - **efficiency** = *nRecoEvents*/*nSimEvents*, with binomial error
 - **efficiency for particles generated within 1 sigma** = *nRecoEvents1sig*/*nSimEvents1sig*, with binomial error
 - **data saving**: the following are stored on the output file:
   - vector containing resolution and efficiencies, with corresponding uncertainties
   - histograms:
     - generated multiplicity
-    - zSimVertices distribution
-    - zRecoVertices distribution
+    - distribution of z coordinate of simulated vertices
+    - distribution of z coordinate of reconstructed vertices
     - residuals along the z coordinate
 ```
 ~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l
 root [0] .X compile.C("force");
 root [1] analysis("../Sim/simFile.root", "../Reco/recoFile.root", "analysisFile.root");
 ```
+- in order to open the analysis output file:
+```
+~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l analysisFile.root
+root [0] TBrowser a;
+```
+
 
 
 #### inputFileList.txt

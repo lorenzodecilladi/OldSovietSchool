@@ -4,7 +4,7 @@
   ~           Lorenzo de Cilladi                             ~
   ~ Course:   TANS - 2017/2018                               ~
   ~                                                          ~
-  ~ Last modified: 08/01/2018                                ~
+  ~ Last modified: 2/01/2018                                ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
@@ -20,6 +20,7 @@
 #include "TF1.h"
 #include "TStopwatch.h"
 #include "TVectorD.h"
+#include "TCanvas.h"
 
 #endif
 
@@ -57,26 +58,19 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
 
   UInt_t   nSimEvents       = simTree -> GetEntries();                      //number of simulated events
 
+  TCanvas *c1 = new TCanvas("c1", "c1");
   histSimVertices->Fit("gaus");
   Double_t meanZSimVert     = histSimVertices->GetFunction("gaus")->GetParameter(1);
   Double_t sigmaZSimVert    = histSimVertices->GetFunction("gaus")->GetParameter(2);
 
-  //???????????????
   UInt_t   nSimEvents1sig   = 0;
-  cout << "FIRST LOOP" << endl;
+
   for(UInt_t i=0; i<nSimEvents; i++){
-    if(i%10000==0) cout<<"PROCESSING EVENT "<<i<<endl;
-    simTree -> GetEvent(i); //aim of recoLabel: get only simulated events whose vertex was actually reconstructed
+    if(i%50000==0) cout<<"PROCESSING EVENT "<<i<<endl;
+    simTree -> GetEvent(i);
     Double_t zSimVert = simVert->getPoint().Z();
     if(zSimVert >= meanZSimVert-sigmaZSimVert && zSimVert <= meanZSimVert+sigmaZSimVert) nSimEvents1sig++;
   }
-  cout << nSimEvents1sig << endl;
-
-  Double_t zMinBin = histSimVertices->GetXaxis()->FindBin(meanZSimVert-sigmaZSimVert);
-  Double_t zMaxBin = histSimVertices->GetXaxis()->FindBin(meanZSimVert+sigmaZSimVert);
-  cout << histSimVertices->Integral(zMinBin, zMaxBin) << endl;
-
-  
   
   //open reco file and tree
   TFile   *reco_file        = new TFile(recofilePath);
@@ -98,8 +92,9 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
   
   //creates analysis file
   TFile *analysis_file      = new TFile(outFileName, "RECREATE");
-  TH1D  *histResidualZ      = new TH1D ("histResidualZ", "Residual in Z", nSimEvents/30., -0.10005, 0.10005);
-  //uso nSimEvents così ho il controllo dell'ampiezza dei bins
+  TH1D  *histResidualZ      = new TH1D ("histResidualZ", "Residual in Z", nSimEvents/100., -0.10005, 0.10005);
+  histResidualZ -> GetXaxis() -> SetTitle("residual = zRecoVertex - zSimVertex [cm]");
+  histResidualZ -> GetYaxis() -> SetTitle("counts");
 
   cout << "\nCreating " << outFileName << " ..." << endl;
   
@@ -118,9 +113,8 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
 
   UInt_t nRecoEvents1sig    = 0;
   
-  cout << "SECOND LOOP" <<endl;
   for(UInt_t i=0; i<nRecoEvents; i++){
-    if(i%10000==0) cout<<"PROCESSING EVENT "<<i<<endl;
+    if(i%50000==0) cout<<"PROCESSING EVENT "<<i<<endl;
     
     recoTree -> GetEvent(i);
     Double_t zRecoVert = recoVert->Z();
@@ -130,7 +124,6 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
     histResidualZ -> Fill(residualZ);
     if(zSimVert >= meanZSimVert-sigmaZSimVert && zSimVert <= meanZSimVert+sigmaZSimVert) nRecoEvents1sig++;
   }
-  cout << nRecoEvents1sig << endl;
   
   
   //Resolution
@@ -163,10 +156,8 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
   histSimVertices  -> Write();
   histRecoVertices -> Write();
   histResidualZ    -> Write();
-
-  analysis_file    -> ls();
-  cout << "-----------------------------------------------------" << endl;
   
+  c1               -> Close();
   analysis_file    -> Close();
   reco_file        -> Close();
   sim_file         -> Close();
@@ -174,9 +165,6 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
   watch.Stop();
   watch.Print();
 
-  cout << "Number of sim  events: " << nSimEvents << endl;
-  cout << "Number of reco events: " << nRecoEvents << endl;
-  
 }
 
 
