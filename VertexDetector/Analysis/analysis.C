@@ -96,8 +96,8 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
 
   cout << "\nCreating " << outFileName << " ..." << endl;
   
-  Double_t meanZGenerated   = histSimVertices -> GetMean(); //si può fare un fit e prendere il valor medio???
-  Double_t mult             = histSimMult     -> GetMean(); //obviously, to be used only when "fixed" mult
+  Double_t meanZGenerated   = histSimVertices -> GetMean();
+  Double_t mult             = histSimMult     -> GetMean();
 
   Double_t meanResZ; //mean residual in Z
   TVectorD vec(6);   //vector = (resol, sResol, eff, sEff, eff1sig, sEff1sig)
