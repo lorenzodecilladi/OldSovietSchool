@@ -4,7 +4,7 @@
   ~           Lorenzo de Cilladi                                      ~
   ~ Course:   TANS - 2017/2018                                        ~
   ~                                                                   ~
-  ~ Last modified: 10/01/2018                                         ~
+  ~ Last modified: 22/01/2018                                         ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
@@ -29,8 +29,6 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   TStopwatch watch;
   watch.Start(kTRUE);
 
-  //TH1D *histResolMult = new TH1D("histResolMult", "Resolution vs Multiplicity", 51, -0.5, 50.5);
-  
   Double_t     multArr[50]; //multipliciy
   Double_t    sMultArr[50] = {0.};
   Double_t    resolArr[50]; //resolution
@@ -153,7 +151,6 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   
   in.close();
 
-  //histResolMult->Write();
   grResolZGen  ->Write();
   grResolMult  ->Write();
   grEffMult    ->Write();
