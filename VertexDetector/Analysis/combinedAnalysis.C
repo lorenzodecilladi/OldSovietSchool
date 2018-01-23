@@ -20,6 +20,7 @@
 #include "TGraph.h"
 #include "TGraphErrors.h"
 #include "TVectorD.h"
+#include "TCanvas.h"
 
 #endif
 
@@ -65,6 +66,7 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
     Double_t mult   = ((TH1D*)analysis_file->Get("histSimMult"))->GetMean();  //obviously, to be used only when "fixed" mult
     multArr[count]  = mult;
 
+    TCanvas *c1 = new TCanvas("c1", "c1");
     TH1D *histSimVertices = (TH1D*)analysis_file->Get("histSimVertices"); //[cm]
     histSimVertices -> Fit("gaus");    
     Double_t zGen    = histSimVertices->GetFunction("gaus")->GetParameter(1);
@@ -97,13 +99,12 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
     //histResolMult->Fill(mult, resol);    
 
     count++;
+    c1            -> Close();
     analysis_file -> Close();
   }
 
   //creates output file
   TFile *combAnalysis_file = new TFile(outFileName, "RECREATE");
-  
-  //histResolMult -> DrawCopy();
 
   TGraphErrors *grResolZGen = new TGraphErrors(count, zGenArr, resolArr, sZGenArr, sResolArr);
   grResolZGen -> SetName("ResolVsZGen");
@@ -112,10 +113,10 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   grResolZGen -> GetYaxis()->SetTitle("Resolution [cm]");
   grResolZGen -> SetMarkerStyle(20);
   grResolZGen -> SetMarkerSize(0.5);
-  grResolZGen -> SetMarkerColor(6);
-  grResolZGen -> SetLineColor(6);
+  grResolZGen -> SetMarkerColor(kGreen+3);
+  grResolZGen -> SetLineColor(kGreen+3);
   grResolZGen -> Draw("AP");
-  
+
   TGraphErrors *grResolMult = new TGraphErrors(count, multArr, resolArr, sMultArr, sResolArr);
   grResolMult -> SetName("ResolVsMult");
   grResolMult -> SetTitle("Resolution vs Multiplicity");
