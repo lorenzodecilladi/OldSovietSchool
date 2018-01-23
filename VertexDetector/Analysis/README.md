@@ -73,10 +73,14 @@ void combinedAnalysis(TString inputListFile, TString outFileName = "combAnalysis
   - resolution vs multiplicity
   - efficiency vs multiplicity
   - efficiency (for particles generated within 1 sigma) vs multiplicity
-- plots are stored on the output file
+- plots are stored in the output file
 ```
 ~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l
-root [0] .X compile.C
+root [0] .X compile.C("force");
 root [1] combinedAnalysis("inputFileList.txt", "combAnalysisFile.root");
 ```
-
+- in order to open the combined analysis output file:
+```
+~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l combAnalysisFile.root
+root [0] TBrowser a;
+```
