@@ -223,11 +223,24 @@ Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Ve
   histRecoVertices -> Fill(zRecoVert);  //fill reco vertices histogram
 
   recoVertex = Point(0., 0., zRecoVert);
-  Double_t szV = 0.01; //deviazione standard?? //(1. + 2*detector::r1L/(detector::r2L-detector::r1L))*detector::smZhit; //smearing
+  Double_t szV = 0.01;
   recoVertex.setsZ(szV);
 
   return kTRUE;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

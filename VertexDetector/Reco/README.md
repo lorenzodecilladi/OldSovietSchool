@@ -28,13 +28,13 @@ void reco(TString simfilePath = "../Sim/simFile.root", TString outFileName = "re
     - loop over 1st layer's hits + geometry check (hits must be on the detector surface)
         - loop over 2nd layer's hits + geometry check
             - if checks are passed, then a tracklet is generated as a line joining the two hits (one per layer)
-            - azimutal distance check (Tracklet::matchHits()): the tracklet is assumed as a viable candidate for a particle's trajectory only if the distance in phi between the two hits on the two layers is lower than a certain value, set to 0.01 rad
+            - azimutal distance check (Tracklet::matchHits()): the tracklet is assumed as a viable candidate for a particle's trajectory only if the distance in phi(azimutal angle) between the two hits on the two layers is lower than a certain value, set to 0.01 rad
                 - if the hits are matched and the tracklet accepted, then a vertex candidate is extrapolated as intersection between the tracklet and the beam line (Tracklet::extractVertex()). Only its z coordinate is considered (*zCandidate*).
                 - *zCandidate* is added to the histogram *histCandidates*
                 - *zCandidate* is added to a vector storing all the z coordinates of the vertex candidates
     - **findPeak** looks for a peak in the *histCandidates*. A peak must be higher than twice the height of any other bin in the histogram in order to be accepted.
-    - if a peak is accepted, then the weighed average of the bins is computed and assumed as the z coordinate of the reconstructed vertex for the event. This value is added to *histRecoVertices*
-    - if a vertex has been found, a reconstructed Vertex is created and a label specifying the number of the event is stored
+    - if a peak is accepted, then the average of the z coordinates of the vertex cantidates is computed and assumed as the z coordinate of the reconstructed vertex for the event. This value is added to *histRecoVertices*
+    - if a vertex was found, a reconstructed Vertex is created and a label specifying the number of the event is stored
     - **data saving**: reconstructed Vertex and corresponding label are stored in the recoTree's branches
 - histograms and tree are written on the **output recoFile**
 ```
