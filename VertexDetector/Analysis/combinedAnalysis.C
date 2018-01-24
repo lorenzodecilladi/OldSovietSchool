@@ -106,6 +106,8 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   //creates output file
   TFile *combAnalysis_file = new TFile(outFileName, "RECREATE");
 
+  TCanvas *cv = new TCanvas("cv","cv");
+  cv -> cd();
   TGraphErrors *grResolZGen = new TGraphErrors(count, zGenArr, resolArr, sZGenArr, sResolArr);
   grResolZGen -> SetName("ResolVsZGen");
   grResolZGen -> SetTitle("Resolution vs Generated Z");
@@ -117,6 +119,8 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   grResolZGen -> SetLineColor(kGreen+3);
   grResolZGen -> Draw("AP");
 
+  TCanvas *cv1 = new TCanvas("cv1","cv1");
+  cv1 -> cd();
   TGraphErrors *grResolMult = new TGraphErrors(count, multArr, resolArr, sMultArr, sResolArr);
   grResolMult -> SetName("ResolVsMult");
   grResolMult -> SetTitle("Resolution vs Multiplicity");
@@ -128,6 +132,8 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   grResolMult -> SetLineColor(kRed);
   grResolMult -> Draw("AP");
 
+  TCanvas *cv2 = new TCanvas("cv2","cv2");
+  cv2 -> cd();
   TGraphErrors *grEffMult = new TGraphErrors(count, multArr, effArr, sMultArr, sEffArr);
   grEffMult   -> SetName("EffVsMult");
   grEffMult   -> SetTitle("Efficiency vs Multiplicity");
@@ -139,6 +145,8 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   grEffMult   -> SetLineColor(kBlue);
   grEffMult   -> Draw("AP");
 
+  TCanvas *cv3 = new TCanvas("cv3","cv3");
+  cv3 -> cd();
   TGraphErrors *grEff1sigMult = new TGraphErrors(count, multArr, eff1sigArr, sMultArr, sEff1sigArr);
   grEff1sigMult   -> SetName("Eff1sigVsMult");
   grEff1sigMult   -> SetTitle("Efficiency (for particles generated within 1 sigma) vs Multiplicity");
@@ -156,6 +164,7 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   grResolMult  ->Write();
   grEffMult    ->Write();
   grEff1sigMult->Write();
+
   combAnalysis_file->Write();
   combAnalysis_file->Close();
   
