@@ -1,7 +1,6 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ Macro for the simulation of a VERTEX DETECTOR           ~
-  ~ Authors:  Arianna Corrado                               ~
-  ~           Lorenzo de Cilladi                            ~
+  ~ Author:   Lorenzo de Cilladi                            ~
   ~ Course:   TANS - 2017/2018                              ~
   ~                                                         ~
   ~ Last modified: 22/01/2018                               ~
