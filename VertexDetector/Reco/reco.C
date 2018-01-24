@@ -30,7 +30,6 @@
 //--------------------------------------------
 //---------- FUNCTION DECLARATION ------------
 
-void exec();
 void reco(TString simfilePath = "../Sim/simFile.root", TString outFileName = "recoFile.root");
 Bool_t eventAnalysis(Int_t event, TClonesArray *hits1L, TClonesArray *hits2L, Vertex *vert, TH1D *histRecoVertices, TH1D *histCandidates, Point &recoVertex);
 Bool_t findPeak(TH1D* histCandidates, Double_t &xCandMad);
@@ -40,54 +39,6 @@ Int_t findMaximum(TH1* hist, Int_t minBin, Int_t maxBin);
 
 //--------------------------------------------
 //--------- FUNCTION IMPLEMENTATION ----------
-
-void exec(){
-  reco("../Sim/simFiles/sim0080.root", "reco0080.root");
-  reco("../Sim/simFiles/sim0081.root", "reco0081.root");
-  reco("../Sim/simFiles/sim0082.root", "reco0082.root");
-  reco("../Sim/simFiles/sim0083.root", "reco0083.root");
-  reco("../Sim/simFiles/sim0084.root", "reco0084.root");
-}
-void exec1(){
-  reco("../Sim/simFiles/sim0085.root", "reco0085.root");
-  reco("../Sim/simFiles/sim0086.root", "reco0086.root");
-  reco("../Sim/simFiles/sim0087.root", "reco0087.root");
-  reco("../Sim/simFiles/sim0088.root", "reco0088.root");
-  reco("../Sim/simFiles/sim0089.root", "reco0089.root");
-}
-void exec2(){
-  reco("../Sim/simFiles/sim0090.root", "reco0090.root");
-  reco("../Sim/simFiles/sim0091.root", "reco0091.root");
-  reco("../Sim/simFiles/sim0092.root", "reco0092.root");
-  reco("../Sim/simFiles/sim0093.root", "reco0093.root");
-  reco("../Sim/simFiles/sim0094.root", "reco0094.root");
-}
-
-
-
-/*
-void exec1(){
-  reco("../Sim/simFiles/sim0042.root", "reco0042m.root");
-  reco("../Sim/simFiles/sim0043.root", "reco0043m.root");
-  reco("../Sim/simFiles/sim0044.root", "reco0044m.root");
-  reco("../Sim/simFiles/sim0045.root", "reco0045m.root");
-  reco("../Sim/simFiles/sim0046.root", "reco0046m.root");
-  reco("../Sim/simFiles/sim0047.root", "reco0047m.root");
-  reco("../Sim/simFiles/sim0048.root", "reco0048m.root");
-  reco("../Sim/simFiles/sim0049.root", "reco0049m.root");
-  reco("../Sim/simFiles/sim0050.root", "reco0050m.root");
-}
-
-void exec2(){
-  reco("../Sim/simFiles/sim0054.root", "reco0054m.root");
-  reco("../Sim/simFiles/sim0055.root", "reco0055m.root");
-  reco("../Sim/simFiles/sim0056.root", "reco0056m.root");
-  reco("../Sim/simFiles/sim0057.root", "reco0057m.root");
-  reco("../Sim/simFiles/sim0058.root", "reco0058m.root");
-  reco("../Sim/simFiles/sim0059.root", "reco0059m.root");
-  reco("../Sim/simFiles/sim0060.root", "reco0060m.root");
-}
-*/
 
 
 //---------------- RECO ---------------------

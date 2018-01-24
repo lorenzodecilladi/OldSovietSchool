@@ -1,7 +1,7 @@
 #include "Riostream.h"
 #include "Tracklet.h"
 #include "Detector.h"
-#include "Math.h"
+#include "MyMath.h"
 
 using namespace detector;
 
@@ -66,9 +66,9 @@ Double_t Tracklet::evalPhi(Point hit){
   Double_t y = hit.Y();
   
   if(x>0 && y>0) return TMath::ATan(y/x);
-  else if(x<0 && y<0) return TMath::ATan(y/x)+math::pi;
-  else if(x>0 && y<0) return TMath::ATan(y/x)+2*math::pi;
-  else if(x<0 && y>0) return TMath::ATan(y/x)+math::pi;
+  else if(x<0 && y<0) return TMath::ATan(y/x)+mymath::pi;
+  else if(x>0 && y<0) return TMath::ATan(y/x)+2*mymath::pi;
+  else if(x<0 && y>0) return TMath::ATan(y/x)+mymath::pi;
   else {
     cout << "WARNING: x or y == 0 !!! phi set to -1 ___ Smearing::evalPhi TO BE DEBUGGED" << endl;
     return -1.;
