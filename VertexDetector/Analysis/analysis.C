@@ -27,13 +27,6 @@
 //function definition
 void analysis(TString simfilePath = "../Sim/simFile.root", TString recofilePath = "../Reco/recoFile.root", TString outFileName = "analysisFile.root");
 
-//utils function (they will be deleted in the final version)
-void exec();
-void exec1();
-void exec2();
-void exec3();
-
-
 
 //function implementation
 void analysis(TString simfilePath, TString recofilePath, TString outFileName){
@@ -173,57 +166,3 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void exec(){
-  analysis("../Sim/simFiles/sim0080.root", "../Reco/recoFilesMatch/reco0080.root", "analysis0080.root");
-  analysis("../Sim/simFiles/sim0081.root", "../Reco/recoFilesMatch/reco0081.root", "analysis0081.root");
-  analysis("../Sim/simFiles/sim0082.root", "../Reco/recoFilesMatch/reco0082.root", "analysis0082.root");
-  analysis("../Sim/simFiles/sim0083.root", "../Reco/recoFilesMatch/reco0083.root", "analysis0083.root");
-  analysis("../Sim/simFiles/sim0084.root", "../Reco/recoFilesMatch/reco0084.root", "analysis0084.root");
-}
-
-void exec1(){
-  analysis("../Sim/simFiles/sim0085.root", "../Reco/recoFilesMatch/reco0085.root", "analysis0085.root");
-  analysis("../Sim/simFiles/sim0086.root", "../Reco/recoFilesMatch/reco0086.root", "analysis0086.root");
-  analysis("../Sim/simFiles/sim0087.root", "../Reco/recoFilesMatch/reco0087.root", "analysis0087.root");
-  analysis("../Sim/simFiles/sim0088.root", "../Reco/recoFilesMatch/reco0088.root", "analysis0088.root");
-  analysis("../Sim/simFiles/sim0089.root", "../Reco/recoFilesMatch/reco0089.root", "analysis0089.root");
-}
-
-void exec2(){
-  analysis("../Sim/simFiles/sim0090.root", "../Reco/recoFilesMatch/reco0090.root", "analysis0090.root");
-  analysis("../Sim/simFiles/sim0091.root", "../Reco/recoFilesMatch/reco0091.root", "analysis0091.root");
-  analysis("../Sim/simFiles/sim0092.root", "../Reco/recoFilesMatch/reco0092.root", "analysis0092.root");
-  analysis("../Sim/simFiles/sim0093.root", "../Reco/recoFilesMatch/reco0093.root", "analysis0093.root");
-  analysis("../Sim/simFiles/sim0094.root", "../Reco/recoFilesMatch/reco0094.root", "analysis0094.root");
-}
-
-
-void exec3(){
-  analysis("../Sim/simFiles/sim0070.root", "../Reco/recoFilesMatch/reco0070.root", "analysis0070.root");
-  analysis("../Sim/simFiles/sim0071.root", "../Reco/recoFilesMatch/reco0071.root", "analysis0071.root");
-  analysis("../Sim/simFiles/sim0072.root", "../Reco/recoFilesMatch/reco0072.root", "analysis0072.root");
-  analysis("../Sim/simFiles/sim0073.root", "../Reco/recoFilesMatch/reco0073.root", "analysis0073.root");
-  analysis("../Sim/simFiles/sim0074.root", "../Reco/recoFilesMatch/reco0074.root", "analysis0074.root");
-  analysis("../Sim/simFiles/sim0075.root", "../Reco/recoFilesMatch/reco0075.root", "analysis0075.root");
-  analysis("../Sim/simFiles/sim0076.root", "../Reco/recoFilesMatch/reco0076.root", "analysis0076.root");
-  analysis("../Sim/simFiles/sim0077.root", "../Reco/recoFilesMatch/reco0077.root", "analysis0077.root");
-  analysis("../Sim/simFiles/sim0078.root", "../Reco/recoFilesMatch/reco0078.root", "analysis0078.root");
-  analysis("../Sim/simFiles/sim0079.root", "../Reco/recoFilesMatch/reco0079.root", "analysis0079.root");
-}
