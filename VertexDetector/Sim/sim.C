@@ -15,7 +15,7 @@
 #include "Vertex.h"
 #include "Detector.h"
 #include "Rootils.h"
-#include "Math.h"
+#include "MyMath.h"
 #include "TFile.h"
 #include "TTree.h"
 #include "TBranch.h"
@@ -308,7 +308,7 @@ void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseO
   UInt_t nNoiseHits1L = temp+size1L<=100 ? temp : 100-size1L;
   for(UInt_t i=0; i<nNoiseHits1L; i++){
     Double_t z   = rootils::rndmUniform(-detector::length/2., detector::length/2.);
-    Double_t phi = rootils::rndmUniform(0, 2*math::pi);
+    Double_t phi = rootils::rndmUniform(0, 2*mymath::pi);
     new((*ptrhits1L)[size1L+i]) Point(detector::r1L*TMath::Cos(phi), detector::r1L*TMath::Sin(phi), z);
   }
   
@@ -323,7 +323,7 @@ void noiseMaker(TClonesArray* ptrhits1L, TClonesArray* ptrhits2L, TString noiseO
   
   for(UInt_t i=0; i<nNoiseHits2L; i++){
     Double_t z   = rootils::rndmUniform(-detector::length/2., detector::length/2.);
-    Double_t phi = rootils::rndmUniform(0, 2*math::pi);
+    Double_t phi = rootils::rndmUniform(0, 2*mymath::pi);
     new((*ptrhits2L)[size2L+i]) Point(detector::r2L*TMath::Cos(phi), detector::r2L*TMath::Sin(phi), z);
   }
 }

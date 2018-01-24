@@ -1,5 +1,5 @@
 #include "Direction.h"
-#include "Math.h"
+#include "MyMath.h"
 #include "Rootils.h"
 #include "Riostream.h"
 
@@ -7,7 +7,7 @@ ClassImp(Direction)
 
 //default constructor
 Direction::Direction():TObject(){
-  fPhi = rootils::rndmUniform(0., 2*math::pi);
+  fPhi = rootils::rndmUniform(0., 2*mymath::pi);
   fEta = rootils::rndmUniform(-2., 2.);
   fTheta = etaToTheta();
   fC1 = evalC1();
@@ -17,7 +17,7 @@ Direction::Direction():TObject(){
 
 //standard constructor; direction from input pseudorapidity distribution
 Direction::Direction(TH1F* histEta):TObject(){
-  fPhi = rootils::rndmUniform(0., 2*math::pi);
+  fPhi = rootils::rndmUniform(0., 2*mymath::pi);
   fEta = histEta -> GetRandom();
   fTheta = etaToTheta();
   fC1 = evalC1();
@@ -93,9 +93,9 @@ Double_t Direction::evalTheta(){
 }
 Double_t Direction::evalPhi(){
   if(fC1>0 && fC2>0) return TMath::ATan(fC2/fC1);
-  else if(fC1<0 && fC2<0) return TMath::ATan(fC2/fC1)+math::pi;
-  else if(fC1>0 && fC2<0) return TMath::ATan(fC2/fC1)+2*math::pi;
-  else if(fC1<0 && fC2>0) return TMath::ATan(fC2/fC1)+math::pi;
+  else if(fC1<0 && fC2<0) return TMath::ATan(fC2/fC1)+mymath::pi;
+  else if(fC1>0 && fC2<0) return TMath::ATan(fC2/fC1)+2*mymath::pi;
+  else if(fC1<0 && fC2>0) return TMath::ATan(fC2/fC1)+mymath::pi;
   else {
     cout << "WARNING: C1 or C2 == 0 !!! phi set to -1 ___ Direction::evalPhi TO BE DEBUGGED" << endl;
     return -1.;

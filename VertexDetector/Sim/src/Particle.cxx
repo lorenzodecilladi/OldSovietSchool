@@ -1,6 +1,6 @@
 #include "Particle.h"
 #include "Rootils.h"
-#include "Math.h"
+#include "MyMath.h"
 #include "Riostream.h"
 #include "Detector.h"
 
@@ -88,7 +88,7 @@ void Particle::multipleScattering(){
 
   //SR con apici, after MS
   Double_t theta1 = rootils::rndmGaus(0., detector::thetaSpace);
-  Double_t phi1 = rootils::rndmUniform(0., 2*math::pi);
+  Double_t phi1 = rootils::rndmUniform(0., 2*mymath::pi);
   Direction dir1 = Direction(theta1, phi1);
     
   //back to SR lab

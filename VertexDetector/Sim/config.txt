@@ -1,8 +1,8 @@
 //nEvents,multOpt,par1,par2,multScatt,noise,zGenVertex,inputEta
 200000
 hist
-20.
-5.
+0.
+0.
 1
 1
 0.
