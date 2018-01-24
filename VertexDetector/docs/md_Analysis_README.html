@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('md_Analysis_README.html','');});
 </ul>
 <p>#### analysis.C </p><div class="fragment"><div class="line">void analysis(TString simfilePath, TString recofilePath, TString outFileName)</div></div><!-- fragment --><ul>
 <li>macro for executing the <a class="el" href="classVertex.html" title="Vertex class. ">Vertex</a> Detector analysis for a single data set (a simFile and the corresponding recoFile)</li>
-<li>opens simFile, gets simTree and histograms (reconstructed vertices' z coordinate (zRecoVertex) distribution) 1) gets number of simulated events (<em>nSimEvents</em>) 2) evaluates number of simulated events with vertex's z coordinate withing 1 sigma (= 5.3 cm) (<em>nSimEvents1sig</em>) (2 possibilities)</li>
+<li>opens simFile, gets simTree and histograms (reconstructed vertices' z coordinate (zRecoVertex) distribution) 1) gets number of simulated events (<em>nSimEvents</em>) 2) evaluates number of simulated events with vertex's z coordinate withing 1 sigma (= 5.3 cm) (<em>nSimEvents1sig</em>)</li>
 <li>opens recoFile, gets recoTree and histograms (generated multiplicity distribution, generated vertices' z coordinate (zSimVertex) distribution) on) 1) gets number of reconstructed events (<em>nRecoEvents</em>)</li>
 <li>initialises a root file (analysisFile) for storing the output</li>
 <li>initialises histogram (for residual of vertices' z coordinate)</li>
@@ -118,20 +118,21 @@ $(document).ready(function(){initNavTree('md_Analysis_README.html','');});
 </ul>
 </li>
 <li>evaluates the number of reconstructed events among those events whose vertex's z coord was generated within 1 sigma (<em>nRecoEvents1sig</em>)</li>
-<li><b>resolution</b> = sigma of gaussian fit of residuals' histogram (??? o forse dobbiamo prendere l'RMS senza fit???)</li>
+<li><b>resolution</b> = sigma of gaussian fit of residuals' histogram</li>
 <li><b>efficiency</b> = <em>nRecoEvents</em>/*nSimEvents*, with binomial error</li>
 <li><b>efficiency for particles generated within 1 sigma</b> = <em>nRecoEvents1sig</em>/*nSimEvents1sig*, with binomial error</li>
 <li><b>data saving</b>: the following are stored on the output file:<ul>
 <li>vector containing resolution and efficiencies, with corresponding uncertainties</li>
 <li>histograms:<ul>
 <li>generated multiplicity</li>
-<li>zSimVertices distribution</li>
-<li>zRecoVertices distribution</li>
+<li>distribution of z coordinate of simulated vertices</li>
+<li>distribution of z coordinate of reconstructed vertices</li>
 <li>residuals along the z coordinate <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l</div><div class="line">root [0] .X compile.C(&quot;force&quot;);</div><div class="line">root [1] analysis(&quot;../Sim/simFile.root&quot;, &quot;../Reco/recoFile.root&quot;, &quot;analysisFile.root&quot;);</div></div><!-- fragment --></li>
 </ul>
 </li>
 </ul>
 </li>
+<li>in order to open the analysis output file: <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l analysisFile.root</div><div class="line">root [0] TBrowser a;</div></div><!-- fragment --></li>
 </ul>
 <h4>inputFileList.txt</h4>
 <ul>
@@ -153,7 +154,8 @@ $(document).ready(function(){initNavTree('md_Analysis_README.html','');});
 <li>efficiency (for particles generated within 1 sigma) vs multiplicity</li>
 </ul>
 </li>
-<li>plots are stored on the output file <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l</div><div class="line">root [0] .X compile.C</div><div class="line">root [1] combinedAnalysis(&quot;inputFileList.txt&quot;, &quot;combAnalysisFile.root&quot;);</div></div><!-- fragment --> </li>
+<li>plots are stored in the output file <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l</div><div class="line">root [0] .X compile.C(&quot;force&quot;);</div><div class="line">root [1] combinedAnalysis(&quot;inputFileList.txt&quot;, &quot;combAnalysisFile.root&quot;);</div></div><!-- fragment --></li>
+<li>in order to open the combined analysis output file: <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l combAnalysisFile.root</div><div class="line">root [0] TBrowser a;</div></div><!-- fragment --> </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
