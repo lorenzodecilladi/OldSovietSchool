@@ -5,7 +5,7 @@
 - contains functions aimed at extracting random numbers from Uniform or Gaussian distibuted sequences
 
 
-#### Math.h
+#### MyMath.h
 - defines a namespace containing *pi*(=3.1415...) and two functions that convert deg to rad and viceversa
 
 
