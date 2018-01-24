@@ -1,7 +1,7 @@
 ## README FILE for /VertexDetector
 
 The folder ~/VertexDetector contains a **simulation and reconstruction** program for a vertex detector.
-The **authors** are Arianna Corrado and Lorenzo de Cilladi.
+The **author** is  Lorenzo de Cilladi.
 The program was written as exam project for the course "Tecniche di Analisi Numerica e Simulazione", held by Professor Massimo Masera.
 
 Simulation:
