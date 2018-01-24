@@ -156,6 +156,7 @@ void sim(TString outFileName){
   }//end events loop
 
   sim_file -> Write();
+  cout << "\n...output written in " << outFileName << "\n" << endl;
   sim_file -> Close();
 
   watch.Stop();

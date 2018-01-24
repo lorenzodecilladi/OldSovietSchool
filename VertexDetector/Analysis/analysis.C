@@ -149,6 +149,7 @@ void analysis(TString simfilePath, TString recofilePath, TString outFileName){
   histResidualZ    -> Write();
   
   c1               -> Close();
+  cout << "\n...output written in " << outFileName << "\n" << endl;
   analysis_file    -> Close();
   reco_file        -> Close();
   sim_file         -> Close();

@@ -166,6 +166,7 @@ void combinedAnalysis(TString inputListFile = "inputFileList.txt",  TString outF
   grEff1sigMult->Write();
 
   combAnalysis_file->Write();
+  cout << "\n...output written in " << outFileName << "\n" << endl;
   combAnalysis_file->Close();
   
   watch.Stop();

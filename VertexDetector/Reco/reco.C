@@ -108,7 +108,7 @@ void reco(TString simfilePath, TString outFileName){
   histRecoVertices -> Write();
   recoTree         -> Write();
 
-  reco_file -> ls();
+  cout << "\n...output written in " << outFileName << "\n" << endl;
   reco_file -> Close();
   sim_file.Close();
 
