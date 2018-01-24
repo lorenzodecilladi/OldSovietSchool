@@ -42,6 +42,7 @@ par2 | sigma (if gaus), 0. (if fixed)
 
 
 #### sim.C
+
 ```
 void sim(TString outFileName = "simFile.root")
 ```

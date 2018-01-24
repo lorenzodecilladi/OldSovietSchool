@@ -2,7 +2,7 @@ var NAVTREEINDEX0 =
 {
 "Detector_8h_source.html":[7,0,0,0],
 "Direction_8h_source.html":[7,0,2,0,0],
-"Math_8h_source.html":[7,0,3,0],
+"MyMath_8h_source.html":[7,0,3,0],
 "Particle_8h_source.html":[7,0,2,0,1],
 "Point_8h_source.html":[7,0,2,0,2],
 "Rootils_8h_source.html":[7,0,3,1],

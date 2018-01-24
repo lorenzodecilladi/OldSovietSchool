@@ -105,7 +105,8 @@ $(document).ready(function(){initNavTree('md_Analysis_README.html','');});
 <li>contains instruction for compiling classes and macros used in the analysis</li>
 <li>to be executed as follows: <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Analysis$ root -l</div><div class="line">root [0] .x compile.C(&quot;force&quot;);</div></div><!-- fragment --></li>
 </ul>
-<p>#### analysis.C </p><div class="fragment"><div class="line">void analysis(TString simfilePath, TString recofilePath, TString outFileName)</div></div><!-- fragment --><ul>
+<h4>analysis.C</h4>
+<div class="fragment"><div class="line">void analysis(TString simfilePath, TString recofilePath, TString outFileName)</div></div><!-- fragment --><ul>
 <li>macro for executing the <a class="el" href="classVertex.html" title="Vertex class. ">Vertex</a> Detector analysis for a single data set (a simFile and the corresponding recoFile)</li>
 <li>opens simFile, gets simTree and histograms (reconstructed vertices' z coordinate (zRecoVertex) distribution) 1) gets number of simulated events (<em>nSimEvents</em>) 2) evaluates number of simulated events with vertex's z coordinate withing 1 sigma (= 5.3 cm) (<em>nSimEvents1sig</em>)</li>
 <li>opens recoFile, gets recoTree and histograms (generated multiplicity distribution, generated vertices' z coordinate (zSimVertex) distribution) on) 1) gets number of reconstructed events (<em>nRecoEvents</em>)</li>
@@ -139,7 +140,8 @@ $(document).ready(function(){initNavTree('md_Analysis_README.html','');});
 <li>contains list of input files for combinedAnalysis().</li>
 <li>every input file is an output file of analysis(), obtained from the analysis of a single data set (one simFile and the corresponding recoFile).</li>
 </ul>
-<p>#### combinedAnalysis.C </p><div class="fragment"><div class="line">void combinedAnalysis(TString inputListFile, TString outFileName = &quot;combAnalysisFile.root&quot;)</div></div><!-- fragment --><ul>
+<h4>combinedAnalysis.C</h4>
+<div class="fragment"><div class="line">void combinedAnalysis(TString inputListFile, TString outFileName = &quot;combAnalysisFile.root&quot;)</div></div><!-- fragment --><ul>
 <li>macro for executing the <a class="el" href="classVertex.html" title="Vertex class. ">Vertex</a> Detector combined analysis for multiple data sets</li>
 <li>input files are the analysis' output files</li>
 <li>for each input file:<ul>

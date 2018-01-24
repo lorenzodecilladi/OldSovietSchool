@@ -105,7 +105,8 @@ $(document).ready(function(){initNavTree('md_Reco_README.html','');});
 <li>contains instruction for compiling classes and macros used in the reconstruction</li>
 <li>to be executed as follows: <div class="fragment"><div class="line">~/OldSovietSchool/esercizi/VertexDetector/Reco$ root -l</div><div class="line">root [0] .x compile.C(&quot;force&quot;);</div></div><!-- fragment --></li>
 </ul>
-<p>#### reco.C </p><div class="fragment"><div class="line">void reco(TString simfilePath = &quot;../Sim/simFile.root&quot;, TString outFileName = &quot;recoFile.root&quot;)</div></div><!-- fragment --><ul>
+<h4>reco.C</h4>
+<div class="fragment"><div class="line">void reco(TString simfilePath = &quot;../Sim/simFile.root&quot;, TString outFileName = &quot;recoFile.root&quot;)</div></div><!-- fragment --><ul>
 <li>macro for executing the <a class="el" href="classVertex.html" title="Vertex class. ">Vertex</a> Detector reconstruction: <b>reco</b></li>
 <li>input simFile path and output recoFile name are passed as arguments</li>
 <li>opens simFile and gets the tree stored in it, which contains info on generated Vertices and hits on beam pipe and detector's layers</li>
