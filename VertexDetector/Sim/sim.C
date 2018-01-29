@@ -271,10 +271,11 @@ void hitMaker(UInt_t i, Vertex* ptrvert, TClonesArray* ptrhitsBP, TClonesArray* 
 
   Point hit1L = part->getPoint();
   hit1L.smearing(detector::r1L);             //smearing on Layer1
-  if(TMath::Abs(hit1L.Z())<=detector::length/2.) new((*ptrhits1L)[i1L]) Point(hit1L);  //geometry check and storage
-
-  if(msON) part -> multipleScattering();     //MS in Layer1
-
+  if(TMath::Abs(hit1L.Z())<=detector::length/2.){
+    new((*ptrhits1L)[i1L]) Point(hit1L);     //geometry check and storage
+    if(msON) part -> multipleScattering();   //MS in Layer1
+  }
+    
   part -> transport(detector::r2L);          //transport Layer1 -> Layer2
   Int_t i2L = ptrhits2L -> GetEntries();
 
