@@ -69,7 +69,7 @@ void sim(TString outFileName = "simFile.root")
 ```
 ~/OldSovietSchool/esercizi/VertexDetector/Sim$ root -l
 root [0] .x compile.C("force");
-root [1] sim("sim_file.root");
+root [1] sim("simFile.root");
 ```
 - in order to open the simulation output file:
 ```
